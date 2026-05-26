@@ -53,6 +53,9 @@ public class FrmConsulta extends javax.swing.JFrame {
         
         this.setLocationRelativeTo(this);
         SetImageLabel(jLabel2, "src/IMG/Logoliberty.png");
+        
+        setIconImage(new ImageIcon(getClass().getResource("/IMG/Iconoliberty.png")).getImage());
+        
     }
 
     private void setPlaceholder(javax.swing.JTextField txt, String placeholder) {
