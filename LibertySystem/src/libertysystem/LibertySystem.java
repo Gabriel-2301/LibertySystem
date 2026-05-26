@@ -3,7 +3,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Main.java to edit this template
  */
 package libertysystem;
-
+import Formularios.FrmConsulta;
 /**
  *
  * @author gabri
@@ -14,7 +14,8 @@ public class LibertySystem {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        // TODO code application logic here
+        FrmConsulta frm = new FrmConsulta();
+        frm.setVisible(true);
     }
     
 }

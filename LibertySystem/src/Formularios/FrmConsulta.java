@@ -145,12 +145,14 @@ public class FrmConsulta extends javax.swing.JFrame {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
+        TxtFieldBuscador.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         TxtFieldBuscador.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 TxtFieldBuscadorActionPerformed(evt);
             }
         });
 
+        BtnBuscar.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         BtnBuscar.setText("Buscar");
         BtnBuscar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -158,6 +160,7 @@ public class FrmConsulta extends javax.swing.JFrame {
             }
         });
 
+        BtnLimpiar.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         BtnLimpiar.setText("Limpiar");
         BtnLimpiar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -165,6 +168,7 @@ public class FrmConsulta extends javax.swing.JFrame {
             }
         });
 
+        jTableDatos.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jTableDatos.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null, null, null},
@@ -177,7 +181,7 @@ public class FrmConsulta extends javax.swing.JFrame {
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, true, true
+                false, false, false, false, false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
@@ -186,8 +190,10 @@ public class FrmConsulta extends javax.swing.JFrame {
         });
         jScrollPane1.setViewportView(jTableDatos);
 
+        BtnEditar.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         BtnEditar.setText("Editar");
 
+        BtnEliminar.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         BtnEliminar.setText("Eliminar");
         BtnEliminar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -195,6 +201,7 @@ public class FrmConsulta extends javax.swing.JFrame {
             }
         });
 
+        BtnAgregar.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         BtnAgregar.setText("Agregar");
         BtnAgregar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -202,12 +209,16 @@ public class FrmConsulta extends javax.swing.JFrame {
             }
         });
 
-        jLabel3.setFont(new java.awt.Font("Source Sans Pro Black", 0, 20)); // NOI18N
+        jLabel3.setFont(new java.awt.Font("Source Sans Pro Black", 1, 20)); // NOI18N
         jLabel3.setText("Busqueda por Filtro");
 
+        CmbServicio.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         CmbServicio.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Seleccionar Servicio", "Bussines Trunk", "MyUC" }));
         CmbServicio.setToolTipText("");
 
+        TxtCantidad.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+
+        BtnFiltrar.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         BtnFiltrar.setText("Filtrar");
         BtnFiltrar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -215,6 +226,7 @@ public class FrmConsulta extends javax.swing.JFrame {
             }
         });
 
+        CmbEstado.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         CmbEstado.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Seleccionar Estado", "Libre", "Cancelado", "En Servicio", "Reservado" }));
         CmbEstado.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -222,6 +234,7 @@ public class FrmConsulta extends javax.swing.JFrame {
             }
         });
 
+        BtnImprimir.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         BtnImprimir.setText("Imprimir");
         BtnImprimir.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -250,11 +263,11 @@ public class FrmConsulta extends javax.swing.JFrame {
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addComponent(jLabel3)
                                 .addGap(18, 18, 18)
-                                .addComponent(CmbEstado, javax.swing.GroupLayout.PREFERRED_SIZE, 143, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(CmbEstado, javax.swing.GroupLayout.PREFERRED_SIZE, 149, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(CmbServicio, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(CmbServicio, javax.swing.GroupLayout.PREFERRED_SIZE, 155, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(TxtCantidad, javax.swing.GroupLayout.PREFERRED_SIZE, 82, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(TxtCantidad, javax.swing.GroupLayout.PREFERRED_SIZE, 76, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(0, 0, Short.MAX_VALUE)))
                         .addGap(18, 18, 18)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
@@ -288,12 +301,12 @@ public class FrmConsulta extends javax.swing.JFrame {
                     .addComponent(BtnImprimir))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 275, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(BtnEditar)
                     .addComponent(BtnEliminar)
                     .addComponent(BtnAgregar))
-                .addContainerGap(10, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
