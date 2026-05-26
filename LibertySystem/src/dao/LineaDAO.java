@@ -57,9 +57,7 @@ public class LineaDAO {
         return modelo;
     }
     
-    public DefaultTableModel filtrarLineasFlexible(String estado,
-                                               String servicio,
-                                               int cantidad) {
+    public DefaultTableModel filtrarLineasFlexible(String estado,String servicio,int cantidad) {
 
     String[] columnas = {
         "Numero",

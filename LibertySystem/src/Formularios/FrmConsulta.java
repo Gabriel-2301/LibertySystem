@@ -4,8 +4,12 @@
  */
 package Formularios;
 
+import com.itextpdf.text.BaseColor;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
+import com.itextpdf.text.Element;
+import com.itextpdf.text.Font;
+import com.itextpdf.text.PageSize;
 import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
@@ -133,7 +137,7 @@ public class FrmConsulta extends javax.swing.JFrame {
                 .addGap(92, 92, 92)
                 .addComponent(jLabel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 155, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(38, 38, 38))
         );
         jPanel2Layout.setVerticalGroup(
@@ -289,8 +293,8 @@ public class FrmConsulta extends javax.swing.JFrame {
                 .addGap(6, 6, 6)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(TxtFieldBuscador, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(BtnBuscar)
-                    .addComponent(BtnLimpiar))
+                    .addComponent(BtnLimpiar)
+                    .addComponent(BtnBuscar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(CmbServicio, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -306,7 +310,7 @@ public class FrmConsulta extends javax.swing.JFrame {
                     .addComponent(BtnEditar)
                     .addComponent(BtnEliminar)
                     .addComponent(BtnAgregar))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -450,14 +454,14 @@ public class FrmConsulta extends javax.swing.JFrame {
     }//GEN-LAST:event_CmbEstadoActionPerformed
 
     private void BtnImprimirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnImprimirActionPerformed
-        try {
-
+         try {
+             
         JFileChooser fileChooser = new JFileChooser();
         fileChooser.setDialogTitle("Guardar PDF");
 
-        int userSelection = fileChooser.showSaveDialog(this);
+        int option = fileChooser.showSaveDialog(this);
 
-        if (userSelection != JFileChooser.APPROVE_OPTION) {
+        if (option != JFileChooser.APPROVE_OPTION) {
             return;
         }
 
@@ -467,63 +471,230 @@ public class FrmConsulta extends javax.swing.JFrame {
             ruta += ".pdf";
         }
 
-        Document documento = new Document();
+        // =========================
+        // DOCUMENTO
+        // =========================
+        Document documento = new Document(
+                PageSize.A4.rotate(),
+                20, 20, 20, 20
+        );
 
-        PdfWriter.getInstance(documento, new FileOutputStream(ruta));
+        PdfWriter.getInstance(documento,
+                new FileOutputStream(ruta));
 
         documento.open();
-        
-         // =========================
-        // TÍTULO
+
         // =========================
-        documento.add(new Paragraph("Reporte de Líneas Filtradas"));
+        // COLORES
+        // =========================
+        BaseColor naranjaLiberty = new BaseColor(255, 153, 0);
+        BaseColor grisClaro = new BaseColor(245, 245, 245);
+
+        // =========================
+        // LOGO
+        // =========================
+        try {
+
+            com.itextpdf.text.Image logo =
+                    com.itextpdf.text.Image.getInstance(
+                            "src/IMG/Logoliberty.png"
+                    );
+
+            logo.scaleToFit(100, 100);
+
+            logo.setAlignment(Element.ALIGN_CENTER);
+
+            documento.add(logo);
+
+        } catch (Exception e) {
+
+            System.out.println("Logo no encontrado");
+        }
+
+        // =========================
+        // TITULO
+        // =========================
+        Font tituloFont = new Font(
+                Font.FontFamily.HELVETICA,
+                18,
+                Font.BOLD,
+                BaseColor.BLACK
+        );
+
+        Paragraph titulo =
+                new Paragraph(
+                        "LIBERTY NETWORKS - REPORTE DE LÍNEAS",
+                        tituloFont
+                );
+
+        titulo.setAlignment(Element.ALIGN_CENTER);
+
+        documento.add(titulo);
+
+        documento.add(new Paragraph(" "));
+
+        // =========================
+        // FECHA
+        // =========================
+        String fecha =
+                new java.text.SimpleDateFormat(
+                        "dd/MM/yyyy HH:mm:ss"
+                ).format(new java.util.Date());
+
+        Paragraph fechaTexto =
+                new Paragraph("Generado: " + fecha);
+
+        fechaTexto.setAlignment(Element.ALIGN_RIGHT);
+
+        documento.add(fechaTexto);
+
         documento.add(new Paragraph(" "));
 
         // =========================
         // TABLA PDF
         // =========================
-        PdfPTable tablaPDF = new PdfPTable(jTableDatos.getColumnCount());
+        PdfPTable tabla = new PdfPTable(
+                jTableDatos.getColumnCount()
+        );
+
+        tabla.setWidthPercentage(100);
+
+        // IMPORTANTE
+        tabla.setSplitLate(false);
+        tabla.setSplitRows(true);
+
+        // tamaños columnas
+        tabla.setWidths(new float[]{
+            3f, 2f, 3f, 3f, 4f, 3f
+        });
+
+        // =========================
+        // FUENTES
+        // =========================
+        Font headerFont = new Font(
+                Font.FontFamily.HELVETICA,
+                10,
+                Font.BOLD,
+                BaseColor.WHITE
+        );
+
+        Font dataFont = new Font(
+                Font.FontFamily.HELVETICA,
+                9,
+                Font.NORMAL,
+                BaseColor.BLACK
+        );
 
         // =========================
         // ENCABEZADOS
         // =========================
         for (int i = 0; i < jTableDatos.getColumnCount(); i++) {
 
-            PdfPCell celda = new PdfPCell();
+            PdfPCell header =
+                    new PdfPCell(
+                            new Paragraph(
+                                    jTableDatos.getColumnName(i),
+                                    headerFont
+                            )
+                    );
 
-            celda.setPhrase(
-                new Paragraph(jTableDatos.getColumnName(i))
+            header.setBackgroundColor(naranjaLiberty);
+
+            header.setHorizontalAlignment(
+                    Element.ALIGN_CENTER
             );
 
-            tablaPDF.addCell(celda);
+            header.setVerticalAlignment(
+                    Element.ALIGN_MIDDLE
+            );
+
+            header.setPadding(6);
+
+            tabla.addCell(header);
         }
-        
+
         // =========================
         // DATOS
         // =========================
-        for (int filas = 0; filas < jTableDatos.getRowCount(); filas++) {
+        for (int fila = 0;
+                fila < jTableDatos.getRowCount();
+                fila++) {
 
-            for (int columnas = 0; columnas < jTableDatos.getColumnCount(); columnas++) {
+            for (int columna = 0;
+                    columna < jTableDatos.getColumnCount();
+                    columna++) {
 
-                Object valor = jTableDatos.getValueAt(filas, columnas);
+                Object valor =
+                        jTableDatos.getValueAt(
+                                fila,
+                                columna
+                        );
 
-                tablaPDF.addCell(
-                    valor != null ? valor.toString() : ""
+                PdfPCell cell =
+                        new PdfPCell(
+                                new Paragraph(
+                                        valor != null
+                                                ? valor.toString()
+                                                : "",
+                                        dataFont
+                                )
+                        );
+
+                cell.setPadding(5);
+
+                cell.setVerticalAlignment(
+                        Element.ALIGN_MIDDLE
                 );
+
+                // filas alternas
+                if (fila % 2 == 0) {
+
+                    cell.setBackgroundColor(
+                            grisClaro
+                    );
+                }
+
+                tabla.addCell(cell);
             }
         }
 
-        documento.add(tablaPDF);
+        documento.add(tabla);
+
+        documento.add(new Paragraph(" "));
+
+        // =========================
+        // FIRMA
+        // =========================
+        Font firmaFont = new Font(
+                Font.FontFamily.HELVETICA,
+                9,
+                Font.ITALIC,
+                BaseColor.GRAY
+        );
+
+        Paragraph firma =
+                new Paragraph(
+                        "Generado automáticamente por Liberty Networks",
+                        firmaFont
+                );
+
+        firma.setAlignment(Element.ALIGN_CENTER);
+
+        documento.add(firma);
 
         documento.close();
 
-        javax.swing.JOptionPane.showMessageDialog(this,
-                "PDF generado correctamente");
+        JOptionPane.showMessageDialog(
+                this,
+                "PDF generado correctamente"
+        );
 
-    } catch (DocumentException | java.io.IOException e) {
+    } catch (Exception e) {
 
-        javax.swing.JOptionPane.showMessageDialog(this,
-                "Error al generar PDF: " + e);
+        JOptionPane.showMessageDialog(
+                this,
+                "Error al generar PDF: " + e
+        );
     }
     }//GEN-LAST:event_BtnImprimirActionPerformed
 

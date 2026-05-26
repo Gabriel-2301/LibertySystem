@@ -30,10 +30,10 @@ public class FrmAgregado extends javax.swing.JFrame {
         
         setPlaceholder(TxtNumero, "Agregar Numero de Linea");
         setPlaceholder(TxtCliente, "Agregar Nombre de Cliente");
-        setPlaceholder(TxtFecha, "0000-00-00 00:00:00");
+        setPlaceholder(TxtFecha, "dd/MM/yyyy HH:mm:ss");
         
         this.setLocationRelativeTo(null);
-        SetImageLabel(jLabel9, "src/IMG/Logoliberty.png");  
+        SetImageLabel(jLabel9, "/IMG/Logoliberty.png");  
         
         setIconImage(new ImageIcon(getClass().getResource("/IMG/Iconoliberty.png")).getImage());
         
@@ -370,11 +370,32 @@ public class FrmAgregado extends javax.swing.JFrame {
         });
     }
 
-    private void SetImageLabel(JLabel labelName, String root){
-        ImageIcon image = new ImageIcon(root);
-        Icon icon = new ImageIcon(image.getImage().getScaledInstance(labelName.getWidth(), labelName.getHeight(), Image.SCALE_DEFAULT));
-        labelName.setIcon(icon);
-        this.repaint();
+    private void SetImageLabel(javax.swing.JLabel labelName,String resourcePath) {
+
+        java.net.URL imageURL =
+            getClass().getResource(resourcePath);
+
+        if (imageURL != null) {
+
+            ImageIcon image = new ImageIcon(imageURL);
+
+            Icon icon = new ImageIcon(
+                image.getImage().getScaledInstance(
+                        labelName.getWidth(),
+                        labelName.getHeight(),
+                        Image.SCALE_SMOOTH
+                    )
+            );
+
+            labelName.setIcon(icon);
+
+        } else {
+
+            System.out.println(
+                "No se encontró la imagen: "
+                + resourcePath
+            );
+        }
     }
     
     // Variables declaration - do not modify//GEN-BEGIN:variables

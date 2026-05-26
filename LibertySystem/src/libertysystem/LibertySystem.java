@@ -16,6 +16,7 @@ public class LibertySystem {
     public static void main(String[] args) {
         FrmConsulta frm = new FrmConsulta();
         frm.setVisible(true);
+        
     }
     
 }
