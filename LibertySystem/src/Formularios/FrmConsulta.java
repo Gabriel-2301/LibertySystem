@@ -115,6 +115,7 @@ public class FrmConsulta extends javax.swing.JFrame {
 
         jPanel2.setBackground(new java.awt.Color(255, 255, 255));
 
+        jLabel1.setBackground(new java.awt.Color(0, 0, 0));
         jLabel1.setFont(new java.awt.Font("Source Sans Pro Black", 0, 38)); // NOI18N
         jLabel1.setText("Formulario de Consulta");
 
@@ -350,15 +351,16 @@ public class FrmConsulta extends javax.swing.JFrame {
     jTableDatos.setModel(filtro);
     jTableDatos.setDefaultEditor(Object.class, null);
     // permitir selección correcta
-jTableDatos.setRowSelectionAllowed(true);
-jTableDatos.setColumnSelectionAllowed(false);
-jTableDatos.setCellSelectionEnabled(false);
+    jTableDatos.setRowSelectionAllowed(true);
+    jTableDatos.setColumnSelectionAllowed(false);
+    jTableDatos.setCellSelectionEnabled(false);
 
-// esto es CLAVE para que mouse funcione bien
-jTableDatos.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+    // esto es CLAVE para que mouse funcione bien
+    jTableDatos.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
 
-// permitir copiar con teclado
-jTableDatos.setFocusable(true);
+    // permitir copiar con teclado
+    jTableDatos.setFocusable(true);
+    
     }//GEN-LAST:event_BtnBuscarActionPerformed
 
     private void BtnLimpiarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnLimpiarActionPerformed

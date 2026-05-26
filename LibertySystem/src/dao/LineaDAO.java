@@ -145,24 +145,24 @@ public class LineaDAO {
             // convertir nombres a IDs
             int estadoId = obtenerId(con, "estados", estado);
             int municipioId = obtenerId(con, "municipios", municipio);
-            int clienteId = obtenerId(con, "clientes", cliente);
+            int clienteId = obtenerOInsertarCliente(con, cliente);
             int servicioId = obtenerId(con, "servicios", servicio);
 
             if (estadoId == -1) {
-    throw new SQLException("Estado no encontrado: " + estado);
-}
+            throw new SQLException("Estado no encontrado: " + estado);
+            }
 
-if (municipioId == -1) {
-    throw new SQLException("Municipio no encontrado: " + municipio);
-}
+            if (municipioId == -1) {
+            throw new SQLException("Municipio no encontrado: " + municipio);
+            }
 
-if (clienteId == -1) {
-    throw new SQLException("Cliente no encontrado: " + cliente);
-}
+            if (clienteId == -1) {
+            throw new SQLException("Cliente no encontrado: " + cliente);
+            }
 
-if (servicioId == -1) {
-    throw new SQLException("Servicio no encontrado: " + servicio);
-}
+            if (servicioId == -1) {
+            throw new SQLException("Servicio no encontrado: " + servicio);
+            }
             
             String sql = "INSERT INTO lineas "
                     + "(numero, estado_id, fechas_ultimo_estado, municipio_id, cliente_id, servicio_id) "
@@ -205,6 +205,42 @@ if (servicioId == -1) {
 
         return -1; // si no encuentra
     }
+    
+    private int obtenerOInsertarCliente(Connection con, String cliente) throws SQLException {
+
+    // buscar si existe
+        String sqlBuscar = "SELECT id FROM clientes WHERE TRIM(LOWER(nombre)) = TRIM(LOWER(?))";
+
+        PreparedStatement psBuscar = con.prepareStatement(sqlBuscar);
+        psBuscar.setString(1, cliente);
+
+        ResultSet rs = psBuscar.executeQuery();
+
+        if (rs.next()) {
+        return rs.getInt("id");
+        }
+
+        // si no existe -> insertar
+        String sqlInsertar = "INSERT INTO clientes(nombre) VALUES(?)";
+
+        PreparedStatement psInsertar = con.prepareStatement(
+            sqlInsertar,
+            Statement.RETURN_GENERATED_KEYS
+        );
+
+        psInsertar.setString(1, cliente);
+
+        psInsertar.executeUpdate();
+
+        ResultSet generado = psInsertar.getGeneratedKeys();
+
+        if (generado.next()) {
+        return generado.getInt(1);
+        }
+
+        throw new SQLException("No se pudo insertar cliente");
+    }
+    
     
     public boolean eliminarLinea(String numero) {
 
