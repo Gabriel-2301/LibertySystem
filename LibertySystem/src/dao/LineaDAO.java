@@ -8,7 +8,7 @@ public class LineaDAO {
 
    
     // =========================
-    // MOSTRAR DATOS (YA LO TENÍA)
+    // MOSTRAR DATOS (YA LO TENIA)
     // =========================
     public DefaultTableModel mostrarDatos() {
 
