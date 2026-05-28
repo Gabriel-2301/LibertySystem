@@ -25,12 +25,17 @@ public class FrmAgregado extends javax.swing.JFrame {
     public FrmAgregado() {
         initComponents();
         
+        setResizable(false);
+        
+       this.setFocusable(true);
+       this.requestFocusInWindow();
+        
         LineaDAO dao = new LineaDAO();
         dao.cargarMunicipios(CmbMunicipio);
         
-        setPlaceholder(TxtNumero, "Agregar Numero de Linea");
-        setPlaceholder(TxtCliente, "Agregar Nombre de Cliente");
-        setPlaceholder(TxtFecha, "dd/MM/yyyy HH:mm:ss");
+        setPlaceholder(TxtNumero, " Agregar Numero de Linea");
+        setPlaceholder(TxtCliente, " Agregar Nombre de Cliente");
+        setPlaceholder(TxtFecha, " dd/MM/yyyy HH:mm:ss");
         
         this.setLocationRelativeTo(null);
         SetImageLabel(jLabel9, "/IMG/Logoliberty.png");  
@@ -68,7 +73,7 @@ public class FrmAgregado extends javax.swing.JFrame {
     }
     
         public FrmAgregado(FrmConsulta frmConsulta) {
-        initComponents();
+        this();
         this.frmConsulta = frmConsulta;
     }
     
@@ -94,11 +99,11 @@ public class FrmAgregado extends javax.swing.JFrame {
         TxtNumero = new javax.swing.JTextField();
         TxtCliente = new javax.swing.JTextField();
         TxtFecha = new javax.swing.JTextField();
-        BtnLimpiar = new javax.swing.JButton();
-        BtnGuardar = new javax.swing.JButton();
         CmbServicio = new javax.swing.JComboBox<>();
         CmbEstado = new javax.swing.JComboBox<>();
         CmbMunicipio = new javax.swing.JComboBox<>();
+        BtnGuardar = new javax.swing.JButton();
+        BtnLimpiar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -119,7 +124,7 @@ public class FrmAgregado extends javax.swing.JFrame {
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addGap(25, 25, 25)
                 .addComponent(jLabel1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 24, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 98, Short.MAX_VALUE)
                 .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 119, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(14, 14, 14))
         );
@@ -133,24 +138,31 @@ public class FrmAgregado extends javax.swing.JFrame {
         );
 
         jLabel2.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/IMG/Iconohashtag.png"))); // NOI18N
         jLabel2.setText("Numero");
 
         jLabel3.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        jLabel3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/IMG/Iconocliente.png"))); // NOI18N
         jLabel3.setText("Cliente");
 
         jLabel4.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        jLabel4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/IMG/Iconofecha.png"))); // NOI18N
         jLabel4.setText("Fecha");
 
         jLabel5.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        jLabel5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/IMG/Iconomunicipio.png"))); // NOI18N
         jLabel5.setText("Municipio");
 
         jLabel6.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        jLabel6.setIcon(new javax.swing.ImageIcon(getClass().getResource("/IMG/Iconoservicio.png"))); // NOI18N
         jLabel6.setText("Servicio");
 
         jLabel7.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        jLabel7.setIcon(new javax.swing.ImageIcon(getClass().getResource("/IMG/Iconoestado.png"))); // NOI18N
         jLabel7.setText("Estado");
 
         TxtNumero.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        TxtNumero.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         TxtNumero.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 TxtNumeroActionPerformed(evt);
@@ -158,24 +170,10 @@ public class FrmAgregado extends javax.swing.JFrame {
         });
 
         TxtCliente.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        TxtCliente.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
         TxtFecha.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-
-        BtnLimpiar.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        BtnLimpiar.setText("Limpiar");
-        BtnLimpiar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                BtnLimpiarActionPerformed(evt);
-            }
-        });
-
-        BtnGuardar.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        BtnGuardar.setText("Guardar");
-        BtnGuardar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                BtnGuardarActionPerformed(evt);
-            }
-        });
+        TxtFecha.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
         CmbServicio.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         CmbServicio.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Selecciona un Servicio", "Bussines Trunk", "MyUC" }));
@@ -191,6 +189,24 @@ public class FrmAgregado extends javax.swing.JFrame {
             }
         });
 
+        BtnGuardar.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        BtnGuardar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/IMG/Iconoguardar.png"))); // NOI18N
+        BtnGuardar.setText("Guardar");
+        BtnGuardar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BtnGuardarActionPerformed(evt);
+            }
+        });
+
+        BtnLimpiar.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        BtnLimpiar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/IMG/Iconolimpiar.png"))); // NOI18N
+        BtnLimpiar.setText("Limpiar");
+        BtnLimpiar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BtnLimpiarActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -199,31 +215,32 @@ public class FrmAgregado extends javax.swing.JFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addContainerGap()
-                        .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(115, 115, 115)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addComponent(jLabel2)
-                                    .addComponent(jLabel6)
-                                    .addComponent(jLabel5)
-                                    .addComponent(jLabel7)
-                                    .addComponent(jLabel4)
-                                    .addComponent(jLabel3))
+                                .addGap(145, 145, 145)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                    .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(jLabel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(jLabel7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                     .addComponent(TxtNumero)
                                     .addComponent(TxtCliente)
                                     .addComponent(TxtFecha)
-                                    .addComponent(CmbMunicipio, 0, 1, Short.MAX_VALUE)
+                                    .addComponent(CmbMunicipio, 0, 0, Short.MAX_VALUE)
                                     .addComponent(CmbServicio, 0, 185, Short.MAX_VALUE)
-                                    .addComponent(CmbEstado, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(BtnGuardar, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(87, 87, 87)
-                                .addComponent(BtnLimpiar, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                                    .addComponent(CmbEstado, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                .addGap(0, 155, Short.MAX_VALUE))))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(BtnGuardar, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(117, 117, 117)
+                        .addComponent(BtnLimpiar, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(106, 106, 106)))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
@@ -231,52 +248,55 @@ public class FrmAgregado extends javax.swing.JFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(26, 26, 26)
+                .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(TxtNumero, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(TxtNumero, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel2))
                 .addGap(8, 8, 8)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(TxtCliente, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(TxtCliente, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel3))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(TxtFecha, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(TxtFecha, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel4))
-                .addGap(7, 7, 7)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel5)
-                    .addComponent(CmbMunicipio, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(CmbServicio, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel6))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel7)
-                    .addComponent(CmbEstado, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(23, 23, 23)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(BtnGuardar)
-                    .addComponent(BtnLimpiar))
-                .addContainerGap(17, Short.MAX_VALUE))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGap(13, 13, 13)
+                                .addComponent(jLabel5))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGap(7, 7, 7)
+                                .addComponent(CmbMunicipio, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(CmbServicio, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel6))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel7)
+                            .addComponent(CmbEstado, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addContainerGap(77, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(BtnGuardar)
+                            .addComponent(BtnLimpiar))
+                        .addGap(27, 27, 27))))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(8, Short.MAX_VALUE)
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+            .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap())
+                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
@@ -287,53 +307,53 @@ public class FrmAgregado extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_TxtNumeroActionPerformed
 
-    private void BtnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnGuardarActionPerformed
-    
-        if (CmbMunicipio.getSelectedIndex() == 0) {
-
-        JOptionPane.showMessageDialog(this,
-            "Seleccione un municipio");
-
-        return;
-    }
-    
-    LineaDAO dao = new LineaDAO();
-
-    String numero = TxtNumero.getText();
-    String municipio = CmbMunicipio.getSelectedItem().toString();
-    String cliente = TxtCliente.getText();
-    String fecha = TxtFecha.getText();
-
-    String estado = CmbEstado.getSelectedItem().toString();
-    String servicio = CmbServicio.getSelectedItem().toString();
-
-    boolean resultado = dao.insertarLinea(numero, estado, fecha, municipio, cliente, servicio);
-
-    if (resultado) {
-
-        javax.swing.JOptionPane.showMessageDialog(this, "Registro agregado correctamente");
-
-        // REFRESCAR TABLA SIN ABRIR NADA NUEVO
-        frmConsulta.cargarTabla();
-
-        this.dispose(); // solo cerrar FrmAgregado
-    }
-    }//GEN-LAST:event_BtnGuardarActionPerformed
+    private void CmbMunicipioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CmbMunicipioActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_CmbMunicipioActionPerformed
 
     private void BtnLimpiarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnLimpiarActionPerformed
         TxtNumero.setText("");
-        
+
         TxtCliente.setText("");
         TxtFecha.setText("");
-        
+
         CmbMunicipio.setSelectedIndex(0);
         CmbEstado.setSelectedIndex(0);
         CmbServicio.setSelectedIndex(0);
     }//GEN-LAST:event_BtnLimpiarActionPerformed
 
-    private void CmbMunicipioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CmbMunicipioActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_CmbMunicipioActionPerformed
+    private void BtnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnGuardarActionPerformed
+
+        if (CmbMunicipio.getSelectedIndex() == 0) {
+
+            JOptionPane.showMessageDialog(this,
+                "Seleccione un municipio");
+
+            return;
+        }
+
+        LineaDAO dao = new LineaDAO();
+
+        String numero = TxtNumero.getText();
+        String municipio = CmbMunicipio.getSelectedItem().toString();
+        String cliente = TxtCliente.getText();
+        String fecha = TxtFecha.getText();
+
+        String estado = CmbEstado.getSelectedItem().toString();
+        String servicio = CmbServicio.getSelectedItem().toString();
+
+        boolean resultado = dao.insertarLinea(numero, estado, fecha, municipio, cliente, servicio);
+
+        if (resultado) {
+
+            javax.swing.JOptionPane.showMessageDialog(this, "Registro agregado correctamente");
+
+            // REFRESCAR TABLA SIN ABRIR NADA NUEVO
+            frmConsulta.cargarTabla();
+
+            this.dispose(); // solo cerrar FrmAgregado
+        }
+    }//GEN-LAST:event_BtnGuardarActionPerformed
 
     /**
      * @param args the command line arguments
