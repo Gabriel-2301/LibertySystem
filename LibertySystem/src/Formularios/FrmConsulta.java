@@ -24,6 +24,7 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import modelo.Item;
+import utilidades.Validaciones;
 
 
 /**
@@ -36,21 +37,38 @@ public class FrmConsulta extends javax.swing.JFrame {
      * Creates new form FrmConsulta
      */
     
-   
-    
     public void cargarTabla() {
     LineaDAO dao = new LineaDAO();
     jTableDatos.setModel(dao.mostrarDatos());
    
-    jTableDatos.setDefaultEditor(Object.class, null);
-    
-    
-
+    jTableDatos.setDefaultEditor(Object.class, null); 
 }
     
     public FrmConsulta() {
         initComponents();
         cargarTabla();
+        
+        //Ancho de Columnas
+        jTableDatos.getColumnModel().getColumn(0).setPreferredWidth(10);
+        jTableDatos.getColumnModel().getColumn(0).setResizable(false);
+        
+        jTableDatos.getColumnModel().getColumn(1).setPreferredWidth(10);
+        jTableDatos.getColumnModel().getColumn(1).setResizable(false);
+        
+        jTableDatos.getColumnModel().getColumn(2).setPreferredWidth(48);
+        jTableDatos.getColumnModel().getColumn(2).setResizable(false);
+        
+        jTableDatos.getColumnModel().getColumn(3).setPreferredWidth(105);
+        jTableDatos.getColumnModel().getColumn(3).setResizable(false);
+        
+        jTableDatos.getColumnModel().getColumn(4).setPreferredWidth(180);
+        jTableDatos.getColumnModel().getColumn(4).setResizable(false);
+        
+        jTableDatos.getColumnModel().getColumn(5).setPreferredWidth(10);
+        jTableDatos.getColumnModel().getColumn(5).setResizable(false);
+       
+        //Alto de filas
+        jTableDatos.setRowHeight(20);
         
        this.setFocusable(true);
        this.requestFocusInWindow();
@@ -66,8 +84,6 @@ public class FrmConsulta extends javax.swing.JFrame {
         setIconImage(new ImageIcon(getClass().getResource("/IMG/Iconoliberty.png")).getImage());
         
     }
-    
-   
 
     private void setPlaceholder(javax.swing.JTextField txt, String placeholder) {
 
@@ -151,9 +167,9 @@ public class FrmConsulta extends javax.swing.JFrame {
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 121, Short.MAX_VALUE)
+            .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap(37, Short.MAX_VALUE)
                 .addComponent(jLabel1)
                 .addGap(35, 35, 35))
         );
@@ -163,6 +179,14 @@ public class FrmConsulta extends javax.swing.JFrame {
         TxtFieldBuscador.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 TxtFieldBuscadorActionPerformed(evt);
+            }
+        });
+        TxtFieldBuscador.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                TxtFieldBuscadorKeyReleased(evt);
+            }
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                TxtFieldBuscadorKeyTyped(evt);
             }
         });
 
@@ -204,6 +228,8 @@ public class FrmConsulta extends javax.swing.JFrame {
                 return canEdit [columnIndex];
             }
         });
+        jTableDatos.getTableHeader().setResizingAllowed(false);
+        jTableDatos.getTableHeader().setReorderingAllowed(false);
         jScrollPane1.setViewportView(jTableDatos);
 
         BtnEditar.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
@@ -244,6 +270,11 @@ public class FrmConsulta extends javax.swing.JFrame {
                 TxtCantidadActionPerformed(evt);
             }
         });
+        TxtCantidad.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                TxtCantidadKeyTyped(evt);
+            }
+        });
 
         BtnFiltrar.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         BtnFiltrar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/IMG/Iconofiltrar.png"))); // NOI18N
@@ -274,7 +305,7 @@ public class FrmConsulta extends javax.swing.JFrame {
         jLabel6.setBackground(new java.awt.Color(0, 0, 0));
         jLabel6.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jLabel6.setIcon(new javax.swing.ImageIcon(getClass().getResource("/IMG/Iconodatos.png"))); // NOI18N
-        jLabel6.setText("Tabla de Datos");
+        jLabel6.setText("Tabla de Lineas");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -289,7 +320,7 @@ public class FrmConsulta extends javax.swing.JFrame {
                         .addComponent(BtnEditar, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(BtnEliminar, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(281, 281, 281)
+                        .addGap(292, 292, 292)
                         .addComponent(BtnAgregar, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -299,12 +330,12 @@ public class FrmConsulta extends javax.swing.JFrame {
                                     .addGroup(jPanel1Layout.createSequentialGroup()
                                         .addGap(209, 209, 209)
                                         .addComponent(CmbEstado, javax.swing.GroupLayout.PREFERRED_SIZE, 176, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(CmbServicio, javax.swing.GroupLayout.PREFERRED_SIZE, 176, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(15, 15, 15)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(TxtCantidad, javax.swing.GroupLayout.PREFERRED_SIZE, 83, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addComponent(TxtFieldBuscador, javax.swing.GroupLayout.PREFERRED_SIZE, 671, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(13, 13, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(BtnFiltrar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(BtnBuscar, javax.swing.GroupLayout.DEFAULT_SIZE, 140, Short.MAX_VALUE))
@@ -314,7 +345,7 @@ public class FrmConsulta extends javax.swing.JFrame {
                             .addComponent(BtnImprimir, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
                         .addComponent(jLabel6)
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                        .addGap(0, 848, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
@@ -328,7 +359,7 @@ public class FrmConsulta extends javax.swing.JFrame {
                     .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(BtnBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(BtnLimpiar, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(12, 12, 12)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(BtnFiltrar, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(BtnImprimir, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -339,13 +370,13 @@ public class FrmConsulta extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel6)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 310, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 342, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(BtnEliminar)
-                    .addComponent(BtnAgregar)
-                    .addComponent(BtnEditar))
-                .addGap(12, 12, 12))
+                    .addComponent(BtnEliminar, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(BtnAgregar, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(BtnEditar, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(10, 10, 10))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -356,9 +387,9 @@ public class FrmConsulta extends javax.swing.JFrame {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(11, 11, 11)
-                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addGap(0, 6, Short.MAX_VALUE)
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
         pack();
@@ -366,6 +397,7 @@ public class FrmConsulta extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void BtnImprimirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnImprimirActionPerformed
+        
         try {
 
             JFileChooser fileChooser = new JFileChooser();
@@ -608,6 +640,7 @@ public class FrmConsulta extends javax.swing.JFrame {
                 "Error al generar PDF: " + e
             );
         }
+        
     }//GEN-LAST:event_BtnImprimirActionPerformed
 
     private void CmbEstadoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CmbEstadoActionPerformed
@@ -639,6 +672,7 @@ public class FrmConsulta extends javax.swing.JFrame {
             dao.filtrarLineasFlexible(estado, servicio, cantidad)
         );
         jTableDatos.setDefaultEditor(Object.class, null);
+        
     }//GEN-LAST:event_BtnFiltrarActionPerformed
 
     private void TxtCantidadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_TxtCantidadActionPerformed
@@ -646,11 +680,14 @@ public class FrmConsulta extends javax.swing.JFrame {
     }//GEN-LAST:event_TxtCantidadActionPerformed
 
     private void BtnAgregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnAgregarActionPerformed
+        
         FrmAgregado frm = new FrmAgregado(this);
         frm.setVisible(true);
+        
     }//GEN-LAST:event_BtnAgregarActionPerformed
 
     private void BtnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnEliminarActionPerformed
+        
         int fila = jTableDatos.getSelectedRow();
 
         if (fila == -1) {
@@ -682,14 +719,18 @@ public class FrmConsulta extends javax.swing.JFrame {
                 javax.swing.JOptionPane.showMessageDialog(this, "Error al eliminar");
             }
         }
+        
     }//GEN-LAST:event_BtnEliminarActionPerformed
 
     private void BtnLimpiarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnLimpiarActionPerformed
+        
         TxtFieldBuscador.setText("");
         cargarTabla();
+        
     }//GEN-LAST:event_BtnLimpiarActionPerformed
 
     private void BtnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnBuscarActionPerformed
+        
         String numero = TxtFieldBuscador.getText();
 
         LineaDAO dao = new LineaDAO();
@@ -726,11 +767,36 @@ public class FrmConsulta extends javax.swing.JFrame {
 
         // permitir copiar con teclado
         jTableDatos.setFocusable(true);
+        
     }//GEN-LAST:event_BtnBuscarActionPerformed
 
     private void TxtFieldBuscadorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_TxtFieldBuscadorActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_TxtFieldBuscadorActionPerformed
+
+    private void TxtFieldBuscadorKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TxtFieldBuscadorKeyReleased
+    
+
+   
+    }//GEN-LAST:event_TxtFieldBuscadorKeyReleased
+
+    private void TxtFieldBuscadorKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TxtFieldBuscadorKeyTyped
+       
+        Validaciones.soloNumeros8Digitos(
+        TxtFieldBuscador,
+        evt
+        );
+        
+    }//GEN-LAST:event_TxtFieldBuscadorKeyTyped
+
+    private void TxtCantidadKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TxtCantidadKeyTyped
+        
+        Validaciones.soloNumeros8Digitos(
+        TxtCantidad,
+        evt
+        );
+        
+    }//GEN-LAST:event_TxtCantidadKeyTyped
 
     /**
      * @param args the command line arguments

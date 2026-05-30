@@ -10,6 +10,7 @@ import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import utilidades.Validaciones;
 /**
  *
  * @author gabri
@@ -33,6 +34,15 @@ public class FrmAgregado extends javax.swing.JFrame {
         LineaDAO dao = new LineaDAO();
         dao.cargarMunicipios(CmbMunicipio);
         
+        TxtFecha.addKeyListener(new java.awt.event.KeyAdapter() {
+
+    @Override
+    public void keyReleased(java.awt.event.KeyEvent e) {
+
+        validarFechaEnTiempoReal();
+    }
+});
+        
         setPlaceholder(TxtNumero, " Agregar Numero de Linea");
         setPlaceholder(TxtCliente, " Agregar Nombre de Cliente");
         setPlaceholder(TxtFecha, " dd/MM/yyyy HH:mm:ss");
@@ -43,6 +53,30 @@ public class FrmAgregado extends javax.swing.JFrame {
         setIconImage(new ImageIcon(getClass().getResource("/IMG/Iconoliberty.png")).getImage());
         
     }
+    
+    private void validarFechaEnTiempoReal() {
+
+    String fecha = TxtFecha.getText().trim();
+
+    if (fecha.isEmpty()) {
+
+        LblFechaInfo.setText("");
+
+
+        return;
+    }
+
+    if (Validaciones.validarFechaFormato(fecha)) {
+
+        LblFechaInfo.setText("Fecha válida");
+
+
+    } else {
+
+        LblFechaInfo.setText("Formato: dd/MM/yyyy HH:mm:ss");
+    }
+}
+    
     
     
     private void setPlaceholder(javax.swing.JTextField txt, String placeholder) {
@@ -70,11 +104,14 @@ public class FrmAgregado extends javax.swing.JFrame {
                 }
             }
         });
+        
+        
     }
     
         public FrmAgregado(FrmConsulta frmConsulta) {
         this();
         this.frmConsulta = frmConsulta;
+        
     }
     
     /**
@@ -104,6 +141,7 @@ public class FrmAgregado extends javax.swing.JFrame {
         CmbMunicipio = new javax.swing.JComboBox<>();
         BtnGuardar = new javax.swing.JButton();
         BtnLimpiar = new javax.swing.JButton();
+        LblFechaInfo = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -122,19 +160,19 @@ public class FrmAgregado extends javax.swing.JFrame {
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGap(25, 25, 25)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jLabel1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 98, Short.MAX_VALUE)
+                .addGap(59, 59, 59)
                 .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 119, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(14, 14, 14))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGap(31, 31, 31)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                .addContainerGap(32, Short.MAX_VALUE)
                 .addComponent(jLabel1)
-                .addContainerGap(31, Short.MAX_VALUE))
+                .addGap(30, 30, 30))
         );
 
         jLabel2.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
@@ -168,12 +206,27 @@ public class FrmAgregado extends javax.swing.JFrame {
                 TxtNumeroActionPerformed(evt);
             }
         });
+        TxtNumero.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                TxtNumeroKeyTyped(evt);
+            }
+        });
 
         TxtCliente.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         TxtCliente.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
         TxtFecha.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         TxtFecha.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        TxtFecha.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                TxtFechaActionPerformed(evt);
+            }
+        });
+        TxtFecha.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                TxtFechaKeyTyped(evt);
+            }
+        });
 
         CmbServicio.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         CmbServicio.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Selecciona un Servicio", "Bussines Trunk", "MyUC" }));
@@ -207,41 +260,44 @@ public class FrmAgregado extends javax.swing.JFrame {
             }
         });
 
+        LblFechaInfo.setBackground(new java.awt.Color(0, 0, 0));
+        LblFechaInfo.setFont(new java.awt.Font("Segoe UI", 1, 10)); // NOI18N
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGap(145, 145, 145)
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                    .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(jLabel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(jLabel7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(TxtNumero)
-                                    .addComponent(TxtCliente)
-                                    .addComponent(TxtFecha)
-                                    .addComponent(CmbMunicipio, 0, 0, Short.MAX_VALUE)
-                                    .addComponent(CmbServicio, 0, 185, Short.MAX_VALUE)
-                                    .addComponent(CmbEstado, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                                .addGap(0, 155, Short.MAX_VALUE))))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(BtnGuardar, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(117, 117, 117)
-                        .addComponent(BtnLimpiar, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(106, 106, 106)))
+                        .addGap(150, 150, 150)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jLabel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jLabel7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(TxtNumero)
+                            .addComponent(TxtCliente)
+                            .addComponent(TxtFecha)
+                            .addComponent(CmbMunicipio, 0, 0, Short.MAX_VALUE)
+                            .addComponent(CmbServicio, 0, 185, Short.MAX_VALUE)
+                            .addComponent(CmbEstado, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(LblFechaInfo, javax.swing.GroupLayout.PREFERRED_SIZE, 156, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 44, Short.MAX_VALUE)))
                 .addContainerGap())
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(133, 133, 133)
+                .addComponent(BtnGuardar, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(BtnLimpiar, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(125, 125, 125))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -259,7 +315,8 @@ public class FrmAgregado extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(TxtFecha, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel4))
+                    .addComponent(jLabel4)
+                    .addComponent(LblFechaInfo, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -277,13 +334,13 @@ public class FrmAgregado extends javax.swing.JFrame {
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel7)
                             .addComponent(CmbEstado, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addContainerGap(77, Short.MAX_VALUE))
+                        .addGap(18, 18, 18)
+                        .addComponent(BtnLimpiar, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(BtnGuardar)
-                            .addComponent(BtnLimpiar))
-                        .addGap(27, 27, 27))))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 137, Short.MAX_VALUE)
+                        .addComponent(BtnGuardar, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(22, 22, 22))))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -312,6 +369,7 @@ public class FrmAgregado extends javax.swing.JFrame {
     }//GEN-LAST:event_CmbMunicipioActionPerformed
 
     private void BtnLimpiarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnLimpiarActionPerformed
+        
         TxtNumero.setText("");
 
         TxtCliente.setText("");
@@ -320,40 +378,111 @@ public class FrmAgregado extends javax.swing.JFrame {
         CmbMunicipio.setSelectedIndex(0);
         CmbEstado.setSelectedIndex(0);
         CmbServicio.setSelectedIndex(0);
+        
     }//GEN-LAST:event_BtnLimpiarActionPerformed
 
     private void BtnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnGuardarActionPerformed
+// VALIDAR MUNICIPIO
+    if (CmbMunicipio.getSelectedIndex() == 0) {
 
-        if (CmbMunicipio.getSelectedIndex() == 0) {
+        JOptionPane.showMessageDialog(this,
+            "Seleccione un municipio");
 
-            JOptionPane.showMessageDialog(this,
-                "Seleccione un municipio");
+        return;
+    }
 
-            return;
-        }
+    LineaDAO dao = new LineaDAO();
 
-        LineaDAO dao = new LineaDAO();
+    String numero = TxtNumero.getText();
+    String municipio = CmbMunicipio.getSelectedItem().toString();
+    String cliente = TxtCliente.getText();
 
-        String numero = TxtNumero.getText();
-        String municipio = CmbMunicipio.getSelectedItem().toString();
-        String cliente = TxtCliente.getText();
-        String fecha = TxtFecha.getText();
+    String fechaUsuario = TxtFecha.getText();
 
-        String estado = CmbEstado.getSelectedItem().toString();
-        String servicio = CmbServicio.getSelectedItem().toString();
+    String estado = CmbEstado.getSelectedItem().toString();
+    String servicio = CmbServicio.getSelectedItem().toString();
 
-        boolean resultado = dao.insertarLinea(numero, estado, fecha, municipio, cliente, servicio);
+    // VALIDAR CAMPOS VACÍOS (opcional pero recomendado)
+    if (numero.trim().isEmpty() || cliente.trim().isEmpty() || fechaUsuario.trim().isEmpty()) {
 
-        if (resultado) {
+        JOptionPane.showMessageDialog(this,
+            "Complete todos los campos",
+            "Advertencia",
+            JOptionPane.WARNING_MESSAGE);
 
-            javax.swing.JOptionPane.showMessageDialog(this, "Registro agregado correctamente");
+        return;
+    }
 
-            // REFRESCAR TABLA SIN ABRIR NADA NUEVO
-            frmConsulta.cargarTabla();
+    // VALIDAR FORMATO FECHA
+    if (!Validaciones.validarFechaFormato(fechaUsuario)) {
 
-            this.dispose(); // solo cerrar FrmAgregado
-        }
+        LblFechaInfo.setText("Formato: dd/MM/yyyy HH:mm:ss");
+        LblFechaInfo.setForeground(java.awt.Color.RED);
+
+        JOptionPane.showMessageDialog(this,
+            "Fecha inválida",
+            "Error",
+            JOptionPane.ERROR_MESSAGE);
+
+        TxtFecha.requestFocus();
+
+        return;
+    }
+
+    // CONVERTIR FECHA PARA MYSQL
+    String fecha = Validaciones.convertirFechaMySQL(fechaUsuario);
+
+    if (fecha == null) {
+
+        JOptionPane.showMessageDialog(this,
+            "Error al convertir la fecha",
+            "Error",
+            JOptionPane.ERROR_MESSAGE);
+
+        return;
+    }
+
+    // INSERTAR EN BD
+    boolean resultado = dao.insertarLinea(
+        numero,
+        estado,
+        fecha,
+        municipio,
+        cliente,
+        servicio
+    );
+
+    if (resultado) {
+
+        JOptionPane.showMessageDialog(this,
+            "Registro agregado correctamente"
+        );
+
+        // REFRESCAR TABLA
+        frmConsulta.cargarTabla();
+
+        this.dispose();
+    }
     }//GEN-LAST:event_BtnGuardarActionPerformed
+
+    private void TxtNumeroKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TxtNumeroKeyTyped
+        
+        Validaciones.soloNumeros8Digitos(
+        TxtNumero,
+        evt
+        );
+        
+    }//GEN-LAST:event_TxtNumeroKeyTyped
+
+    private void TxtFechaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_TxtFechaActionPerformed
+        
+       
+        
+    }//GEN-LAST:event_TxtFechaActionPerformed
+
+    private void TxtFechaKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TxtFechaKeyTyped
+        Validaciones.soloFormatoFechaHora(evt);
+    }//GEN-LAST:event_TxtFechaKeyTyped
 
     /**
      * @param args the command line arguments
@@ -424,6 +553,7 @@ public class FrmAgregado extends javax.swing.JFrame {
     private javax.swing.JComboBox<String> CmbEstado;
     private javax.swing.JComboBox<String> CmbMunicipio;
     private javax.swing.JComboBox<String> CmbServicio;
+    private javax.swing.JLabel LblFechaInfo;
     private javax.swing.JTextField TxtCliente;
     private javax.swing.JTextField TxtFecha;
     private javax.swing.JTextField TxtNumero;

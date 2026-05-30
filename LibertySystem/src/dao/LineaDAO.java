@@ -123,8 +123,7 @@ public class LineaDAO {
 
     return modelo;
 }
-    
-
+   
     // =========================
     // INSERTAR DATOS (NUEVO)
     // =========================
@@ -238,7 +237,6 @@ public class LineaDAO {
 
         throw new SQLException("No se pudo insertar cliente");
     }
-    
     
     public boolean eliminarLinea(String numero) {
 

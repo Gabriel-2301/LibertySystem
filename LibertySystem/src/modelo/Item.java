@@ -9,6 +9,7 @@ package modelo;
  * @author gabri
  */
 public class Item {
+    
     private int id;
     private String nombre;
 
@@ -29,4 +30,5 @@ public class Item {
     public String toString() {
         return nombre;
     }
+    
 }
