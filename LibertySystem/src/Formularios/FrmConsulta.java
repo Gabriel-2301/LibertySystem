@@ -36,54 +36,87 @@ public class FrmConsulta extends javax.swing.JFrame {
     /**
      * Creates new form FrmConsulta
      */
+    private javax.swing.Timer filtroTimer;
     
     public void cargarTabla() {
+
     LineaDAO dao = new LineaDAO();
+
     jTableDatos.setModel(dao.mostrarDatos());
-   
-    jTableDatos.setDefaultEditor(Object.class, null); 
+
+    jTableDatos.setDefaultEditor(Object.class, null);
+
+    configurarTabla();
 }
     
     public FrmConsulta() {
         initComponents();
         cargarTabla();
         
-        //Ancho de Columnas
-        jTableDatos.getColumnModel().getColumn(0).setPreferredWidth(10);
-        jTableDatos.getColumnModel().getColumn(0).setResizable(false);
+        BtnFiltrar.setEnabled(false);
         
-        jTableDatos.getColumnModel().getColumn(1).setPreferredWidth(10);
-        jTableDatos.getColumnModel().getColumn(1).setResizable(false);
-        
-        jTableDatos.getColumnModel().getColumn(2).setPreferredWidth(48);
-        jTableDatos.getColumnModel().getColumn(2).setResizable(false);
-        
-        jTableDatos.getColumnModel().getColumn(3).setPreferredWidth(105);
-        jTableDatos.getColumnModel().getColumn(3).setResizable(false);
-        
-        jTableDatos.getColumnModel().getColumn(4).setPreferredWidth(180);
-        jTableDatos.getColumnModel().getColumn(4).setResizable(false);
-        
-        jTableDatos.getColumnModel().getColumn(5).setPreferredWidth(10);
-        jTableDatos.getColumnModel().getColumn(5).setResizable(false);
-       
-        //Alto de filas
-        jTableDatos.setRowHeight(20);
+        validarFiltros();
         
        this.setFocusable(true);
        this.requestFocusInWindow();
         
         setResizable(false);
         
-        setPlaceholder(TxtFieldBuscador, " Buscar Numero");
-        setPlaceholder(TxtCantidad, " #Cantidad");
-        
+        setPlaceholder(TxtFieldBuscador, " Buscar por Numero o Cliente");
+        setPlaceholder(TxtCantidad, " #Cantidad Filtrado");
+        validarFiltros();
         this.setLocationRelativeTo(this);
         SetImageLabel(jLabel2, "src/IMG/Logoliberty.png");
         
         setIconImage(new ImageIcon(getClass().getResource("/IMG/Iconoliberty.png")).getImage());
         
     }
+    
+    private void configurarTabla() {
+
+    jTableDatos.getColumnModel().getColumn(0).setPreferredWidth(10);
+    jTableDatos.getColumnModel().getColumn(0).setResizable(false);
+
+    jTableDatos.getColumnModel().getColumn(1).setPreferredWidth(10);
+    jTableDatos.getColumnModel().getColumn(1).setResizable(false);
+
+    jTableDatos.getColumnModel().getColumn(2).setPreferredWidth(48);
+    jTableDatos.getColumnModel().getColumn(2).setResizable(false);
+
+    jTableDatos.getColumnModel().getColumn(3).setPreferredWidth(105);
+    jTableDatos.getColumnModel().getColumn(3).setResizable(false);
+
+    jTableDatos.getColumnModel().getColumn(4).setPreferredWidth(180);
+    jTableDatos.getColumnModel().getColumn(4).setResizable(false);
+
+    jTableDatos.getColumnModel().getColumn(5).setPreferredWidth(10);
+    jTableDatos.getColumnModel().getColumn(5).setResizable(false);
+
+    jTableDatos.setRowHeight(25);
+
+    jTableDatos.getTableHeader().setResizingAllowed(false);
+    jTableDatos.getTableHeader().setReorderingAllowed(false);
+}
+    
+   private void validarFiltros() {
+
+    boolean estadoOk = CmbEstado.getSelectedIndex() > 0;
+    boolean servicioOk = CmbServicio.getSelectedIndex() > 0;
+    boolean municipioOk = CmbMunicipio.getSelectedIndex() > 0;
+
+    String cantidad = TxtCantidad.getText().trim();
+
+    boolean cantidadOk =
+            !cantidad.isEmpty()
+            && !cantidad.equals("#Cantidad Filtrado");
+
+    BtnFiltrar.setEnabled(
+            estadoOk ||
+            servicioOk ||
+            municipioOk ||
+            cantidadOk
+    );
+}
 
     private void setPlaceholder(javax.swing.JTextField txt, String placeholder) {
 
@@ -139,6 +172,7 @@ public class FrmConsulta extends javax.swing.JFrame {
         CmbEstado = new javax.swing.JComboBox<>();
         BtnImprimir = new javax.swing.JButton();
         jLabel6 = new javax.swing.JLabel();
+        CmbMunicipio = new javax.swing.JComboBox<>();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
@@ -159,7 +193,7 @@ public class FrmConsulta extends javax.swing.JFrame {
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGap(189, 189, 189)
+                .addGap(237, 237, 237)
                 .addComponent(jLabel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 155, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -208,7 +242,7 @@ public class FrmConsulta extends javax.swing.JFrame {
             }
         });
 
-        jTableDatos.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        jTableDatos.setFont(new java.awt.Font("Segoe UI", 0, 16)); // NOI18N
         jTableDatos.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null, null, null},
@@ -228,6 +262,7 @@ public class FrmConsulta extends javax.swing.JFrame {
                 return canEdit [columnIndex];
             }
         });
+        jTableDatos.setRowHeight(25);
         jTableDatos.getTableHeader().setResizingAllowed(false);
         jTableDatos.getTableHeader().setReorderingAllowed(false);
         jScrollPane1.setViewportView(jTableDatos);
@@ -262,6 +297,16 @@ public class FrmConsulta extends javax.swing.JFrame {
         CmbServicio.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Seleccionar Servicio", "Bussines Trunk", "MyUC" }));
         CmbServicio.setToolTipText("");
         CmbServicio.setBorder(null);
+        CmbServicio.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                CmbServicioItemStateChanged(evt);
+            }
+        });
+        CmbServicio.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                CmbServicioActionPerformed(evt);
+            }
+        });
 
         TxtCantidad.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         TxtCantidad.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
@@ -271,6 +316,9 @@ public class FrmConsulta extends javax.swing.JFrame {
             }
         });
         TxtCantidad.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                TxtCantidadKeyReleased(evt);
+            }
             public void keyTyped(java.awt.event.KeyEvent evt) {
                 TxtCantidadKeyTyped(evt);
             }
@@ -287,6 +335,11 @@ public class FrmConsulta extends javax.swing.JFrame {
 
         CmbEstado.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         CmbEstado.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Seleccionar Estado", "Libre", "Cancelado", "En Servicio", "Reservado" }));
+        CmbEstado.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                CmbEstadoItemStateChanged(evt);
+            }
+        });
         CmbEstado.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 CmbEstadoActionPerformed(evt);
@@ -307,6 +360,19 @@ public class FrmConsulta extends javax.swing.JFrame {
         jLabel6.setIcon(new javax.swing.ImageIcon(getClass().getResource("/IMG/Iconodatos.png"))); // NOI18N
         jLabel6.setText("Tabla de Lineas");
 
+        CmbMunicipio.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        CmbMunicipio.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Seleccionar Municipio", "Alianza, Valle", "Amapala, Valle", "Azacualpa, Santa Barbara", "Campamento, Olancho", "Catacamas, Olancho", "Choloma, Cortes", "Choluteca, Choluteca", "Comayagua, Comayagua", "Copan Ruinas, Copan", "Cucuyagua, Copan", "Danli, El Paraiso", "Dulce Nombre de Culmi, Olancho", "El Negrito, Yoro", "El Paraiso, El Paraiso", "El Porvenir, Francisco Morazan", "El Progreso, Yoro", "El Triunfo, Choluteca", "Florida, Copan", "Gracias, Lempira", "Guiamaca, Francisco Morazan", "Jesus de Otoro, Intibuca", "Juticalpa, Olancho", "La Ceiba, Atlantida", "La Esperanza, Intibuca", "La Flecha, Santa Barbara", "La Labor, Ocotepeque", "La Libertad, Comayagua", "La Lima, Cortes", "La Paz, La Paz", "La Trinidad, Santa Barbara", "La Union, Copan", "Langue, Valle", "Las Vegas, Santa Barbara", "Lepaera, Lempira", "Macuelizo, Santa Barbara", "Marcala, La Paz", "Monjaras, Marcovia", "Morazan, Yoro", "Nacaome, Valle", "Nueva Arcadia, Copan", "Ocotepeque, Ocotepeque", "Olanchito, Yoro", "Omoa, Cortes", "Pespire, Choluteca", "Pimienta, Cortes", "Potrerillos, Cortes", "Puerto Cortes, Cortes", "Puerto Lempira, Gracias a Dios", "Quimistan, Santa Barbara", "Roatan, Islas de la Bahia", "Saba, Colon", "San Manuel, Cortes", "San Antonio de Oriente, Francisco Morazan", "San Juan, Intibuca", "San Juan Pueblo, Atlantida", "San Lorenzo, Valle", "San Marcos, Ocotepeque", "San Marcos de Colon, Choluteca", "San Pedro Sula, Cortes", "Santa Barbara, Santa Barbara", "Santa Cruz de Yojoa, Cortes", "Santa Rita, Copan", "Santa Rosa de Copan, Copan", "Siguatepeque, Comayagua", "Talanga, Francisco Morazan", "Taulabe, Comayagua", "Tegucigalpa, Francisco Morazan", "Tela, Atlantida", "Tocoa, Colon", "Trojes, El Paraiso", "Trujillo, Colon", "Villanueva, Cortes", "Yoro, Yoro", "Yuscaran, El Paraiso" }));
+        CmbMunicipio.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                CmbMunicipioItemStateChanged(evt);
+            }
+        });
+        CmbMunicipio.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                CmbMunicipioActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -320,33 +386,35 @@ public class FrmConsulta extends javax.swing.JFrame {
                         .addComponent(BtnEditar, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(BtnEliminar, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(292, 292, 292)
+                        .addGap(448, 448, 448)
                         .addComponent(BtnAgregar, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel3)
-                                    .addGroup(jPanel1Layout.createSequentialGroup()
-                                        .addGap(209, 209, 209)
-                                        .addComponent(CmbEstado, javax.swing.GroupLayout.PREFERRED_SIZE, 176, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(jLabel3)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(CmbMunicipio, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(CmbEstado, javax.swing.GroupLayout.PREFERRED_SIZE, 176, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(CmbServicio, javax.swing.GroupLayout.PREFERRED_SIZE, 176, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(TxtCantidad, javax.swing.GroupLayout.PREFERRED_SIZE, 83, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(TxtFieldBuscador, javax.swing.GroupLayout.PREFERRED_SIZE, 671, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(BtnFiltrar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(BtnBuscar, javax.swing.GroupLayout.DEFAULT_SIZE, 140, Short.MAX_VALUE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(TxtCantidad, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(TxtFieldBuscador))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(BtnLimpiar, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(BtnImprimir, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(BtnFiltrar, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(BtnImprimir, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(BtnBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(BtnLimpiar, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE))))
                     .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
                         .addComponent(jLabel6)
-                        .addGap(0, 848, Short.MAX_VALUE)))
-                .addContainerGap())
+                        .addGap(0, 0, Short.MAX_VALUE)))
+                .addGap(16, 16, 16))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -354,8 +422,8 @@ public class FrmConsulta extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(6, 6, 6)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(TxtFieldBuscador)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(TxtFieldBuscador, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(BtnBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(BtnLimpiar, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)))
@@ -366,7 +434,8 @@ public class FrmConsulta extends javax.swing.JFrame {
                     .addComponent(TxtCantidad, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(CmbEstado, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel3)
-                    .addComponent(CmbServicio, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(CmbServicio, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(CmbMunicipio, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel6)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -383,12 +452,12 @@ public class FrmConsulta extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(0, 6, Short.MAX_VALUE)
+                .addGap(0, 17, Short.MAX_VALUE)
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
@@ -644,34 +713,73 @@ public class FrmConsulta extends javax.swing.JFrame {
     }//GEN-LAST:event_BtnImprimirActionPerformed
 
     private void CmbEstadoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CmbEstadoActionPerformed
-        // TODO add your handling code here:
+        validarFiltros();
     }//GEN-LAST:event_CmbEstadoActionPerformed
 
     private void BtnFiltrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnFiltrarActionPerformed
 
-        String estado = CmbEstado.getSelectedItem().toString();
-        String servicio = CmbServicio.getSelectedItem().toString();
+    int estadoIndex = CmbEstado.getSelectedIndex();
+    int servicioIndex = CmbServicio.getSelectedIndex();
+    int municipioIndex = CmbMunicipio.getSelectedIndex();
 
-        if (TxtCantidad.getText().isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Ingrese una cantidad");
-            return;
+    String estado = CmbEstado.getSelectedItem().toString();
+    String servicio = CmbServicio.getSelectedItem().toString();
+    String municipio = CmbMunicipio.getSelectedItem().toString();
+
+    String cantidadTxt = TxtCantidad.getText().trim();
+
+    Integer cantidad = null;
+
+    // =========================
+    // VALIDAR SI NO HAY FILTROS
+    // =========================
+    boolean sinFiltros =
+            estadoIndex == 0 &&
+            servicioIndex == 0 &&
+            municipioIndex == 0 &&
+            cantidadTxt.isEmpty();
+
+    if (sinFiltros) {
+        JOptionPane.showMessageDialog(this,
+            "Por favor seleccione una o varias opciones que quiere filtrar");
+
+        // IMPORTANTE: limpiar tabla para evitar datos viejos
+        jTableDatos.setModel(new javax.swing.table.DefaultTableModel());
+        return;
+    }
+
+    // =========================
+    // CANTIDAD OPCIONAL
+    // =========================
+    try {
+        if (!cantidadTxt.isEmpty()) {
+            cantidad = Integer.parseInt(cantidadTxt);
+            if (cantidad <= 0) cantidad = null;
         }
+    } catch (Exception e) {
+        cantidad = null;
+    }
 
-        int cantidad;
+    // =========================
+    // EJECUTAR FILTRO
+    // =========================
+    LineaDAO dao = new LineaDAO();
 
-        try {
-            cantidad = Integer.parseInt(TxtCantidad.getText());
-        } catch (NumberFormatException e) {
-            JOptionPane.showMessageDialog(this, "Cantidad inválida");
-            return;
-        }
+    jTableDatos.setModel(
+    dao.filtrarLineasFlexible(
+        estadoIndex,
+        servicioIndex,
+        municipioIndex,
+        estado,
+        servicio,
+        municipio,
+        cantidad
+    )
+);
 
-        LineaDAO dao = new LineaDAO();
+    jTableDatos.setDefaultEditor(Object.class, null);
 
-        jTableDatos.setModel(
-            dao.filtrarLineasFlexible(estado, servicio, cantidad)
-        );
-        jTableDatos.setDefaultEditor(Object.class, null);
+    configurarTabla();
         
     }//GEN-LAST:event_BtnFiltrarActionPerformed
 
@@ -724,8 +832,26 @@ public class FrmConsulta extends javax.swing.JFrame {
 
     private void BtnLimpiarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnLimpiarActionPerformed
         
+          // Limpiar buscador
         TxtFieldBuscador.setText("");
+
+        // Restaurar filtros
+        CmbMunicipio.setSelectedIndex(0);
+        CmbEstado.setSelectedIndex(0);
+        CmbServicio.setSelectedIndex(0);
+
+         // Limpiar cantidad
+        TxtCantidad.setText("");
+
+        // Volver a mostrar placeholder
+        TxtCantidad.setText(" #Cantidad");
+        TxtCantidad.setForeground(java.awt.Color.GRAY);
+
+        // Recargar tabla completa
         cargarTabla();
+
+        // Actualizar estado del botón Filtrar
+        validarFiltros();
         
     }//GEN-LAST:event_BtnLimpiarActionPerformed
 
@@ -757,7 +883,8 @@ public class FrmConsulta extends javax.swing.JFrame {
 
         jTableDatos.setModel(filtro);
         jTableDatos.setDefaultEditor(Object.class, null);
-        // permitir selección correcta
+
+        configurarTabla();
         jTableDatos.setRowSelectionAllowed(true);
         jTableDatos.setColumnSelectionAllowed(false);
         jTableDatos.setCellSelectionEnabled(false);
@@ -797,6 +924,31 @@ public class FrmConsulta extends javax.swing.JFrame {
         );
         
     }//GEN-LAST:event_TxtCantidadKeyTyped
+
+    private void CmbMunicipioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CmbMunicipioActionPerformed
+        validarFiltros();
+    }//GEN-LAST:event_CmbMunicipioActionPerformed
+
+    private void CmbServicioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CmbServicioActionPerformed
+       validarFiltros();
+    }//GEN-LAST:event_CmbServicioActionPerformed
+
+    private void TxtCantidadKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TxtCantidadKeyReleased
+        validarFiltros();
+    }//GEN-LAST:event_TxtCantidadKeyReleased
+
+    private void CmbMunicipioItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_CmbMunicipioItemStateChanged
+      
+    }//GEN-LAST:event_CmbMunicipioItemStateChanged
+
+    private void CmbEstadoItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_CmbEstadoItemStateChanged
+     
+    }//GEN-LAST:event_CmbEstadoItemStateChanged
+
+    private void CmbServicioItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_CmbServicioItemStateChanged
+        
+    
+    }//GEN-LAST:event_CmbServicioItemStateChanged
 
     /**
      * @param args the command line arguments
@@ -849,6 +1001,7 @@ public class FrmConsulta extends javax.swing.JFrame {
     private javax.swing.JButton BtnImprimir;
     private javax.swing.JButton BtnLimpiar;
     private javax.swing.JComboBox<String> CmbEstado;
+    private javax.swing.JComboBox<String> CmbMunicipio;
     private javax.swing.JComboBox<String> CmbServicio;
     private javax.swing.JTextField TxtCantidad;
     private javax.swing.JTextField TxtFieldBuscador;

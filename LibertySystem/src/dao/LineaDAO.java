@@ -6,9 +6,8 @@ import javax.swing.table.DefaultTableModel;
 
 public class LineaDAO {
 
-   
     // =========================
-    // MOSTRAR DATOS (YA LO TENIA)
+    // MOSTRAR DATOS
     // =========================
     public DefaultTableModel mostrarDatos() {
 
@@ -56,8 +55,18 @@ public class LineaDAO {
 
         return modelo;
     }
-    
-    public DefaultTableModel filtrarLineasFlexible(String estado,String servicio,int cantidad) {
+
+    // =========================
+    // FILTRO FLEXIBLE (ACTUALIZADO)
+    // =========================
+    public DefaultTableModel filtrarLineasFlexible(
+        int estadoIndex,
+        int servicioIndex,
+        int municipioIndex,
+        String estado,
+        String servicio,
+        String municipio,
+        Integer cantidad) {
 
     String[] columnas = {
         "Numero",
@@ -86,18 +95,32 @@ public class LineaDAO {
        .append("LEFT JOIN servicios s ON l.servicio_id = s.id ")
        .append("WHERE 1=1 ");
 
-    // filtro estado (solo si no es "Seleccionar")
-    if (estado != null && !estado.equals("Seleccionar Estado")) {
+    // =========================
+    // SOLO APLICAR FILTROS REALES
+    // =========================
+
+    if (estadoIndex > 0) {
         sql.append("AND e.nombre = '").append(estado).append("' ");
     }
 
-    // filtro servicio (solo si no es "Seleccionar")
-    if (servicio != null && !servicio.equals("Seleccionar Servicio")) {
+    if (servicioIndex > 0) {
         sql.append("AND s.nombre = '").append(servicio).append("' ");
     }
 
-    sql.append("ORDER BY l.numero ASC ")
-       .append("LIMIT ").append(cantidad);
+    if (municipioIndex > 0) {
+        sql.append("AND m.nombre = '").append(municipio).append("' ");
+    }
+
+    // si no hay ningún filtro REAL → bloquear resultado total
+    if (estadoIndex == 0 && servicioIndex == 0 && municipioIndex == 0) {
+        return modelo; // vacío
+    }
+
+    sql.append("ORDER BY l.id ASC ");
+
+    if (cantidad != null && cantidad > 0) {
+        sql.append("LIMIT ").append(cantidad);
+    }
 
     try (Connection con = Conexion.conectar();
          Statement st = con.createStatement();
@@ -118,14 +141,14 @@ public class LineaDAO {
         }
 
     } catch (SQLException e) {
-        System.out.println("Error al filtrar: " + e);
+        System.out.println("Error: " + e);
     }
 
     return modelo;
 }
-   
+
     // =========================
-    // INSERTAR DATOS (NUEVO)
+    // INSERTAR LINEA (igual que el tuyo)
     // =========================
     public boolean insertarLinea(String numero,
                                  String estado,
@@ -139,28 +162,11 @@ public class LineaDAO {
         try {
             con = Conexion.conectar();
 
-            // convertir nombres a IDs
             int estadoId = obtenerId(con, "estados", estado);
             int municipioId = obtenerId(con, "municipios", municipio);
             int clienteId = obtenerOInsertarCliente(con, cliente);
             int servicioId = obtenerId(con, "servicios", servicio);
 
-            if (estadoId == -1) {
-            throw new SQLException("Estado no encontrado: " + estado);
-            }
-
-            if (municipioId == -1) {
-            throw new SQLException("Municipio no encontrado: " + municipio);
-            }
-
-            if (clienteId == -1) {
-            throw new SQLException("Cliente no encontrado: " + cliente);
-            }
-
-            if (servicioId == -1) {
-            throw new SQLException("Servicio no encontrado: " + servicio);
-            }
-            
             String sql = "INSERT INTO lineas "
                     + "(numero, estado_id, fechas_ultimo_estado, municipio_id, cliente_id, servicio_id) "
                     + "VALUES (?, ?, ?, ?, ?, ?)";
@@ -185,7 +191,7 @@ public class LineaDAO {
     }
 
     // =========================
-    // MÉTODO AUXILIAR: OBTENER ID
+    // AUXILIAR ID
     // =========================
     private int obtenerId(Connection con, String tabla, String nombre) throws SQLException {
 
@@ -200,12 +206,14 @@ public class LineaDAO {
             return rs.getInt("id");
         }
 
-        return -1; // si no encuentra
+        return -1;
     }
-    
+
+    // =========================
+    // CLIENTE
+    // =========================
     private int obtenerOInsertarCliente(Connection con, String cliente) throws SQLException {
 
-    // buscar si existe
         String sqlBuscar = "SELECT id FROM clientes WHERE TRIM(LOWER(nombre)) = TRIM(LOWER(?))";
 
         PreparedStatement psBuscar = con.prepareStatement(sqlBuscar);
@@ -214,73 +222,69 @@ public class LineaDAO {
         ResultSet rs = psBuscar.executeQuery();
 
         if (rs.next()) {
-        return rs.getInt("id");
+            return rs.getInt("id");
         }
 
-        // si no existe -> insertar
         String sqlInsertar = "INSERT INTO clientes(nombre) VALUES(?)";
 
         PreparedStatement psInsertar = con.prepareStatement(
-            sqlInsertar,
-            Statement.RETURN_GENERATED_KEYS
+                sqlInsertar,
+                Statement.RETURN_GENERATED_KEYS
         );
 
         psInsertar.setString(1, cliente);
-
         psInsertar.executeUpdate();
 
         ResultSet generado = psInsertar.getGeneratedKeys();
 
         if (generado.next()) {
-        return generado.getInt(1);
+            return generado.getInt(1);
         }
 
         throw new SQLException("No se pudo insertar cliente");
     }
-    
+
+    // =========================
+    // ELIMINAR
+    // =========================
     public boolean eliminarLinea(String numero) {
 
-    String sql = "DELETE FROM lineas WHERE numero = ?";
+        String sql = "DELETE FROM lineas WHERE numero = ?";
 
-    try (Connection con = Conexion.conectar();
-         PreparedStatement ps = con.prepareStatement(sql)) {
+        try (Connection con = Conexion.conectar();
+             PreparedStatement ps = con.prepareStatement(sql)) {
 
-        ps.setString(1, numero);
+            ps.setString(1, numero);
+            ps.executeUpdate();
+            return true;
 
-        ps.executeUpdate();
-        return true;
-
-    } catch (Exception e) {
-        System.out.println("Error al eliminar: " + e);
-        return false;
+        } catch (Exception e) {
+            System.out.println("Error al eliminar: " + e);
+            return false;
+        }
     }
-  }
-    
+
+    // =========================
+    // CARGAR MUNICIPIOS
+    // =========================
     public void cargarMunicipios(javax.swing.JComboBox<String> combo) {
 
-    String sql = "SELECT nombre FROM municipios ORDER BY nombre ASC";
+        String sql = "SELECT nombre FROM municipios ORDER BY nombre ASC";
 
-    try (Connection con = Conexion.conectar();
-         Statement st = con.createStatement();
-         ResultSet rs = st.executeQuery(sql)) {
+        try (Connection con = Conexion.conectar();
+             Statement st = con.createStatement();
+             ResultSet rs = st.executeQuery(sql)) {
 
-        combo.removeAllItems();
+            combo.removeAllItems();
+            combo.addItem("Seleccionar Municipio");
 
-        combo.addItem("Seleccionar Municipio");
+            while (rs.next()) {
+                combo.addItem(rs.getString("nombre"));
+            }
 
-        while (rs.next()) {
-
-            String municipio = rs.getString("nombre");
-
-            combo.addItem(municipio);
+        } catch (SQLException e) {
+            System.out.println("Error cargando municipios: " + e);
         }
-
-    } catch (SQLException e) {
-
-        System.out.println(
-                "Error cargando municipios: " + e
-        );
     }
-  }
 }
 
