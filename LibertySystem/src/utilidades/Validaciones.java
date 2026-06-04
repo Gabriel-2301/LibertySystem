@@ -87,7 +87,7 @@ public class Validaciones {
     }
 }
     // VALIDAR FORMATO FECHA Y HORA
-public static void soloFormatoFechaHora(KeyEvent evt) {
+    public static void soloFormatoFechaHora(KeyEvent evt) {
 
     char c = evt.getKeyChar();
 

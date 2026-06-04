@@ -103,7 +103,7 @@ public class FrmConsulta extends javax.swing.JFrame {
     
     private void configurarTabla() {
     
-        //jTableDatos.setAutoResizeMode(jTableDatos.AUTO_RESIZE_OFF);
+    //jTableDatos.setAutoResizeMode(jTableDatos.AUTO_RESIZE_OFF);
 
     jTableDatos.getColumnModel().getColumn(0).setPreferredWidth(130);
     jTableDatos.getColumnModel().getColumn(0).setResizable(false);
@@ -533,7 +533,7 @@ public class FrmConsulta extends javax.swing.JFrame {
 
     private void BtnImprimirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnImprimirActionPerformed
         
-          try {
+        try {
 
         JFileChooser fileChooser = new JFileChooser();
         fileChooser.setDialogTitle("Guardar PDF");
@@ -621,7 +621,7 @@ public class FrmConsulta extends javax.swing.JFrame {
         tabla.setSplitLate(false);
         tabla.setSplitRows(true);
 
-        // IMPORTANTE: evitar error si cambias columnas
+        // IMPORTANTE: evitar error si se cambia columnas
         float[] widths = new float[jTableDatos.getColumnCount()];
         for (int i = 0; i < widths.length; i++) {
             widths[i] = 1f;
@@ -699,7 +699,9 @@ public class FrmConsulta extends javax.swing.JFrame {
     }//GEN-LAST:event_BtnImprimirActionPerformed
 
     private void CmbEstadoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CmbEstadoActionPerformed
+        
         validarFiltros();
+        
     }//GEN-LAST:event_CmbEstadoActionPerformed
 
     private void BtnFiltrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnFiltrarActionPerformed
@@ -847,7 +849,7 @@ public class FrmConsulta extends javax.swing.JFrame {
 
     private void BtnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnBuscarActionPerformed
         
-          String texto = TxtFieldBuscador.getText().trim();
+    String texto = TxtFieldBuscador.getText().trim();
 
     if (texto.isEmpty()
             || texto.equals("Buscar por Numero o Cliente")) {
@@ -877,7 +879,7 @@ public class FrmConsulta extends javax.swing.JFrame {
 
     private void TxtFieldBuscadorKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TxtFieldBuscadorKeyReleased
     
-     String texto = TxtFieldBuscador.getText().trim();
+    String texto = TxtFieldBuscador.getText().trim();
 
     if (texto.isEmpty()
             || texto.equals("Buscar por Numero o Cliente")
@@ -919,15 +921,21 @@ public class FrmConsulta extends javax.swing.JFrame {
     }//GEN-LAST:event_TxtCantidadKeyTyped
 
     private void CmbMunicipioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CmbMunicipioActionPerformed
+        
         validarFiltros();
+        
     }//GEN-LAST:event_CmbMunicipioActionPerformed
 
     private void CmbServicioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CmbServicioActionPerformed
-       validarFiltros();
+       
+        validarFiltros();
+        
     }//GEN-LAST:event_CmbServicioActionPerformed
 
     private void TxtCantidadKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TxtCantidadKeyReleased
+        
         validarFiltros();
+        
     }//GEN-LAST:event_TxtCantidadKeyReleased
 
     private void CmbMunicipioItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_CmbMunicipioItemStateChanged
