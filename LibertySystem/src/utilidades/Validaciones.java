@@ -46,6 +46,23 @@ public class Validaciones {
         }
     }
     
+    public static void buscadorNumeroCliente(
+         JTextField txt,
+        KeyEvent evt
+) {
+
+    // Máximo 50 caracteres
+    if (txt.getText().length() >= 50) {
+
+        if (evt.getKeyChar() == KeyEvent.VK_BACK_SPACE
+                || evt.getKeyChar() == KeyEvent.VK_DELETE) {
+            return;
+        }
+
+        evt.consume();
+    }
+  }
+    
     public static boolean validarFechaFormato(String fecha) {
 
     // SOLO permite:

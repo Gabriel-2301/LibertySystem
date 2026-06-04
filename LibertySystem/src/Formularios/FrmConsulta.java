@@ -53,6 +53,10 @@ public class FrmConsulta extends javax.swing.JFrame {
         initComponents();
         cargarTabla();
         
+        cargarTotalInicial();
+        
+        setTitle("Liberty Networks | Sistema de Consulta de Líneas");
+        
         BtnFiltrar.setEnabled(false);
         
         validarFiltros();
@@ -70,27 +74,57 @@ public class FrmConsulta extends javax.swing.JFrame {
         
         setIconImage(new ImageIcon(getClass().getResource("/IMG/Iconoliberty.png")).getImage());
         
+        jLabelResultadoFiltrado.setText("");
+        
     }
     
+    
+    
+    private void actualizarLabelResultado() {
+
+    int total = jTableDatos.getRowCount();
+
+    // Si no hay nada o tabla vacía
+    if (total <= 0) {
+        jLabelResultadoFiltrado.setText("Sin resultados");
+    } else {
+        jLabelResultadoFiltrado.setText("Resultados Filtrados/Encontrados: " + total);
+    }
+}
+    
+   private void cargarTotalInicial() {
+
+    LineaDAO dao = new LineaDAO();
+
+    int total = dao.contarLineasTotales();
+
+    jLabelTotalDatos.setText("" + total);
+}
+    
     private void configurarTabla() {
+    
+        //jTableDatos.setAutoResizeMode(jTableDatos.AUTO_RESIZE_OFF);
 
-    jTableDatos.getColumnModel().getColumn(0).setPreferredWidth(10);
+    jTableDatos.getColumnModel().getColumn(0).setPreferredWidth(130);
     jTableDatos.getColumnModel().getColumn(0).setResizable(false);
-
-    jTableDatos.getColumnModel().getColumn(1).setPreferredWidth(10);
+    
+    jTableDatos.getColumnModel().getColumn(1).setPreferredWidth(130);
     jTableDatos.getColumnModel().getColumn(1).setResizable(false);
 
-    jTableDatos.getColumnModel().getColumn(2).setPreferredWidth(48);
+    jTableDatos.getColumnModel().getColumn(2).setPreferredWidth(130);
     jTableDatos.getColumnModel().getColumn(2).setResizable(false);
 
-    jTableDatos.getColumnModel().getColumn(3).setPreferredWidth(105);
+    jTableDatos.getColumnModel().getColumn(3).setPreferredWidth(180);
     jTableDatos.getColumnModel().getColumn(3).setResizable(false);
 
-    jTableDatos.getColumnModel().getColumn(4).setPreferredWidth(180);
+    jTableDatos.getColumnModel().getColumn(4).setPreferredWidth(300);
     jTableDatos.getColumnModel().getColumn(4).setResizable(false);
 
-    jTableDatos.getColumnModel().getColumn(5).setPreferredWidth(10);
+    jTableDatos.getColumnModel().getColumn(5).setPreferredWidth(400);
     jTableDatos.getColumnModel().getColumn(5).setResizable(false);
+
+    jTableDatos.getColumnModel().getColumn(6).setPreferredWidth(140);
+    jTableDatos.getColumnModel().getColumn(6).setResizable(false);
 
     jTableDatos.setRowHeight(25);
 
@@ -118,6 +152,19 @@ public class FrmConsulta extends javax.swing.JFrame {
     );
 }
 
+   private String limpiarPDF(Object valor) {
+
+    if (valor == null) return "";
+
+    String v = valor.toString().trim();
+
+    if (v.equalsIgnoreCase("null")) return "";
+    if (v.equals("1900-01-01 00:00:00")) return "";
+    if (v.equals("0")) return "";
+
+    return v;
+}
+   
     private void setPlaceholder(javax.swing.JTextField txt, String placeholder) {
 
     txt.setText(placeholder);
@@ -173,6 +220,8 @@ public class FrmConsulta extends javax.swing.JFrame {
         BtnImprimir = new javax.swing.JButton();
         jLabel6 = new javax.swing.JLabel();
         CmbMunicipio = new javax.swing.JComboBox<>();
+        jLabelResultadoFiltrado = new javax.swing.JLabel();
+        jLabelTotalDatos = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
@@ -182,8 +231,8 @@ public class FrmConsulta extends javax.swing.JFrame {
         jPanel2.setBackground(new java.awt.Color(255, 255, 255));
 
         jLabel1.setBackground(new java.awt.Color(0, 0, 0));
-        jLabel1.setFont(new java.awt.Font("Source Sans Pro Black", 0, 38)); // NOI18N
-        jLabel1.setText("Formulario de Consulta");
+        jLabel1.setFont(new java.awt.Font("Source Sans Pro Black", 0, 48)); // NOI18N
+        jLabel1.setText("Liberty Networks | Panel de Consultas");
 
         jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/IMG/Logoliberty.png"))); // NOI18N
         jLabel2.setDisabledIcon(new javax.swing.ImageIcon(getClass().getResource("/IMG/Logoliberty.png"))); // NOI18N
@@ -193,19 +242,19 @@ public class FrmConsulta extends javax.swing.JFrame {
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGap(237, 237, 237)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jLabel1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGap(112, 112, 112)
                 .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 155, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(50, 50, 50))
+                .addGap(67, 67, 67))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                .addContainerGap(37, Short.MAX_VALUE)
+                .addContainerGap(34, Short.MAX_VALUE)
                 .addComponent(jLabel1)
-                .addGap(35, 35, 35))
+                .addGap(25, 25, 25))
         );
 
         TxtFieldBuscador.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
@@ -245,17 +294,17 @@ public class FrmConsulta extends javax.swing.JFrame {
         jTableDatos.setFont(new java.awt.Font("Segoe UI", 0, 16)); // NOI18N
         jTableDatos.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null}
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null}
             },
             new String [] {
-                "Numero", "Estado", "Fecha_Ultimo_Estado", "Municipio", "Cliente", "Servicio"
+                "Numero", "PBX", "Estado", "Fecha_Ultimo_Estado", "Municipio", "Cliente", "Servicio"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false, false
+                false, true, false, false, false, false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
@@ -358,7 +407,7 @@ public class FrmConsulta extends javax.swing.JFrame {
         jLabel6.setBackground(new java.awt.Color(0, 0, 0));
         jLabel6.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jLabel6.setIcon(new javax.swing.ImageIcon(getClass().getResource("/IMG/Iconodatos.png"))); // NOI18N
-        jLabel6.setText("Tabla de Lineas");
+        jLabel6.setText("Tabla de Lineas Registradas HND:");
 
         CmbMunicipio.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         CmbMunicipio.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Seleccionar Municipio", "Alianza, Valle", "Amapala, Valle", "Azacualpa, Santa Barbara", "Campamento, Olancho", "Catacamas, Olancho", "Choloma, Cortes", "Choluteca, Choluteca", "Comayagua, Comayagua", "Copan Ruinas, Copan", "Cucuyagua, Copan", "Danli, El Paraiso", "Dulce Nombre de Culmi, Olancho", "El Negrito, Yoro", "El Paraiso, El Paraiso", "El Porvenir, Francisco Morazan", "El Progreso, Yoro", "El Triunfo, Choluteca", "Florida, Copan", "Gracias, Lempira", "Guiamaca, Francisco Morazan", "Jesus de Otoro, Intibuca", "Juticalpa, Olancho", "La Ceiba, Atlantida", "La Esperanza, Intibuca", "La Flecha, Santa Barbara", "La Labor, Ocotepeque", "La Libertad, Comayagua", "La Lima, Cortes", "La Paz, La Paz", "La Trinidad, Santa Barbara", "La Union, Copan", "Langue, Valle", "Las Vegas, Santa Barbara", "Lepaera, Lempira", "Macuelizo, Santa Barbara", "Marcala, La Paz", "Monjaras, Marcovia", "Morazan, Yoro", "Nacaome, Valle", "Nueva Arcadia, Copan", "Ocotepeque, Ocotepeque", "Olanchito, Yoro", "Omoa, Cortes", "Pespire, Choluteca", "Pimienta, Cortes", "Potrerillos, Cortes", "Puerto Cortes, Cortes", "Puerto Lempira, Gracias a Dios", "Quimistan, Santa Barbara", "Roatan, Islas de la Bahia", "Saba, Colon", "San Manuel, Cortes", "San Antonio de Oriente, Francisco Morazan", "San Juan, Intibuca", "San Juan Pueblo, Atlantida", "San Lorenzo, Valle", "San Marcos, Ocotepeque", "San Marcos de Colon, Choluteca", "San Pedro Sula, Cortes", "Santa Barbara, Santa Barbara", "Santa Cruz de Yojoa, Cortes", "Santa Rita, Copan", "Santa Rosa de Copan, Copan", "Siguatepeque, Comayagua", "Talanga, Francisco Morazan", "Taulabe, Comayagua", "Tegucigalpa, Francisco Morazan", "Tela, Atlantida", "Tocoa, Colon", "Trojes, El Paraiso", "Trujillo, Colon", "Villanueva, Cortes", "Yoro, Yoro", "Yuscaran, El Paraiso" }));
@@ -373,6 +422,13 @@ public class FrmConsulta extends javax.swing.JFrame {
             }
         });
 
+        jLabelResultadoFiltrado.setBackground(new java.awt.Color(0, 0, 0));
+        jLabelResultadoFiltrado.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        jLabelResultadoFiltrado.setText(".");
+
+        jLabelTotalDatos.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        jLabelTotalDatos.setText(".");
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -386,35 +442,40 @@ public class FrmConsulta extends javax.swing.JFrame {
                         .addComponent(BtnEditar, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(BtnEliminar, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(448, 448, 448)
+                        .addGap(517, 517, 517)
                         .addComponent(BtnAgregar, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
+                    .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(jLabel3)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addComponent(jLabel3)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(CmbMunicipio, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(CmbEstado, javax.swing.GroupLayout.PREFERRED_SIZE, 176, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(CmbServicio, javax.swing.GroupLayout.PREFERRED_SIZE, 176, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(TxtCantidad, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addComponent(TxtFieldBuscador))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 245, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(CmbMunicipio, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(CmbEstado, javax.swing.GroupLayout.PREFERRED_SIZE, 176, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(CmbServicio, javax.swing.GroupLayout.PREFERRED_SIZE, 176, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(TxtCantidad, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(TxtFieldBuscador))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jLabelTotalDatos, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(833, 833, 833)))
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(BtnBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(BtnLimpiar, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addComponent(BtnFiltrar, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(BtnImprimir, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(BtnBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(BtnLimpiar, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
-                        .addComponent(jLabel6)
-                        .addGap(0, 0, Short.MAX_VALUE)))
-                .addGap(16, 16, 16))
+                            .addComponent(jLabelResultadoFiltrado, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 270, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -437,7 +498,10 @@ public class FrmConsulta extends javax.swing.JFrame {
                     .addComponent(CmbServicio, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(CmbMunicipio, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel6)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel6)
+                    .addComponent(jLabelResultadoFiltrado)
+                    .addComponent(jLabelTotalDatos))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 342, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -452,12 +516,14 @@ public class FrmConsulta extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(0, 17, Short.MAX_VALUE)
+                .addGap(0, 0, Short.MAX_VALUE)
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
@@ -467,248 +533,168 @@ public class FrmConsulta extends javax.swing.JFrame {
 
     private void BtnImprimirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnImprimirActionPerformed
         
+          try {
+
+        JFileChooser fileChooser = new JFileChooser();
+        fileChooser.setDialogTitle("Guardar PDF");
+
+        int option = fileChooser.showSaveDialog(this);
+
+        if (option != JFileChooser.APPROVE_OPTION) {
+            return;
+        }
+
+        String ruta = fileChooser.getSelectedFile().getAbsolutePath();
+
+        String nombreArchivo = fileChooser.getSelectedFile().getName();
+
+        if (nombreArchivo.toLowerCase().endsWith(".pdf")) {
+            nombreArchivo = nombreArchivo.substring(0, nombreArchivo.length() - 4);
+        }
+
+        String tituloDinamico = "LIBERTY NETWORKS - " + nombreArchivo.toUpperCase();
+
+        if (!ruta.endsWith(".pdf")) {
+            ruta += ".pdf";
+        }
+
+        // =========================
+        // DOCUMENTO
+        // =========================
+        Document documento = new Document(PageSize.A4.rotate(), 20, 20, 20, 20);
+
+        PdfWriter.getInstance(documento, new FileOutputStream(ruta));
+
+        documento.open();
+
+        // =========================
+        // COLORES
+        // =========================
+        BaseColor naranjaLiberty = new BaseColor(255, 153, 0);
+        BaseColor grisClaro = new BaseColor(245, 245, 245);
+
+        // =========================
+        // LOGO
+        // =========================
         try {
+            com.itextpdf.text.Image logo =
+                    com.itextpdf.text.Image.getInstance("src/IMG/Logoliberty.png");
 
-            JFileChooser fileChooser = new JFileChooser();
-            fileChooser.setDialogTitle("Guardar PDF");
+            logo.scaleToFit(100, 100);
+            logo.setAlignment(Element.ALIGN_CENTER);
 
-            int option = fileChooser.showSaveDialog(this);
-
-            if (option != JFileChooser.APPROVE_OPTION) {
-                return;
-            }
-
-            String ruta = fileChooser.getSelectedFile().getAbsolutePath();
-
-            if (!ruta.endsWith(".pdf")) {
-                ruta += ".pdf";
-            }
-
-            // =========================
-            // DOCUMENTO
-            // =========================
-            Document documento = new Document(
-                PageSize.A4.rotate(),
-                20, 20, 20, 20
-            );
-
-            PdfWriter.getInstance(documento,
-                new FileOutputStream(ruta));
-
-            documento.open();
-
-            // =========================
-            // COLORES
-            // =========================
-            BaseColor naranjaLiberty = new BaseColor(255, 153, 0);
-            BaseColor grisClaro = new BaseColor(245, 245, 245);
-
-            // =========================
-            // LOGO
-            // =========================
-            try {
-
-                com.itextpdf.text.Image logo =
-                com.itextpdf.text.Image.getInstance(
-                    "src/IMG/Logoliberty.png"
-                );
-
-                logo.scaleToFit(100, 100);
-
-                logo.setAlignment(Element.ALIGN_CENTER);
-
-                documento.add(logo);
-
-            } catch (Exception e) {
-
-                System.out.println("Logo no encontrado");
-            }
-
-            // =========================
-            // TITULO
-            // =========================
-            Font tituloFont = new Font(
-                Font.FontFamily.HELVETICA,
-                18,
-                Font.BOLD,
-                BaseColor.BLACK
-            );
-
-            Paragraph titulo =
-            new Paragraph(
-                "LIBERTY NETWORKS - REPORTE DE LÍNEAS",
-                tituloFont
-            );
-
-            titulo.setAlignment(Element.ALIGN_CENTER);
-
-            documento.add(titulo);
-
-            documento.add(new Paragraph(" "));
-
-            // =========================
-            // FECHA
-            // =========================
-            String fecha =
-            new java.text.SimpleDateFormat(
-                "dd/MM/yyyy HH:mm:ss"
-            ).format(new java.util.Date());
-
-            Paragraph fechaTexto =
-            new Paragraph("Generado: " + fecha);
-
-            fechaTexto.setAlignment(Element.ALIGN_RIGHT);
-
-            documento.add(fechaTexto);
-
-            documento.add(new Paragraph(" "));
-
-            // =========================
-            // TABLA PDF
-            // =========================
-            PdfPTable tabla = new PdfPTable(
-                jTableDatos.getColumnCount()
-            );
-
-            tabla.setWidthPercentage(100);
-
-            // IMPORTANTE
-            tabla.setSplitLate(false);
-            tabla.setSplitRows(true);
-
-            // tamaños columnas
-            tabla.setWidths(new float[]{
-                3f, 2f, 3f, 3f, 4f, 3f
-            });
-
-            // =========================
-            // FUENTES
-            // =========================
-            Font headerFont = new Font(
-                Font.FontFamily.HELVETICA,
-                10,
-                Font.BOLD,
-                BaseColor.WHITE
-            );
-
-            Font dataFont = new Font(
-                Font.FontFamily.HELVETICA,
-                9,
-                Font.NORMAL,
-                BaseColor.BLACK
-            );
-
-            // =========================
-            // ENCABEZADOS
-            // =========================
-            for (int i = 0; i < jTableDatos.getColumnCount(); i++) {
-
-                PdfPCell header =
-                new PdfPCell(
-                    new Paragraph(
-                        jTableDatos.getColumnName(i),
-                        headerFont
-                    )
-                );
-
-                header.setBackgroundColor(naranjaLiberty);
-
-                header.setHorizontalAlignment(
-                    Element.ALIGN_CENTER
-                );
-
-                header.setVerticalAlignment(
-                    Element.ALIGN_MIDDLE
-                );
-
-                header.setPadding(6);
-
-                tabla.addCell(header);
-            }
-
-            // =========================
-            // DATOS
-            // =========================
-            for (int fila = 0;
-                fila < jTableDatos.getRowCount();
-                fila++) {
-
-                for (int columna = 0;
-                    columna < jTableDatos.getColumnCount();
-                    columna++) {
-
-                    Object valor =
-                    jTableDatos.getValueAt(
-                        fila,
-                        columna
-                    );
-
-                    PdfPCell cell =
-                    new PdfPCell(
-                        new Paragraph(
-                            valor != null
-                            ? valor.toString()
-                            : "",
-                            dataFont
-                        )
-                    );
-
-                    cell.setPadding(5);
-
-                    cell.setVerticalAlignment(
-                        Element.ALIGN_MIDDLE
-                    );
-
-                    // filas alternas
-                    if (fila % 2 == 0) {
-
-                        cell.setBackgroundColor(
-                            grisClaro
-                        );
-                    }
-
-                    tabla.addCell(cell);
-                }
-            }
-
-            documento.add(tabla);
-
-            documento.add(new Paragraph(" "));
-
-            // =========================
-            // FIRMA
-            // =========================
-            Font firmaFont = new Font(
-                Font.FontFamily.HELVETICA,
-                9,
-                Font.ITALIC,
-                BaseColor.GRAY
-            );
-
-            Paragraph firma =
-            new Paragraph(
-                "Generado automáticamente por Liberty Networks",
-                firmaFont
-            );
-
-            firma.setAlignment(Element.ALIGN_CENTER);
-
-            documento.add(firma);
-
-            documento.close();
-
-            JOptionPane.showMessageDialog(
-                this,
-                "PDF generado correctamente"
-            );
+            documento.add(logo);
 
         } catch (Exception e) {
-
-            JOptionPane.showMessageDialog(
-                this,
-                "Error al generar PDF: " + e
-            );
+            System.out.println("Logo no encontrado");
         }
+
+        // =========================
+        // TITULO
+        // =========================
+        Font tituloFont = new Font(Font.FontFamily.HELVETICA, 18, Font.BOLD, BaseColor.BLACK);
+
+        Paragraph titulo = new Paragraph(tituloDinamico, tituloFont);
+        titulo.setAlignment(Element.ALIGN_CENTER);
+
+        documento.add(titulo);
+        documento.add(new Paragraph(" "));
+
+        // =========================
+        // FECHA
+        // =========================
+        String fecha = new java.text.SimpleDateFormat("dd/MM/yyyy HH:mm:ss")
+                .format(new java.util.Date());
+
+        Paragraph fechaTexto = new Paragraph("Generado: " + fecha);
+        fechaTexto.setAlignment(Element.ALIGN_RIGHT);
+
+        documento.add(fechaTexto);
+        documento.add(new Paragraph(" "));
+
+        // =========================
+        // TABLA
+        // =========================
+        PdfPTable tabla = new PdfPTable(jTableDatos.getColumnCount());
+        tabla.setWidthPercentage(100);
+
+        tabla.setSplitLate(false);
+        tabla.setSplitRows(true);
+
+        // IMPORTANTE: evitar error si cambias columnas
+        float[] widths = new float[jTableDatos.getColumnCount()];
+        for (int i = 0; i < widths.length; i++) {
+            widths[i] = 1f;
+        }
+        tabla.setWidths(widths);
+
+        Font headerFont = new Font(Font.FontFamily.HELVETICA, 10, Font.BOLD, BaseColor.WHITE);
+        Font dataFont = new Font(Font.FontFamily.HELVETICA, 9, Font.NORMAL, BaseColor.BLACK);
+
+        // =========================
+        // ENCABEZADOS
+        // =========================
+        for (int i = 0; i < jTableDatos.getColumnCount(); i++) {
+
+            PdfPCell header = new PdfPCell(
+                    new Paragraph(jTableDatos.getColumnName(i), headerFont)
+            );
+
+            header.setBackgroundColor(naranjaLiberty);
+            header.setHorizontalAlignment(Element.ALIGN_CENTER);
+            header.setVerticalAlignment(Element.ALIGN_MIDDLE);
+            header.setPadding(6);
+
+            tabla.addCell(header);
+        }
+
+        // =========================
+        // DATOS 
+        // =========================
+        for (int fila = 0; fila < jTableDatos.getRowCount(); fila++) {
+
+            for (int col = 0; col < jTableDatos.getColumnCount(); col++) {
+
+                Object valor = jTableDatos.getValueAt(fila, col);
+
+                String texto = limpiarPDF(valor);
+
+                PdfPCell cell = new PdfPCell(new Paragraph(texto, dataFont));
+
+                cell.setPadding(5);
+                cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+
+                if (fila % 2 == 0) {
+                    cell.setBackgroundColor(grisClaro);
+                }
+
+                tabla.addCell(cell);
+            }
+        }
+
+        documento.add(tabla);
+
+        documento.add(new Paragraph(" "));
+
+        Font firmaFont = new Font(Font.FontFamily.HELVETICA, 9, Font.ITALIC, BaseColor.GRAY);
+
+        Paragraph firma = new Paragraph(
+                "Generado automáticamente por Liberty Networks",
+                firmaFont
+        );
+
+        firma.setAlignment(Element.ALIGN_CENTER);
+
+        documento.add(firma);
+
+        documento.close();
+
+        JOptionPane.showMessageDialog(this, "PDF generado correctamente");
+
+    } catch (Exception e) {
+
+        JOptionPane.showMessageDialog(this, "Error al generar PDF: " + e);
+    }
         
     }//GEN-LAST:event_BtnImprimirActionPerformed
 
@@ -730,9 +716,6 @@ public class FrmConsulta extends javax.swing.JFrame {
 
     Integer cantidad = null;
 
-    // =========================
-    // VALIDAR SI NO HAY FILTROS
-    // =========================
     boolean sinFiltros =
             estadoIndex == 0 &&
             servicioIndex == 0 &&
@@ -741,18 +724,16 @@ public class FrmConsulta extends javax.swing.JFrame {
 
     if (sinFiltros) {
         JOptionPane.showMessageDialog(this,
-            "Por favor seleccione una o varias opciones que quiere filtrar");
+            "Por favor seleccione filtros");
 
-        // IMPORTANTE: limpiar tabla para evitar datos viejos
         jTableDatos.setModel(new javax.swing.table.DefaultTableModel());
+        jLabelResultadoFiltrado.setText("");
         return;
     }
 
-    // =========================
-    // CANTIDAD OPCIONAL
-    // =========================
     try {
-        if (!cantidadTxt.isEmpty()) {
+        if (!cantidadTxt.isEmpty()
+                && !cantidadTxt.equals("#Cantidad Filtrado")) {
             cantidad = Integer.parseInt(cantidadTxt);
             if (cantidad <= 0) cantidad = null;
         }
@@ -760,27 +741,29 @@ public class FrmConsulta extends javax.swing.JFrame {
         cantidad = null;
     }
 
-    // =========================
-    // EJECUTAR FILTRO
-    // =========================
     LineaDAO dao = new LineaDAO();
 
-    jTableDatos.setModel(
-    dao.filtrarLineasFlexible(
-        estadoIndex,
-        servicioIndex,
-        municipioIndex,
-        estado,
-        servicio,
-        municipio,
-        cantidad
-    )
-);
+    DefaultTableModel modelo = dao.filtrarLineasFlexible(
+            estadoIndex,
+            servicioIndex,
+            municipioIndex,
+            estado,
+            servicio,
+            municipio,
+            cantidad
+    );
 
+    jTableDatos.setModel(modelo);
     jTableDatos.setDefaultEditor(Object.class, null);
 
     configurarTabla();
-        
+
+    // =========================
+    // ACTUALIZAR LABEL
+    // =========================
+    actualizarLabelResultado();
+    
+       
     }//GEN-LAST:event_BtnFiltrarActionPerformed
 
     private void TxtCantidadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_TxtCantidadActionPerformed
@@ -832,68 +815,59 @@ public class FrmConsulta extends javax.swing.JFrame {
 
     private void BtnLimpiarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnLimpiarActionPerformed
         
-          // Limpiar buscador
-        TxtFieldBuscador.setText("");
+    // Limpiar buscador
+    TxtFieldBuscador.setText("");
 
-        // Restaurar filtros
-        CmbMunicipio.setSelectedIndex(0);
-        CmbEstado.setSelectedIndex(0);
-        CmbServicio.setSelectedIndex(0);
+    // Restaurar filtros
+    CmbMunicipio.setSelectedIndex(0);
+    CmbEstado.setSelectedIndex(0);
+    CmbServicio.setSelectedIndex(0);
 
-         // Limpiar cantidad
-        TxtCantidad.setText("");
+    // Limpiar cantidad
+    TxtCantidad.setText("");
 
-        // Volver a mostrar placeholder
-        TxtCantidad.setText(" #Cantidad");
-        TxtCantidad.setForeground(java.awt.Color.GRAY);
+    // Restaurar placeholders
+    TxtCantidad.setText(" #Cantidad Filtrado");
+    TxtCantidad.setForeground(java.awt.Color.GRAY);
 
-        // Recargar tabla completa
-        cargarTabla();
+    TxtFieldBuscador.setText(" ");
+    TxtFieldBuscador.setForeground(java.awt.Color.BLACK);
 
-        // Actualizar estado del botón Filtrar
-        validarFiltros();
+    TxtFieldBuscador.requestFocus();
+
+    // Recargar tabla completa
+    cargarTabla();
+
+    // Actualizar botón filtrar
+    validarFiltros();
+
+   jLabelResultadoFiltrado.setText("");
         
     }//GEN-LAST:event_BtnLimpiarActionPerformed
 
     private void BtnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnBuscarActionPerformed
         
-        String numero = TxtFieldBuscador.getText();
+          String texto = TxtFieldBuscador.getText().trim();
 
-        LineaDAO dao = new LineaDAO();
-        DefaultTableModel modelo = dao.mostrarDatos();
+    if (texto.isEmpty()
+            || texto.equals("Buscar por Numero o Cliente")) {
 
-        DefaultTableModel filtro = new DefaultTableModel(
-            new String[]{"Numero","Estado","Fecha_Ultimo_Estado","Municipio","Cliente","Servicio"}, 0
-        );
+        JOptionPane.showMessageDialog(this,
+                "Ingrese texto");
 
-        for (int i = 0; i < modelo.getRowCount(); i++) {
+        return;
+    }
 
-            if (modelo.getValueAt(i, 0).toString().equals(numero)) {
+    LineaDAO dao = new LineaDAO();
 
-                filtro.addRow(new Object[]{
-                    modelo.getValueAt(i, 0),
-                    modelo.getValueAt(i, 1),
-                    modelo.getValueAt(i, 2),
-                    modelo.getValueAt(i, 3),
-                    modelo.getValueAt(i, 4),
-                    modelo.getValueAt(i, 5)
-                });
-            }
-        }
+    DefaultTableModel modelo = dao.buscarNumeroOCliente(texto);
 
-        jTableDatos.setModel(filtro);
-        jTableDatos.setDefaultEditor(Object.class, null);
+    jTableDatos.setModel(modelo);
+    jTableDatos.setDefaultEditor(Object.class, null);
 
-        configurarTabla();
-        jTableDatos.setRowSelectionAllowed(true);
-        jTableDatos.setColumnSelectionAllowed(false);
-        jTableDatos.setCellSelectionEnabled(false);
+    configurarTabla();
 
-        // esto es CLAVE para que mouse funcione bien
-        jTableDatos.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
-
-        // permitir copiar con teclado
-        jTableDatos.setFocusable(true);
+    //actualizarLabelResultado();
         
     }//GEN-LAST:event_BtnBuscarActionPerformed
 
@@ -903,16 +877,35 @@ public class FrmConsulta extends javax.swing.JFrame {
 
     private void TxtFieldBuscadorKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TxtFieldBuscadorKeyReleased
     
+     String texto = TxtFieldBuscador.getText().trim();
 
+    if (texto.isEmpty()
+            || texto.equals("Buscar por Numero o Cliente")
+            || texto.equals(" Buscar por Numero o Cliente")) {
+
+        cargarTabla();
+        //actualizarLabelResultado();
+        return;
+    }
+
+    LineaDAO dao = new LineaDAO();
+
+    jTableDatos.setModel(dao.buscarNumeroOCliente(texto));
+
+    jTableDatos.setDefaultEditor(Object.class, null);
+
+    configurarTabla();
+
+    actualizarLabelResultado();
    
     }//GEN-LAST:event_TxtFieldBuscadorKeyReleased
 
     private void TxtFieldBuscadorKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TxtFieldBuscadorKeyTyped
        
-        Validaciones.soloNumeros8Digitos(
-        TxtFieldBuscador,
-        evt
-        );
+    // máximo 50 caracteres
+    if (TxtFieldBuscador.getText().length() >= 50) {
+        evt.consume();
+    }
         
     }//GEN-LAST:event_TxtFieldBuscadorKeyTyped
 
@@ -1009,6 +1002,8 @@ public class FrmConsulta extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabelResultadoFiltrado;
+    private javax.swing.JLabel jLabelTotalDatos;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
