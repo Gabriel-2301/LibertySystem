@@ -26,7 +26,6 @@ import javax.swing.table.DefaultTableModel;
 import modelo.Item;
 import utilidades.Validaciones;
 
-
 /**
  *
  * @author gabri
@@ -37,160 +36,166 @@ public class FrmConsulta extends javax.swing.JFrame {
      * Creates new form FrmConsulta
      */
     private javax.swing.Timer filtroTimer;
-    
+
     public void cargarTabla() {
 
-    LineaDAO dao = new LineaDAO();
+        LineaDAO dao = new LineaDAO();
 
-    jTableDatos.setModel(dao.mostrarDatos());
+        jTableDatos.setModel(dao.mostrarDatos());
 
-    jTableDatos.setDefaultEditor(Object.class, null);
+        jTableDatos.setDefaultEditor(Object.class, null);
 
-    configurarTabla();
-}
-    
+        configurarTabla();
+    }
+
     public FrmConsulta() {
         initComponents();
         cargarTabla();
-        
+
         cargarTotalInicial();
-        
+
         setTitle("Liberty Networks | Sistema de Consulta de Líneas");
-        
+
         BtnFiltrar.setEnabled(false);
-        
+
         validarFiltros();
-        
-       this.setFocusable(true);
-       this.requestFocusInWindow();
-        
+
+        this.setFocusable(true);
+        this.requestFocusInWindow();
+
         setResizable(false);
-        
+
         setPlaceholder(TxtFieldBuscador, " Buscar por Numero o Cliente");
         setPlaceholder(TxtCantidad, " #Cantidad Filtrado");
         validarFiltros();
         this.setLocationRelativeTo(this);
         SetImageLabel(jLabel2, "src/IMG/Logoliberty.png");
-        
+
         setIconImage(new ImageIcon(getClass().getResource("/IMG/Iconoliberty.png")).getImage());
-        
+
         jLabelResultadoFiltrado.setText("");
-        
+
     }
-    
-    
-    
-    private void actualizarLabelResultado() {
 
-    int total = jTableDatos.getRowCount();
+    void actualizarLabelResultado() {
 
-    // Si no hay nada o tabla vacía
-    if (total <= 0) {
-        jLabelResultadoFiltrado.setText("Sin resultados");
-    } else {
-        jLabelResultadoFiltrado.setText("Resultados Filtrados/Encontrados: " + total);
+        int total = jTableDatos.getRowCount();
+
+        // Si no hay nada o tabla vacía
+        if (total <= 0) {
+            jLabelResultadoFiltrado.setText("Sin resultados");
+        } else {
+            jLabelResultadoFiltrado.setText("Resultados Filtrados/Encontrados: " + total);
+        }
     }
-}
-    
-   private void cargarTotalInicial() {
 
-    LineaDAO dao = new LineaDAO();
+    void cargarTotalInicial() {
 
-    int total = dao.contarLineasTotales();
+        LineaDAO dao = new LineaDAO();
 
-    jLabelTotalDatos.setText("" + total);
-}
-    
+        int total = dao.contarLineasTotales();
+
+        jLabelTotalDatos.setText("" + total);
+    }
+
     private void configurarTabla() {
-    
-    //jTableDatos.setAutoResizeMode(jTableDatos.AUTO_RESIZE_OFF);
 
-    jTableDatos.getColumnModel().getColumn(0).setPreferredWidth(130);
-    jTableDatos.getColumnModel().getColumn(0).setResizable(false);
-    
-    jTableDatos.getColumnModel().getColumn(1).setPreferredWidth(130);
-    jTableDatos.getColumnModel().getColumn(1).setResizable(false);
+        //jTableDatos.setAutoResizeMode(jTableDatos.AUTO_RESIZE_OFF);
+        jTableDatos.getColumnModel().getColumn(0).setPreferredWidth(130);
+        jTableDatos.getColumnModel().getColumn(0).setResizable(false);
 
-    jTableDatos.getColumnModel().getColumn(2).setPreferredWidth(130);
-    jTableDatos.getColumnModel().getColumn(2).setResizable(false);
+        jTableDatos.getColumnModel().getColumn(1).setPreferredWidth(130);
+        jTableDatos.getColumnModel().getColumn(1).setResizable(false);
 
-    jTableDatos.getColumnModel().getColumn(3).setPreferredWidth(180);
-    jTableDatos.getColumnModel().getColumn(3).setResizable(false);
+        jTableDatos.getColumnModel().getColumn(2).setPreferredWidth(130);
+        jTableDatos.getColumnModel().getColumn(2).setResizable(false);
 
-    jTableDatos.getColumnModel().getColumn(4).setPreferredWidth(300);
-    jTableDatos.getColumnModel().getColumn(4).setResizable(false);
+        jTableDatos.getColumnModel().getColumn(3).setPreferredWidth(180);
+        jTableDatos.getColumnModel().getColumn(3).setResizable(false);
 
-    jTableDatos.getColumnModel().getColumn(5).setPreferredWidth(400);
-    jTableDatos.getColumnModel().getColumn(5).setResizable(false);
+        jTableDatos.getColumnModel().getColumn(4).setPreferredWidth(300);
+        jTableDatos.getColumnModel().getColumn(4).setResizable(false);
 
-    jTableDatos.getColumnModel().getColumn(6).setPreferredWidth(140);
-    jTableDatos.getColumnModel().getColumn(6).setResizable(false);
+        jTableDatos.getColumnModel().getColumn(5).setPreferredWidth(400);
+        jTableDatos.getColumnModel().getColumn(5).setResizable(false);
 
-    jTableDatos.setRowHeight(25);
+        jTableDatos.getColumnModel().getColumn(6).setPreferredWidth(140);
+        jTableDatos.getColumnModel().getColumn(6).setResizable(false);
 
-    jTableDatos.getTableHeader().setResizingAllowed(false);
-    jTableDatos.getTableHeader().setReorderingAllowed(false);
-}
-    
-   private void validarFiltros() {
+        jTableDatos.setRowHeight(25);
 
-    boolean estadoOk = CmbEstado.getSelectedIndex() > 0;
-    boolean servicioOk = CmbServicio.getSelectedIndex() > 0;
-    boolean municipioOk = CmbMunicipio.getSelectedIndex() > 0;
+        jTableDatos.getTableHeader().setResizingAllowed(false);
+        jTableDatos.getTableHeader().setReorderingAllowed(false);
+    }
 
-    String cantidad = TxtCantidad.getText().trim();
+    private void validarFiltros() {
 
-    boolean cantidadOk =
-            !cantidad.isEmpty()
-            && !cantidad.equals("#Cantidad Filtrado");
+        boolean estadoOk = CmbEstado.getSelectedIndex() > 0;
+        boolean servicioOk = CmbServicio.getSelectedIndex() > 0;
+        boolean municipioOk = CmbMunicipio.getSelectedIndex() > 0;
 
-    BtnFiltrar.setEnabled(
-            estadoOk ||
-            servicioOk ||
-            municipioOk ||
-            cantidadOk
-    );
-}
+        String cantidad = TxtCantidad.getText().trim();
 
-   private String limpiarPDF(Object valor) {
+        boolean cantidadOk
+                = !cantidad.isEmpty()
+                && !cantidad.equals("#Cantidad Filtrado");
 
-    if (valor == null) return "";
+        BtnFiltrar.setEnabled(
+                estadoOk
+                || servicioOk
+                || municipioOk
+                || cantidadOk
+        );
+    }
 
-    String v = valor.toString().trim();
+    private String limpiarPDF(Object valor) {
 
-    if (v.equalsIgnoreCase("null")) return "";
-    if (v.equals("1900-01-01 00:00:00")) return "";
-    if (v.equals("0")) return "";
+        if (valor == null) {
+            return "";
+        }
 
-    return v;
-}
-   
+        String v = valor.toString().trim();
+
+        if (v.equalsIgnoreCase("null")) {
+            return "";
+        }
+        if (v.equals("1900-01-01 00:00:00")) {
+            return "";
+        }
+        if (v.equals("0")) {
+            return "";
+        }
+
+        return v;
+    }
+
     private void setPlaceholder(javax.swing.JTextField txt, String placeholder) {
 
-    txt.setText(placeholder);
-    txt.setForeground(java.awt.Color.GRAY);
+        txt.setText(placeholder);
+        txt.setForeground(java.awt.Color.GRAY);
 
-    txt.addFocusListener(new java.awt.event.FocusAdapter() {
+        txt.addFocusListener(new java.awt.event.FocusAdapter() {
 
-        @Override
-        public void focusGained(java.awt.event.FocusEvent e) {
+            @Override
+            public void focusGained(java.awt.event.FocusEvent e) {
 
-            if (txt.getText().equals(placeholder)) {
-                txt.setText("");
-                txt.setForeground(java.awt.Color.BLACK);
+                if (txt.getText().equals(placeholder)) {
+                    txt.setText("");
+                    txt.setForeground(java.awt.Color.BLACK);
+                }
             }
-        }
 
-        @Override
-        public void focusLost(java.awt.event.FocusEvent e) {
+            @Override
+            public void focusLost(java.awt.event.FocusEvent e) {
 
-            if (txt.getText().isEmpty()) {
-                txt.setText(placeholder);
-                txt.setForeground(java.awt.Color.GRAY);
+                if (txt.getText().isEmpty()) {
+                    txt.setText(placeholder);
+                    txt.setForeground(java.awt.Color.GRAY);
+                }
             }
-        }
-    });
-}
+        });
+    }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -222,6 +227,9 @@ public class FrmConsulta extends javax.swing.JFrame {
         CmbMunicipio = new javax.swing.JComboBox<>();
         jLabelResultadoFiltrado = new javax.swing.JLabel();
         jLabelTotalDatos = new javax.swing.JLabel();
+        jMenuBar1 = new javax.swing.JMenuBar();
+        jMenuAgregar = new javax.swing.JMenu();
+        jMenuEditar = new javax.swing.JMenu();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
@@ -512,6 +520,14 @@ public class FrmConsulta extends javax.swing.JFrame {
                 .addGap(10, 10, 10))
         );
 
+        jMenuAgregar.setText("Agregar");
+        jMenuBar1.add(jMenuAgregar);
+
+        jMenuEditar.setText("Editar");
+        jMenuBar1.add(jMenuEditar);
+
+        setJMenuBar(jMenuBar1);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -532,240 +548,242 @@ public class FrmConsulta extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void BtnImprimirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnImprimirActionPerformed
-        
+
         try {
 
-        JFileChooser fileChooser = new JFileChooser();
-        fileChooser.setDialogTitle("Guardar PDF");
+            JFileChooser fileChooser = new JFileChooser();
+            fileChooser.setDialogTitle("Guardar PDF");
 
-        int option = fileChooser.showSaveDialog(this);
+            int option = fileChooser.showSaveDialog(this);
 
-        if (option != JFileChooser.APPROVE_OPTION) {
-            return;
-        }
+            if (option != JFileChooser.APPROVE_OPTION) {
+                return;
+            }
 
-        String ruta = fileChooser.getSelectedFile().getAbsolutePath();
+            String ruta = fileChooser.getSelectedFile().getAbsolutePath();
 
-        String nombreArchivo = fileChooser.getSelectedFile().getName();
+            String nombreArchivo = fileChooser.getSelectedFile().getName();
 
-        if (nombreArchivo.toLowerCase().endsWith(".pdf")) {
-            nombreArchivo = nombreArchivo.substring(0, nombreArchivo.length() - 4);
-        }
+            if (nombreArchivo.toLowerCase().endsWith(".pdf")) {
+                nombreArchivo = nombreArchivo.substring(0, nombreArchivo.length() - 4);
+            }
 
-        String tituloDinamico = "LIBERTY NETWORKS - " + nombreArchivo.toUpperCase();
+            String tituloDinamico = "LIBERTY NETWORKS - " + nombreArchivo.toUpperCase();
 
-        if (!ruta.endsWith(".pdf")) {
-            ruta += ".pdf";
-        }
+            if (!ruta.endsWith(".pdf")) {
+                ruta += ".pdf";
+            }
 
-        // =========================
-        // DOCUMENTO
-        // =========================
-        Document documento = new Document(PageSize.A4.rotate(), 20, 20, 20, 20);
+            // =========================
+            // DOCUMENTO
+            // =========================
+            Document documento = new Document(PageSize.A4.rotate(), 20, 20, 20, 20);
 
-        PdfWriter.getInstance(documento, new FileOutputStream(ruta));
+            PdfWriter.getInstance(documento, new FileOutputStream(ruta));
 
-        documento.open();
+            documento.open();
 
-        // =========================
-        // COLORES
-        // =========================
-        BaseColor naranjaLiberty = new BaseColor(255, 153, 0);
-        BaseColor grisClaro = new BaseColor(245, 245, 245);
+            // =========================
+            // COLORES
+            // =========================
+            BaseColor naranjaLiberty = new BaseColor(255, 153, 0);
+            BaseColor grisClaro = new BaseColor(245, 245, 245);
 
-        // =========================
-        // LOGO
-        // =========================
-        try {
-            com.itextpdf.text.Image logo =
-                    com.itextpdf.text.Image.getInstance("src/IMG/Logoliberty.png");
+            // =========================
+            // LOGO
+            // =========================
+            try {
+                com.itextpdf.text.Image logo
+                        = com.itextpdf.text.Image.getInstance("src/IMG/Logoliberty.png");
 
-            logo.scaleToFit(100, 100);
-            logo.setAlignment(Element.ALIGN_CENTER);
+                logo.scaleToFit(100, 100);
+                logo.setAlignment(Element.ALIGN_CENTER);
 
-            documento.add(logo);
+                documento.add(logo);
 
-        } catch (Exception e) {
-            System.out.println("Logo no encontrado");
-        }
+            } catch (Exception e) {
+                System.out.println("Logo no encontrado");
+            }
 
-        // =========================
-        // TITULO
-        // =========================
-        Font tituloFont = new Font(Font.FontFamily.HELVETICA, 18, Font.BOLD, BaseColor.BLACK);
+            // =========================
+            // TITULO
+            // =========================
+            Font tituloFont = new Font(Font.FontFamily.HELVETICA, 18, Font.BOLD, BaseColor.BLACK);
 
-        Paragraph titulo = new Paragraph(tituloDinamico, tituloFont);
-        titulo.setAlignment(Element.ALIGN_CENTER);
+            Paragraph titulo = new Paragraph(tituloDinamico, tituloFont);
+            titulo.setAlignment(Element.ALIGN_CENTER);
 
-        documento.add(titulo);
-        documento.add(new Paragraph(" "));
+            documento.add(titulo);
+            documento.add(new Paragraph(" "));
 
-        // =========================
-        // FECHA
-        // =========================
-        String fecha = new java.text.SimpleDateFormat("dd/MM/yyyy HH:mm:ss")
-                .format(new java.util.Date());
+            // =========================
+            // FECHA
+            // =========================
+            String fecha = new java.text.SimpleDateFormat("dd/MM/yyyy HH:mm:ss")
+                    .format(new java.util.Date());
 
-        Paragraph fechaTexto = new Paragraph("Generado: " + fecha);
-        fechaTexto.setAlignment(Element.ALIGN_RIGHT);
+            Paragraph fechaTexto = new Paragraph("Generado: " + fecha);
+            fechaTexto.setAlignment(Element.ALIGN_RIGHT);
 
-        documento.add(fechaTexto);
-        documento.add(new Paragraph(" "));
+            documento.add(fechaTexto);
+            documento.add(new Paragraph(" "));
 
-        // =========================
-        // TABLA
-        // =========================
-        PdfPTable tabla = new PdfPTable(jTableDatos.getColumnCount());
-        tabla.setWidthPercentage(100);
+            // =========================
+            // TABLA
+            // =========================
+            PdfPTable tabla = new PdfPTable(jTableDatos.getColumnCount());
+            tabla.setWidthPercentage(100);
 
-        tabla.setSplitLate(false);
-        tabla.setSplitRows(true);
+            tabla.setSplitLate(false);
+            tabla.setSplitRows(true);
 
-        // IMPORTANTE: evitar error si se cambia columnas
-        float[] widths = new float[jTableDatos.getColumnCount()];
-        for (int i = 0; i < widths.length; i++) {
-            widths[i] = 1f;
-        }
-        tabla.setWidths(widths);
+            // IMPORTANTE: evitar error si se cambia columnas
+            float[] widths = new float[jTableDatos.getColumnCount()];
+            for (int i = 0; i < widths.length; i++) {
+                widths[i] = 1f;
+            }
+            tabla.setWidths(widths);
 
-        Font headerFont = new Font(Font.FontFamily.HELVETICA, 10, Font.BOLD, BaseColor.WHITE);
-        Font dataFont = new Font(Font.FontFamily.HELVETICA, 9, Font.NORMAL, BaseColor.BLACK);
+            Font headerFont = new Font(Font.FontFamily.HELVETICA, 10, Font.BOLD, BaseColor.WHITE);
+            Font dataFont = new Font(Font.FontFamily.HELVETICA, 9, Font.NORMAL, BaseColor.BLACK);
 
-        // =========================
-        // ENCABEZADOS
-        // =========================
-        for (int i = 0; i < jTableDatos.getColumnCount(); i++) {
+            // =========================
+            // ENCABEZADOS
+            // =========================
+            for (int i = 0; i < jTableDatos.getColumnCount(); i++) {
 
-            PdfPCell header = new PdfPCell(
-                    new Paragraph(jTableDatos.getColumnName(i), headerFont)
+                PdfPCell header = new PdfPCell(
+                        new Paragraph(jTableDatos.getColumnName(i), headerFont)
+                );
+
+                header.setBackgroundColor(naranjaLiberty);
+                header.setHorizontalAlignment(Element.ALIGN_CENTER);
+                header.setVerticalAlignment(Element.ALIGN_MIDDLE);
+                header.setPadding(6);
+
+                tabla.addCell(header);
+            }
+
+            // =========================
+            // DATOS 
+            // =========================
+            for (int fila = 0; fila < jTableDatos.getRowCount(); fila++) {
+
+                for (int col = 0; col < jTableDatos.getColumnCount(); col++) {
+
+                    Object valor = jTableDatos.getValueAt(fila, col);
+
+                    String texto = limpiarPDF(valor);
+
+                    PdfPCell cell = new PdfPCell(new Paragraph(texto, dataFont));
+
+                    cell.setPadding(5);
+                    cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+
+                    if (fila % 2 == 0) {
+                        cell.setBackgroundColor(grisClaro);
+                    }
+
+                    tabla.addCell(cell);
+                }
+            }
+
+            documento.add(tabla);
+
+            documento.add(new Paragraph(" "));
+
+            Font firmaFont = new Font(Font.FontFamily.HELVETICA, 9, Font.ITALIC, BaseColor.GRAY);
+
+            Paragraph firma = new Paragraph(
+                    "Generado automáticamente por Liberty Networks",
+                    firmaFont
             );
 
-            header.setBackgroundColor(naranjaLiberty);
-            header.setHorizontalAlignment(Element.ALIGN_CENTER);
-            header.setVerticalAlignment(Element.ALIGN_MIDDLE);
-            header.setPadding(6);
+            firma.setAlignment(Element.ALIGN_CENTER);
 
-            tabla.addCell(header);
+            documento.add(firma);
+
+            documento.close();
+
+            JOptionPane.showMessageDialog(this, "PDF generado correctamente");
+
+        } catch (Exception e) {
+
+            JOptionPane.showMessageDialog(this, "Error al generar PDF: " + e);
         }
 
-        // =========================
-        // DATOS 
-        // =========================
-        for (int fila = 0; fila < jTableDatos.getRowCount(); fila++) {
-
-            for (int col = 0; col < jTableDatos.getColumnCount(); col++) {
-
-                Object valor = jTableDatos.getValueAt(fila, col);
-
-                String texto = limpiarPDF(valor);
-
-                PdfPCell cell = new PdfPCell(new Paragraph(texto, dataFont));
-
-                cell.setPadding(5);
-                cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
-
-                if (fila % 2 == 0) {
-                    cell.setBackgroundColor(grisClaro);
-                }
-
-                tabla.addCell(cell);
-            }
-        }
-
-        documento.add(tabla);
-
-        documento.add(new Paragraph(" "));
-
-        Font firmaFont = new Font(Font.FontFamily.HELVETICA, 9, Font.ITALIC, BaseColor.GRAY);
-
-        Paragraph firma = new Paragraph(
-                "Generado automáticamente por Liberty Networks",
-                firmaFont
-        );
-
-        firma.setAlignment(Element.ALIGN_CENTER);
-
-        documento.add(firma);
-
-        documento.close();
-
-        JOptionPane.showMessageDialog(this, "PDF generado correctamente");
-
-    } catch (Exception e) {
-
-        JOptionPane.showMessageDialog(this, "Error al generar PDF: " + e);
-    }
-        
     }//GEN-LAST:event_BtnImprimirActionPerformed
 
     private void CmbEstadoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CmbEstadoActionPerformed
-        
+
         validarFiltros();
-        
+
     }//GEN-LAST:event_CmbEstadoActionPerformed
 
     private void BtnFiltrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnFiltrarActionPerformed
 
-    int estadoIndex = CmbEstado.getSelectedIndex();
-    int servicioIndex = CmbServicio.getSelectedIndex();
-    int municipioIndex = CmbMunicipio.getSelectedIndex();
+        int estadoIndex = CmbEstado.getSelectedIndex();
+        int servicioIndex = CmbServicio.getSelectedIndex();
+        int municipioIndex = CmbMunicipio.getSelectedIndex();
 
-    String estado = CmbEstado.getSelectedItem().toString();
-    String servicio = CmbServicio.getSelectedItem().toString();
-    String municipio = CmbMunicipio.getSelectedItem().toString();
+        String estado = CmbEstado.getSelectedItem().toString();
+        String servicio = CmbServicio.getSelectedItem().toString();
+        String municipio = CmbMunicipio.getSelectedItem().toString();
 
-    String cantidadTxt = TxtCantidad.getText().trim();
+        String cantidadTxt = TxtCantidad.getText().trim();
 
-    Integer cantidad = null;
+        Integer cantidad = null;
 
-    boolean sinFiltros =
-            estadoIndex == 0 &&
-            servicioIndex == 0 &&
-            municipioIndex == 0 &&
-            cantidadTxt.isEmpty();
+        boolean sinFiltros
+                = estadoIndex == 0
+                && servicioIndex == 0
+                && municipioIndex == 0
+                && cantidadTxt.isEmpty();
 
-    if (sinFiltros) {
-        JOptionPane.showMessageDialog(this,
-            "Por favor seleccione filtros");
+        if (sinFiltros) {
+            JOptionPane.showMessageDialog(this,
+                    "Por favor seleccione filtros");
 
-        jTableDatos.setModel(new javax.swing.table.DefaultTableModel());
-        jLabelResultadoFiltrado.setText("");
-        return;
-    }
-
-    try {
-        if (!cantidadTxt.isEmpty()
-                && !cantidadTxt.equals("#Cantidad Filtrado")) {
-            cantidad = Integer.parseInt(cantidadTxt);
-            if (cantidad <= 0) cantidad = null;
+            jTableDatos.setModel(new javax.swing.table.DefaultTableModel());
+            jLabelResultadoFiltrado.setText("");
+            return;
         }
-    } catch (Exception e) {
-        cantidad = null;
-    }
 
-    LineaDAO dao = new LineaDAO();
+        try {
+            if (!cantidadTxt.isEmpty()
+                    && !cantidadTxt.equals("#Cantidad Filtrado")) {
+                cantidad = Integer.parseInt(cantidadTxt);
+                if (cantidad <= 0) {
+                    cantidad = null;
+                }
+            }
+        } catch (Exception e) {
+            cantidad = null;
+        }
 
-    DefaultTableModel modelo = dao.filtrarLineasFlexible(
-            estadoIndex,
-            servicioIndex,
-            municipioIndex,
-            estado,
-            servicio,
-            municipio,
-            cantidad
-    );
+        LineaDAO dao = new LineaDAO();
 
-    jTableDatos.setModel(modelo);
-    jTableDatos.setDefaultEditor(Object.class, null);
+        DefaultTableModel modelo = dao.filtrarLineasFlexible(
+                estadoIndex,
+                servicioIndex,
+                municipioIndex,
+                estado,
+                servicio,
+                municipio,
+                cantidad
+        );
 
-    configurarTabla();
+        jTableDatos.setModel(modelo);
+        jTableDatos.setDefaultEditor(Object.class, null);
 
-    // =========================
-    // ACTUALIZAR LABEL
-    // =========================
-    actualizarLabelResultado();
-    
-       
+        configurarTabla();
+
+        // =========================
+        // ACTUALIZAR LABEL
+        // =========================
+        actualizarLabelResultado();
+
+
     }//GEN-LAST:event_BtnFiltrarActionPerformed
 
     private void TxtCantidadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_TxtCantidadActionPerformed
@@ -773,14 +791,14 @@ public class FrmConsulta extends javax.swing.JFrame {
     }//GEN-LAST:event_TxtCantidadActionPerformed
 
     private void BtnAgregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnAgregarActionPerformed
-        
+
         FrmAgregado frm = new FrmAgregado(this);
         frm.setVisible(true);
-        
+
     }//GEN-LAST:event_BtnAgregarActionPerformed
 
     private void BtnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnEliminarActionPerformed
-        
+
         int fila = jTableDatos.getSelectedRow();
 
         if (fila == -1) {
@@ -791,10 +809,10 @@ public class FrmConsulta extends javax.swing.JFrame {
         String numero = jTableDatos.getValueAt(fila, 0).toString();
 
         int confirm = javax.swing.JOptionPane.showConfirmDialog(
-            this,
-            "¿Seguro que deseas eliminar el registro " + numero + "?",
-            "Confirmar eliminación",
-            javax.swing.JOptionPane.YES_NO_OPTION
+                this,
+                "¿Seguro que deseas eliminar el registro " + numero + "?",
+                "Confirmar eliminación",
+                javax.swing.JOptionPane.YES_NO_OPTION
         );
 
         if (confirm == javax.swing.JOptionPane.YES_OPTION) {
@@ -812,65 +830,65 @@ public class FrmConsulta extends javax.swing.JFrame {
                 javax.swing.JOptionPane.showMessageDialog(this, "Error al eliminar");
             }
         }
-        
+
     }//GEN-LAST:event_BtnEliminarActionPerformed
 
     private void BtnLimpiarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnLimpiarActionPerformed
-        
-    // Limpiar buscador
-    TxtFieldBuscador.setText("");
 
-    // Restaurar filtros
-    CmbMunicipio.setSelectedIndex(0);
-    CmbEstado.setSelectedIndex(0);
-    CmbServicio.setSelectedIndex(0);
+        // Limpiar buscador
+        TxtFieldBuscador.setText("");
 
-    // Limpiar cantidad
-    TxtCantidad.setText("");
+        // Restaurar filtros
+        CmbMunicipio.setSelectedIndex(0);
+        CmbEstado.setSelectedIndex(0);
+        CmbServicio.setSelectedIndex(0);
 
-    // Restaurar placeholders
-    TxtCantidad.setText(" #Cantidad Filtrado");
-    TxtCantidad.setForeground(java.awt.Color.GRAY);
+        // Limpiar cantidad
+        TxtCantidad.setText("");
 
-    TxtFieldBuscador.setText(" ");
-    TxtFieldBuscador.setForeground(java.awt.Color.BLACK);
+        // Restaurar placeholders
+        TxtCantidad.setText(" #Cantidad Filtrado");
+        TxtCantidad.setForeground(java.awt.Color.GRAY);
 
-    TxtFieldBuscador.requestFocus();
+        TxtFieldBuscador.setText(" ");
+        TxtFieldBuscador.setForeground(java.awt.Color.BLACK);
 
-    // Recargar tabla completa
-    cargarTabla();
+        TxtFieldBuscador.requestFocus();
 
-    // Actualizar botón filtrar
-    validarFiltros();
+        // Recargar tabla completa
+        cargarTabla();
 
-   jLabelResultadoFiltrado.setText("");
-        
+        // Actualizar botón filtrar
+        validarFiltros();
+
+        jLabelResultadoFiltrado.setText("");
+
     }//GEN-LAST:event_BtnLimpiarActionPerformed
 
     private void BtnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnBuscarActionPerformed
-        
-    String texto = TxtFieldBuscador.getText().trim();
 
-    if (texto.isEmpty()
-            || texto.equals("Buscar por Numero o Cliente")) {
+        String texto = TxtFieldBuscador.getText().trim();
 
-        JOptionPane.showMessageDialog(this,
-                "Ingrese texto");
+        if (texto.isEmpty()
+                || texto.equals("Buscar por Numero o Cliente")) {
 
-        return;
-    }
+            JOptionPane.showMessageDialog(this,
+                    "Ingrese texto");
 
-    LineaDAO dao = new LineaDAO();
+            return;
+        }
 
-    DefaultTableModel modelo = dao.buscarNumeroOCliente(texto);
+        LineaDAO dao = new LineaDAO();
 
-    jTableDatos.setModel(modelo);
-    jTableDatos.setDefaultEditor(Object.class, null);
+        DefaultTableModel modelo = dao.buscarNumeroOCliente(texto);
 
-    configurarTabla();
+        jTableDatos.setModel(modelo);
+        jTableDatos.setDefaultEditor(Object.class, null);
 
-    //actualizarLabelResultado();
-        
+        configurarTabla();
+
+        //actualizarLabelResultado();
+
     }//GEN-LAST:event_BtnBuscarActionPerformed
 
     private void TxtFieldBuscadorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_TxtFieldBuscadorActionPerformed
@@ -878,77 +896,77 @@ public class FrmConsulta extends javax.swing.JFrame {
     }//GEN-LAST:event_TxtFieldBuscadorActionPerformed
 
     private void TxtFieldBuscadorKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TxtFieldBuscadorKeyReleased
-    
-    String texto = TxtFieldBuscador.getText().trim();
 
-    if (texto.isEmpty()
-            || texto.equals("Buscar por Numero o Cliente")
-            || texto.equals(" Buscar por Numero o Cliente")) {
+        String texto = TxtFieldBuscador.getText().trim();
 
-        cargarTabla();
-        //actualizarLabelResultado();
-        return;
-    }
+        if (texto.isEmpty()
+                || texto.equals("Buscar por Numero o Cliente")
+                || texto.equals(" Buscar por Numero o Cliente")) {
 
-    LineaDAO dao = new LineaDAO();
+            cargarTabla();
+            //actualizarLabelResultado();
+            return;
+        }
 
-    jTableDatos.setModel(dao.buscarNumeroOCliente(texto));
+        LineaDAO dao = new LineaDAO();
 
-    jTableDatos.setDefaultEditor(Object.class, null);
+        jTableDatos.setModel(dao.buscarNumeroOCliente(texto));
 
-    configurarTabla();
+        jTableDatos.setDefaultEditor(Object.class, null);
 
-    actualizarLabelResultado();
-   
+        configurarTabla();
+
+        actualizarLabelResultado();
+
     }//GEN-LAST:event_TxtFieldBuscadorKeyReleased
 
     private void TxtFieldBuscadorKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TxtFieldBuscadorKeyTyped
-       
-    // máximo 50 caracteres
-    if (TxtFieldBuscador.getText().length() >= 50) {
-        evt.consume();
-    }
-        
+
+        // máximo 50 caracteres
+        if (TxtFieldBuscador.getText().length() >= 50) {
+            evt.consume();
+        }
+
     }//GEN-LAST:event_TxtFieldBuscadorKeyTyped
 
     private void TxtCantidadKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TxtCantidadKeyTyped
-        
+
         Validaciones.soloNumeros8Digitos(
-        TxtCantidad,
-        evt
+                TxtCantidad,
+                evt
         );
-        
+
     }//GEN-LAST:event_TxtCantidadKeyTyped
 
     private void CmbMunicipioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CmbMunicipioActionPerformed
-        
+
         validarFiltros();
-        
+
     }//GEN-LAST:event_CmbMunicipioActionPerformed
 
     private void CmbServicioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CmbServicioActionPerformed
-       
+
         validarFiltros();
-        
+
     }//GEN-LAST:event_CmbServicioActionPerformed
 
     private void TxtCantidadKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TxtCantidadKeyReleased
-        
+
         validarFiltros();
-        
+
     }//GEN-LAST:event_TxtCantidadKeyReleased
 
     private void CmbMunicipioItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_CmbMunicipioItemStateChanged
-      
+
     }//GEN-LAST:event_CmbMunicipioItemStateChanged
 
     private void CmbEstadoItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_CmbEstadoItemStateChanged
-     
+
     }//GEN-LAST:event_CmbEstadoItemStateChanged
 
     private void CmbServicioItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_CmbServicioItemStateChanged
-        
-    
+
+
     }//GEN-LAST:event_CmbServicioItemStateChanged
 
     /**
@@ -986,13 +1004,13 @@ public class FrmConsulta extends javax.swing.JFrame {
         });
     }
 
-    private void SetImageLabel(JLabel labelName, String root){
+    private void SetImageLabel(JLabel labelName, String root) {
         ImageIcon image = new ImageIcon(root);
         Icon icon = new ImageIcon(image.getImage().getScaledInstance(labelName.getWidth(), labelName.getHeight(), Image.SCALE_DEFAULT));
         labelName.setIcon(icon);
         this.repaint();
     }
-    
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton BtnAgregar;
     private javax.swing.JButton BtnBuscar;
@@ -1012,6 +1030,9 @@ public class FrmConsulta extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabelResultadoFiltrado;
     private javax.swing.JLabel jLabelTotalDatos;
+    private javax.swing.JMenu jMenuAgregar;
+    private javax.swing.JMenuBar jMenuBar1;
+    private javax.swing.JMenu jMenuEditar;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
