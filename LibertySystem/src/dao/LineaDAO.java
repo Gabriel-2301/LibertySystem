@@ -1,6 +1,7 @@
 package dao;
 
 import conexion.Conexion;
+import static conexion.Conexion.conectar;
 import java.sql.*;
 import javax.swing.table.DefaultTableModel;
 
@@ -12,7 +13,7 @@ public class LineaDAO {
     public DefaultTableModel mostrarDatos() {
 
         String[] columnas = {
-            "Numero", "PBX", "Estado", "Fecha_Ultimo_Estado",
+            "Numero", "Estado", "Fecha_Ultimo_Estado",
             "Municipio", "Cliente", "Servicio"
         };
 
@@ -20,7 +21,6 @@ public class LineaDAO {
 
         String sql = "SELECT "
                 + "l.numero, "
-                + "l.pbx, "
                 + "e.nombre AS estado, "
                 + "l.fechas_ultimo_estado, "
                 + "m.nombre AS municipio, "
@@ -39,7 +39,6 @@ public class LineaDAO {
 
                 modelo.addRow(new Object[]{
                     rs.getString("numero"),
-                    rs.getString("pbx"),
                     rs.getString("estado"),
                     rs.getString("fechas_ultimo_estado"),
                     rs.getString("municipio"),
@@ -61,7 +60,7 @@ public class LineaDAO {
     public DefaultTableModel buscarNumeroOCliente(String texto) {
 
         String[] columnas = {
-            "Numero", "PBX", "Estado", "Fecha_Ultimo_Estado",
+            "Numero", "Estado", "Fecha_Ultimo_Estado",
             "Municipio", "Cliente", "Servicio"
         };
 
@@ -70,7 +69,6 @@ public class LineaDAO {
         String sql
                 = "SELECT "
                 + "l.numero, "
-                + "l.pbx, "
                 + "e.nombre AS estado, "
                 + "l.fechas_ultimo_estado, "
                 + "m.nombre AS municipio, "
@@ -98,7 +96,6 @@ public class LineaDAO {
 
                 modelo.addRow(new Object[]{
                     rs.getString("numero"),
-                    rs.getString("pbx"),
                     rs.getString("estado"),
                     rs.getString("fechas_ultimo_estado"),
                     rs.getString("municipio"),
@@ -127,7 +124,7 @@ public class LineaDAO {
             Integer cantidad) {
 
         String[] columnas = {
-            "Numero", "PBX", "Estado", "Fecha_Ultimo_Estado",
+            "Numero", "Estado", "Fecha_Ultimo_Estado",
             "Municipio", "Cliente", "Servicio"
         };
 
@@ -137,7 +134,6 @@ public class LineaDAO {
 
         sql.append("SELECT ")
                 .append("l.numero, ")
-                .append("l.pbx, ")
                 .append("COALESCE(e.nombre, 'SIN ESTADO') AS estado, ")
                 .append("l.fechas_ultimo_estado, ")
                 .append("COALESCE(m.nombre, 'SIN MUNICIPIO') AS municipio, ")
@@ -174,7 +170,6 @@ public class LineaDAO {
 
                 modelo.addRow(new Object[]{
                     rs.getString("numero"),
-                    rs.getString("pbx"),
                     rs.getString("estado"),
                     rs.getString("fechas_ultimo_estado"),
                     rs.getString("municipio"),
@@ -231,7 +226,6 @@ public class LineaDAO {
     // INSERTAR (SIN CAMBIOS NECESARIOS)
     // =========================
     public int insertarLinea(String numero,
-            String pbx,
             String estado,
             String fecha,
             String municipio,
@@ -246,18 +240,17 @@ public class LineaDAO {
             int servicioId = obtenerId(con, "servicios", servicio);
 
             String sql = "INSERT INTO lineas "
-                    + "(numero, pbx, estado_id, fechas_ultimo_estado, municipio_id, cliente_id, servicio_id) "
-                    + "VALUES (?, ?, ?, ?, ?, ?, ?)";
+                    + "(numero,  estado_id, fechas_ultimo_estado, municipio_id, cliente_id, servicio_id) "
+                    + "VALUES (?, ?, ?, ?, ?, ?)";
 
             PreparedStatement ps = con.prepareStatement(sql);
 
             ps.setString(1, numero);
-            ps.setString(2, pbx);
-            ps.setInt(3, estadoId);
-            ps.setString(4, fecha);
-            ps.setInt(5, municipioId);
-            ps.setInt(6, clienteId);
-            ps.setInt(7, servicioId);
+            ps.setInt(2, estadoId);
+            ps.setString(3, fecha);
+            ps.setInt(4, municipioId);
+            ps.setInt(5, clienteId);
+            ps.setInt(6, servicioId);
 
             ps.executeUpdate();
 
@@ -278,7 +271,7 @@ public class LineaDAO {
     // =========================
     // HELPERS
     // =========================
-    private int obtenerId(Connection con, String tabla, String nombre) throws SQLException {
+    public int obtenerId(Connection con, String tabla, String nombre) throws SQLException {
 
         String sql = "SELECT id FROM " + tabla + " WHERE nombre=?";
 
@@ -294,7 +287,7 @@ public class LineaDAO {
         return -1;
     }
 
-    private int obtenerOInsertarCliente(Connection con, String cliente) throws SQLException {
+    public int obtenerOInsertarCliente(Connection con, String cliente) throws SQLException {
 
         String sql = "SELECT id FROM clientes WHERE LOWER(nombre)=LOWER(?)";
 
@@ -356,6 +349,14 @@ public class LineaDAO {
         }
 
         return 0;
+    }
+
+    public int obtenerIdPublic(Connection con, String tabla, String nombre) throws SQLException {
+        return obtenerId(con, tabla, nombre);
+    }
+
+    public int obtenerClientePublic(Connection con, String cliente) throws SQLException {
+        return obtenerOInsertarCliente(con, cliente);
     }
 
 }

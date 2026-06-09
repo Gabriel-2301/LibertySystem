@@ -51,13 +51,13 @@ public class FrmConsulta extends javax.swing.JFrame {
     public FrmConsulta() {
         initComponents();
         cargarTabla();
+        jTableDatos.setSelectionMode(javax.swing.ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 
         cargarTotalInicial();
 
         setTitle("Liberty Networks | Sistema de Consulta de Líneas");
 
         BtnFiltrar.setEnabled(false);
-
         validarFiltros();
 
         this.setFocusable(true);
@@ -107,20 +107,17 @@ public class FrmConsulta extends javax.swing.JFrame {
         jTableDatos.getColumnModel().getColumn(1).setPreferredWidth(130);
         jTableDatos.getColumnModel().getColumn(1).setResizable(false);
 
-        jTableDatos.getColumnModel().getColumn(2).setPreferredWidth(130);
+        jTableDatos.getColumnModel().getColumn(2).setPreferredWidth(180);
         jTableDatos.getColumnModel().getColumn(2).setResizable(false);
 
-        jTableDatos.getColumnModel().getColumn(3).setPreferredWidth(180);
+        jTableDatos.getColumnModel().getColumn(3).setPreferredWidth(300);
         jTableDatos.getColumnModel().getColumn(3).setResizable(false);
 
-        jTableDatos.getColumnModel().getColumn(4).setPreferredWidth(300);
+        jTableDatos.getColumnModel().getColumn(4).setPreferredWidth(400);
         jTableDatos.getColumnModel().getColumn(4).setResizable(false);
 
-        jTableDatos.getColumnModel().getColumn(5).setPreferredWidth(400);
+        jTableDatos.getColumnModel().getColumn(5).setPreferredWidth(140);
         jTableDatos.getColumnModel().getColumn(5).setResizable(false);
-
-        jTableDatos.getColumnModel().getColumn(6).setPreferredWidth(140);
-        jTableDatos.getColumnModel().getColumn(6).setResizable(false);
 
         jTableDatos.setRowHeight(25);
 
@@ -141,10 +138,7 @@ public class FrmConsulta extends javax.swing.JFrame {
                 && !cantidad.equals("#Cantidad Filtrado");
 
         BtnFiltrar.setEnabled(
-                estadoOk
-                || servicioOk
-                || municipioOk
-                || cantidadOk
+                estadoOk|| servicioOk|| municipioOk|| cantidadOk
         );
     }
 
@@ -210,7 +204,6 @@ public class FrmConsulta extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         TxtFieldBuscador = new javax.swing.JTextField();
-        BtnBuscar = new javax.swing.JButton();
         BtnLimpiar = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTableDatos = new javax.swing.JTable();
@@ -228,8 +221,6 @@ public class FrmConsulta extends javax.swing.JFrame {
         jLabelResultadoFiltrado = new javax.swing.JLabel();
         jLabelTotalDatos = new javax.swing.JLabel();
         jMenuBar1 = new javax.swing.JMenuBar();
-        jMenuAgregar = new javax.swing.JMenu();
-        jMenuEditar = new javax.swing.JMenu();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
@@ -281,15 +272,6 @@ public class FrmConsulta extends javax.swing.JFrame {
             }
         });
 
-        BtnBuscar.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        BtnBuscar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/IMG/Iconobuscar.png"))); // NOI18N
-        BtnBuscar.setText("Buscar");
-        BtnBuscar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                BtnBuscarActionPerformed(evt);
-            }
-        });
-
         BtnLimpiar.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         BtnLimpiar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/IMG/Iconolimpiar.png"))); // NOI18N
         BtnLimpiar.setText("Limpiar");
@@ -302,17 +284,17 @@ public class FrmConsulta extends javax.swing.JFrame {
         jTableDatos.setFont(new java.awt.Font("Segoe UI", 0, 16)); // NOI18N
         jTableDatos.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null}
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null}
             },
             new String [] {
-                "Numero", "PBX", "Estado", "Fecha_Ultimo_Estado", "Municipio", "Cliente", "Servicio"
+                "Numero", "Estado", "Fecha_Ultimo_Estado", "Municipio", "Cliente", "Servicio"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, true, false, false, false, false, false
+                false, false, false, false, false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
@@ -327,6 +309,11 @@ public class FrmConsulta extends javax.swing.JFrame {
         BtnEditar.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         BtnEditar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/IMG/Iconoeditar.png"))); // NOI18N
         BtnEditar.setText("Editar");
+        BtnEditar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BtnEditarActionPerformed(evt);
+            }
+        });
 
         BtnEliminar.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         BtnEliminar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/IMG/Iconoeliminar.png"))); // NOI18N
@@ -449,8 +436,6 @@ public class FrmConsulta extends javax.swing.JFrame {
                     .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
                         .addComponent(BtnEditar, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(BtnEliminar, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(517, 517, 517)
                         .addComponent(BtnAgregar, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -473,9 +458,9 @@ public class FrmConsulta extends javax.swing.JFrame {
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(jLabelTotalDatos, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(833, 833, 833)))
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(BtnBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(BtnEliminar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(BtnLimpiar, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(jPanel1Layout.createSequentialGroup()
@@ -490,12 +475,12 @@ public class FrmConsulta extends javax.swing.JFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(18, 18, 18)
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(6, 6, 6)
+                .addGap(4, 4, 4)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(TxtFieldBuscador, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(BtnBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(BtnLimpiar, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(BtnLimpiar, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(BtnEliminar, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(BtnFiltrar, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -514,17 +499,10 @@ public class FrmConsulta extends javax.swing.JFrame {
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 342, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(BtnEliminar, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(BtnAgregar, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(BtnEditar, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(10, 10, 10))
         );
-
-        jMenuAgregar.setText("Agregar");
-        jMenuBar1.add(jMenuAgregar);
-
-        jMenuEditar.setText("Editar");
-        jMenuBar1.add(jMenuEditar);
 
         setJMenuBar(jMenuBar1);
 
@@ -799,37 +777,48 @@ public class FrmConsulta extends javax.swing.JFrame {
 
     private void BtnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnEliminarActionPerformed
 
-        int fila = jTableDatos.getSelectedRow();
+        int[] filas = jTableDatos.getSelectedRows();
 
-        if (fila == -1) {
-            javax.swing.JOptionPane.showMessageDialog(this, "Selecciona una fila primero");
+        if (filas.length == 0) {
+            javax.swing.JOptionPane.showMessageDialog(this, "Selecciona al menos una fila");
             return;
         }
 
-        String numero = jTableDatos.getValueAt(fila, 0).toString();
-
         int confirm = javax.swing.JOptionPane.showConfirmDialog(
                 this,
-                "¿Seguro que deseas eliminar el registro " + numero + "?",
+                "¿Seguro que deseas eliminar " + filas.length + " registros?",
                 "Confirmar eliminación",
                 javax.swing.JOptionPane.YES_NO_OPTION
         );
 
-        if (confirm == javax.swing.JOptionPane.YES_OPTION) {
+        if (confirm != javax.swing.JOptionPane.YES_OPTION) {
+            return;
+        }
 
-            LineaDAO dao = new LineaDAO();
+        LineaDAO dao = new LineaDAO();
+        boolean error = false;
+
+        // IMPORTANTE: eliminar de abajo hacia arriba para evitar problemas visuales
+        for (int i = filas.length - 1; i >= 0; i--) {
+
+            int fila = filas[i];
+
+            String numero = jTableDatos.getValueAt(fila, 0).toString();
+
             boolean ok = dao.eliminarLinea(numero);
 
-            if (ok) {
-                javax.swing.JOptionPane.showMessageDialog(this, "Eliminado correctamente");
-
-                // refrescar tabla
-                cargarTabla();
-
-            } else {
-                javax.swing.JOptionPane.showMessageDialog(this, "Error al eliminar");
+            if (!ok) {
+                error = true;
             }
         }
+
+        if (!error) {
+            javax.swing.JOptionPane.showMessageDialog(this, "Eliminados correctamente");
+        } else {
+            javax.swing.JOptionPane.showMessageDialog(this, "Algunos registros no se pudieron eliminar");
+        }
+
+        cargarTabla();
 
     }//GEN-LAST:event_BtnEliminarActionPerformed
 
@@ -864,32 +853,6 @@ public class FrmConsulta extends javax.swing.JFrame {
         jLabelResultadoFiltrado.setText("");
 
     }//GEN-LAST:event_BtnLimpiarActionPerformed
-
-    private void BtnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnBuscarActionPerformed
-
-        String texto = TxtFieldBuscador.getText().trim();
-
-        if (texto.isEmpty()
-                || texto.equals("Buscar por Numero o Cliente")) {
-
-            JOptionPane.showMessageDialog(this,
-                    "Ingrese texto");
-
-            return;
-        }
-
-        LineaDAO dao = new LineaDAO();
-
-        DefaultTableModel modelo = dao.buscarNumeroOCliente(texto);
-
-        jTableDatos.setModel(modelo);
-        jTableDatos.setDefaultEditor(Object.class, null);
-
-        configurarTabla();
-
-        //actualizarLabelResultado();
-
-    }//GEN-LAST:event_BtnBuscarActionPerformed
 
     private void TxtFieldBuscadorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_TxtFieldBuscadorActionPerformed
         // TODO add your handling code here:
@@ -969,6 +932,35 @@ public class FrmConsulta extends javax.swing.JFrame {
 
     }//GEN-LAST:event_CmbServicioItemStateChanged
 
+    private void BtnEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnEditarActionPerformed
+
+        int[] filas = jTableDatos.getSelectedRows();
+
+        if (filas.length == 0) {
+            JOptionPane.showMessageDialog(this, "Selecciona al menos una fila");
+            return;
+        }
+
+        java.util.List<Object[]> lista = new java.util.ArrayList<>();
+
+        for (int i : filas) {
+
+            Object[] fila = new Object[6];
+
+            for (int c = 0; c < 6; c++) {
+                fila[c] = jTableDatos.getValueAt(i, c);
+            }
+
+            lista.add(fila);
+        }
+
+        FrmEditar frm = new FrmEditar();
+        frm.cargarDatos(this, lista);   // clave
+        frm.setVisible(true);
+
+
+    }//GEN-LAST:event_BtnEditarActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -1013,7 +1005,6 @@ public class FrmConsulta extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton BtnAgregar;
-    private javax.swing.JButton BtnBuscar;
     private javax.swing.JButton BtnEditar;
     private javax.swing.JButton BtnEliminar;
     private javax.swing.JButton BtnFiltrar;
@@ -1030,9 +1021,7 @@ public class FrmConsulta extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabelResultadoFiltrado;
     private javax.swing.JLabel jLabelTotalDatos;
-    private javax.swing.JMenu jMenuAgregar;
     private javax.swing.JMenuBar jMenuBar1;
-    private javax.swing.JMenu jMenuEditar;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;

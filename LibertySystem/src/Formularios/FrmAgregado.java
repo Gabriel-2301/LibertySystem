@@ -12,6 +12,8 @@ import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import utilidades.Validaciones;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 /**
  *
@@ -26,6 +28,15 @@ public class FrmAgregado extends javax.swing.JFrame {
 
     public FrmAgregado() {
         initComponents();
+
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        sdf.setTimeZone(java.util.TimeZone.getTimeZone("America/Tegucigalpa"));
+        String fechaHora = sdf.format(new Date());
+
+        iniciarRelojEnTiempoReal();
+
+        TxtFecha.setText(fechaHora);
+        TxtFecha.setEditable(false);
 
         setTitle("Liberty Networks | Panel de Agregado");
 
@@ -49,13 +60,6 @@ public class FrmAgregado extends javax.swing.JFrame {
             @Override
             public void keyReleased(java.awt.event.KeyEvent e) {
 
-                validarFechaEnTiempoReal();
-            }
-        });
-
-        TxtCliente.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyTyped(java.awt.event.KeyEvent evt) {
-                Validaciones.soloMax50Caracteres(TxtCliente, evt);
             }
         });
 
@@ -66,9 +70,8 @@ public class FrmAgregado extends javax.swing.JFrame {
         });
 
         setPlaceholder(TxtNumero, " Agregar Numero de Linea");
-        setPlaceholder(TxtPBX, " Agregar Numero PBX");
+
         setPlaceholder(TxtCliente, " Agregar Nombre de Cliente");
-        setPlaceholder(TxtFecha, " dd/MM/yyyy HH:mm:ss");
 
         this.setLocationRelativeTo(null);
         SetImageLabel(jLabel9, "/IMG/Logoliberty.png");
@@ -77,25 +80,26 @@ public class FrmAgregado extends javax.swing.JFrame {
 
     }
 
-    private void validarFechaEnTiempoReal() {
+    private void iniciarRelojEnTiempoReal() {
 
-        String fecha = TxtFecha.getText().trim();
+        javax.swing.Timer timer = new javax.swing.Timer(1000, new java.awt.event.ActionListener() {
+            @Override
+            public void actionPerformed(java.awt.event.ActionEvent e) {
 
-        if (fecha.isEmpty()) {
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                String fechaHora = sdf.format(new Date());
 
-            LblFechaInfo.setText("");
+                TxtFecha.setText(fechaHora);
+            }
+        });
 
-            return;
-        }
+        timer.start();
+    }
 
-        if (Validaciones.validarFechaFormato(fecha)) {
+    private void restaurarPlaceholders() {
 
-            LblFechaInfo.setText("Fecha válida");
-
-        } else {
-
-            LblFechaInfo.setText("!! dd/MM/yyyy HH:mm:ss");
-        }
+        setPlaceholder(TxtNumero, " Agregar Numero de Linea");
+        setPlaceholder(TxtCliente, " Agregar Nombre de Cliente");
     }
 
     private void setPlaceholder(javax.swing.JTextField txt, String placeholder) {
@@ -157,9 +161,6 @@ public class FrmAgregado extends javax.swing.JFrame {
         CmbMunicipio = new javax.swing.JComboBox<>();
         BtnGuardar = new javax.swing.JButton();
         BtnLimpiar = new javax.swing.JButton();
-        LblFechaInfo = new javax.swing.JLabel();
-        jLabel8 = new javax.swing.JLabel();
-        TxtPBX = new javax.swing.JTextField();
 
         jLabel10.setText("jLabel10");
 
@@ -175,7 +176,7 @@ public class FrmAgregado extends javax.swing.JFrame {
 
         jPanel2.setBackground(new java.awt.Color(255, 255, 255));
 
-        jLabel1.setFont(new java.awt.Font("Source Sans Pro Black", 0, 30)); // NOI18N
+        jLabel1.setFont(new java.awt.Font("Source Sans Pro Black", 0, 36)); // NOI18N
         jLabel1.setText("Liberty Networks | Panel de Agregado");
 
         jLabel9.setIcon(new javax.swing.ImageIcon(getClass().getResource("/IMG/Logoliberty.png"))); // NOI18N
@@ -186,11 +187,11 @@ public class FrmAgregado extends javax.swing.JFrame {
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGap(40, 40, 40)
                 .addComponent(jLabel1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGap(48, 48, 48)
                 .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 119, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(14, 14, 14))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -241,8 +242,13 @@ public class FrmAgregado extends javax.swing.JFrame {
         TxtCliente.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         TxtCliente.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
-        TxtFecha.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        TxtFecha.setEditable(false);
+        TxtFecha.setFont(new java.awt.Font("Segoe UI", 1, 21)); // NOI18N
+        TxtFecha.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        TxtFecha.setToolTipText("");
         TxtFecha.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        TxtFecha.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        TxtFecha.setFocusable(false);
         TxtFecha.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 TxtFechaActionPerformed(evt);
@@ -286,21 +292,6 @@ public class FrmAgregado extends javax.swing.JFrame {
             }
         });
 
-        LblFechaInfo.setBackground(new java.awt.Color(0, 0, 0));
-        LblFechaInfo.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-
-        jLabel8.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        jLabel8.setIcon(new javax.swing.ImageIcon(getClass().getResource("/IMG/pbxIcono.png"))); // NOI18N
-        jLabel8.setText("PBX");
-
-        TxtPBX.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        TxtPBX.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-        TxtPBX.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyTyped(java.awt.event.KeyEvent evt) {
-                TxtPBXKeyTyped(evt);
-            }
-        });
-
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -311,35 +302,28 @@ public class FrmAgregado extends javax.swing.JFrame {
                     .addComponent(TxtCliente)
                     .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(BtnGuardar, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 456, Short.MAX_VALUE)
-                        .addComponent(BtnLimpiar, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel5)
                             .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(CmbMunicipio, javax.swing.GroupLayout.PREFERRED_SIZE, 220, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(CmbMunicipio, javax.swing.GroupLayout.PREFERRED_SIZE, 240, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(TxtNumero))
-                        .addGap(18, 18, 18)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel8)
-                            .addComponent(TxtPBX)
-                            .addComponent(CmbServicio, 0, 220, Short.MAX_VALUE))
-                        .addGap(18, 18, 18)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                .addGroup(jPanel1Layout.createSequentialGroup()
-                                    .addComponent(jLabel4)
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                    .addComponent(LblFechaInfo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                                .addGroup(jPanel1Layout.createSequentialGroup()
-                                    .addGap(6, 6, 6)
-                                    .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addComponent(TxtFecha, javax.swing.GroupLayout.PREFERRED_SIZE, 220, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(CmbEstado, javax.swing.GroupLayout.PREFERRED_SIZE, 220, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                            .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(CmbServicio, javax.swing.GroupLayout.PREFERRED_SIZE, 220, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(CmbEstado, javax.swing.GroupLayout.PREFERRED_SIZE, 220, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(TxtFecha)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(jLabel4)
+                                .addGap(0, 0, Short.MAX_VALUE))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(BtnLimpiar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(BtnGuardar, javax.swing.GroupLayout.PREFERRED_SIZE, 167, javax.swing.GroupLayout.PREFERRED_SIZE)))))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
@@ -348,19 +332,26 @@ public class FrmAgregado extends javax.swing.JFrame {
                 .addContainerGap()
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(jLabel2)
-                        .addComponent(jLabel8)
-                        .addComponent(jLabel4))
-                    .addComponent(LblFechaInfo, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(TxtPBX, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(TxtFecha, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(TxtNumero, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addComponent(jLabel3)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(TxtCliente, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(jLabel7)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(CmbEstado, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel4, javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jLabel2, javax.swing.GroupLayout.Alignment.TRAILING))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(TxtNumero, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(0, 0, Short.MAX_VALUE))
+                            .addComponent(TxtFecha))))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel1Layout.createSequentialGroup()
@@ -370,23 +361,16 @@ public class FrmAgregado extends javax.swing.JFrame {
                                 .addGap(5, 5, 5)
                                 .addComponent(jLabel6)))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(CmbMunicipio, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(CmbServicio, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(CmbEstado, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED))
+                            .addComponent(CmbMunicipio, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(6, 6, 6)
-                        .addComponent(jLabel7)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                .addComponent(jLabel3)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(TxtCliente, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(BtnGuardar, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(BtnLimpiar, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(BtnLimpiar, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(BtnGuardar, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(1, 1, 1)))
+                .addGap(11, 11, 11))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -397,7 +381,7 @@ public class FrmAgregado extends javax.swing.JFrame {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
 
         pack();
@@ -414,10 +398,7 @@ public class FrmAgregado extends javax.swing.JFrame {
 
     private void BtnLimpiarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnLimpiarActionPerformed
 
-        TxtNumero.setText("");
-        TxtCliente.setText("");
-        TxtFecha.setText("");
-        TxtPBX.setText("");
+        restaurarPlaceholders();
 
         CmbMunicipio.setSelectedIndex(0);
         CmbEstado.setSelectedIndex(0);
@@ -437,11 +418,9 @@ public class FrmAgregado extends javax.swing.JFrame {
 
         LineaDAO dao = new LineaDAO();
 
-        String numero = TxtNumero.getText().trim();
-        String pbx = TxtPBX.getText().trim();
+        String numero = TxtNumero.getText().trim();;
         String municipio = CmbMunicipio.getSelectedItem().toString();
         String cliente = TxtCliente.getText().trim();
-        String fechaUsuario = TxtFecha.getText().trim();
         String estado = CmbEstado.getSelectedItem().toString();
         String servicio = CmbServicio.getSelectedItem().toString();
 
@@ -449,9 +428,7 @@ public class FrmAgregado extends javax.swing.JFrame {
         // VALIDAR CAMPOS
         // =========================
         if (numero.isEmpty()
-                || pbx.isEmpty()
-                || cliente.isEmpty()
-                || fechaUsuario.isEmpty()) {
+                || cliente.isEmpty()) {
 
             JOptionPane.showMessageDialog(this,
                     "Complete todos los campos",
@@ -461,38 +438,15 @@ public class FrmAgregado extends javax.swing.JFrame {
         }
 
         // =========================
-        // VALIDAR FECHA
+        // FECHA AUTOMÁTICA (IMPORTANTE)
         // =========================
-        if (!utilidades.Validaciones.validarFechaFormato(fechaUsuario)) {
-
-            LblFechaInfo.setText("Formato: dd/MM/yyyy HH:mm:ss");
-            LblFechaInfo.setForeground(java.awt.Color.RED);
-
-            JOptionPane.showMessageDialog(this,
-                    "Fecha inválida",
-                    "Error",
-                    JOptionPane.ERROR_MESSAGE);
-
-            TxtFecha.requestFocus();
-            return;
-        }
-
-        String fecha = utilidades.Validaciones.convertirFechaMySQL(fechaUsuario);
-
-        if (fecha == null) {
-            JOptionPane.showMessageDialog(this,
-                    "Error al convertir la fecha",
-                    "Error",
-                    JOptionPane.ERROR_MESSAGE);
-            return;
-        }
+        String fecha = TxtFecha.getText().trim();
 
         // =========================
         // INSERTAR
         // =========================
         int resultado = dao.insertarLinea(
                 numero,
-                pbx,
                 estado,
                 fecha,
                 municipio,
@@ -509,13 +463,22 @@ public class FrmAgregado extends javax.swing.JFrame {
                     "Registro agregado correctamente"
             );
 
+            // REFRESCAR TABLA
             if (frmConsulta != null) {
                 frmConsulta.cargarTabla();
                 frmConsulta.cargarTotalInicial();
                 frmConsulta.actualizarLabelResultado();
             }
 
-            
+            // LIMPIAR CAMPOS (OPCIONAL)
+            TxtNumero.setText("");
+
+            TxtCliente.setText("");
+            CmbMunicipio.setSelectedIndex(0);
+            CmbEstado.setSelectedIndex(0);
+            CmbServicio.setSelectedIndex(0);
+
+            TxtNumero.requestFocus();
 
         } else if (resultado == 0) {
 
@@ -544,23 +507,14 @@ public class FrmAgregado extends javax.swing.JFrame {
 
     }//GEN-LAST:event_TxtNumeroKeyTyped
 
-    private void TxtFechaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_TxtFechaActionPerformed
-
-
-    }//GEN-LAST:event_TxtFechaActionPerformed
-
     private void TxtFechaKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TxtFechaKeyTyped
+
         Validaciones.soloFormatoFechaHora(evt);
     }//GEN-LAST:event_TxtFechaKeyTyped
 
-    private void TxtPBXKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TxtPBXKeyTyped
+    private void TxtFechaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_TxtFechaActionPerformed
 
-        Validaciones.soloNumeros8Digitos(
-                TxtPBX,
-                evt
-        );
-
-    }//GEN-LAST:event_TxtPBXKeyTyped
+    }//GEN-LAST:event_TxtFechaActionPerformed
 
     /**
      * @param args the command line arguments
@@ -631,11 +585,9 @@ public class FrmAgregado extends javax.swing.JFrame {
     private javax.swing.JComboBox<String> CmbEstado;
     private javax.swing.JComboBox<String> CmbMunicipio;
     private javax.swing.JComboBox<String> CmbServicio;
-    private javax.swing.JLabel LblFechaInfo;
     private javax.swing.JTextField TxtCliente;
     private javax.swing.JTextField TxtFecha;
     private javax.swing.JTextField TxtNumero;
-    private javax.swing.JTextField TxtPBX;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel2;
@@ -644,7 +596,6 @@ public class FrmAgregado extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
-    private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
