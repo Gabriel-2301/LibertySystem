@@ -70,7 +70,6 @@ public class FrmAgregado extends javax.swing.JFrame {
         });
 
         setPlaceholder(TxtNumero, " Agregar Numero de Linea");
-
         setPlaceholder(TxtCliente, " Agregar Nombre de Cliente");
 
         this.setLocationRelativeTo(null);
@@ -277,6 +276,7 @@ public class FrmAgregado extends javax.swing.JFrame {
         BtnGuardar.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         BtnGuardar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/IMG/Iconoguardar.png"))); // NOI18N
         BtnGuardar.setText("Guardar");
+        BtnGuardar.setToolTipText("Guardar nueva linea");
         BtnGuardar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 BtnGuardarActionPerformed(evt);
@@ -286,6 +286,7 @@ public class FrmAgregado extends javax.swing.JFrame {
         BtnLimpiar.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         BtnLimpiar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/IMG/Iconolimpiar.png"))); // NOI18N
         BtnLimpiar.setText("Limpiar");
+        BtnLimpiar.setToolTipText("Limpiar campos");
         BtnLimpiar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 BtnLimpiarActionPerformed(evt);
@@ -351,8 +352,8 @@ public class FrmAgregado extends javax.swing.JFrame {
                                 .addComponent(TxtNumero, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(0, 0, Short.MAX_VALUE))
                             .addComponent(TxtFecha))))
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -364,12 +365,11 @@ public class FrmAgregado extends javax.swing.JFrame {
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(CmbServicio, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(CmbMunicipio, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(BtnLimpiar, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(BtnGuardar, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(1, 1, 1)))
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(BtnGuardar, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(BtnLimpiar, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addGap(11, 11, 11))
         );
 
@@ -407,9 +407,8 @@ public class FrmAgregado extends javax.swing.JFrame {
     }//GEN-LAST:event_BtnLimpiarActionPerformed
 
     private void BtnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnGuardarActionPerformed
-        // =========================
+
         // VALIDAR MUNICIPIO
-        // =========================
         if (CmbMunicipio.getSelectedIndex() == 0) {
             JOptionPane.showMessageDialog(this,
                     "Seleccione un municipio");
@@ -424,9 +423,7 @@ public class FrmAgregado extends javax.swing.JFrame {
         String estado = CmbEstado.getSelectedItem().toString();
         String servicio = CmbServicio.getSelectedItem().toString();
 
-        // =========================
         // VALIDAR CAMPOS
-        // =========================
         if (numero.isEmpty()
                 || cliente.isEmpty()) {
 
@@ -437,14 +434,10 @@ public class FrmAgregado extends javax.swing.JFrame {
             return;
         }
 
-        // =========================
         // FECHA AUTOMÁTICA (IMPORTANTE)
-        // =========================
         String fecha = TxtFecha.getText().trim();
 
-        // =========================
         // INSERTAR
-        // =========================
         int resultado = dao.insertarLinea(
                 numero,
                 estado,
@@ -454,23 +447,21 @@ public class FrmAgregado extends javax.swing.JFrame {
                 servicio
         );
 
-        // =========================
         // RESPUESTAS
-        // =========================
         if (resultado == 1) {
 
             JOptionPane.showMessageDialog(this,
                     "Registro agregado correctamente"
             );
 
-            // REFRESCAR TABLA
+            //REFRESCAR TABLA
             if (frmConsulta != null) {
                 frmConsulta.cargarTabla();
                 frmConsulta.cargarTotalInicial();
                 frmConsulta.actualizarLabelResultado();
             }
 
-            // LIMPIAR CAMPOS (OPCIONAL)
+            //LIMPIAR CAMPOS (OPCIONAL)
             TxtNumero.setText("");
 
             TxtCliente.setText("");
@@ -510,6 +501,7 @@ public class FrmAgregado extends javax.swing.JFrame {
     private void TxtFechaKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TxtFechaKeyTyped
 
         Validaciones.soloFormatoFechaHora(evt);
+
     }//GEN-LAST:event_TxtFechaKeyTyped
 
     private void TxtFechaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_TxtFechaActionPerformed

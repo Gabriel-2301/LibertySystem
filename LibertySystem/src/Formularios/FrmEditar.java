@@ -63,7 +63,7 @@ public class FrmEditar extends javax.swing.JFrame {
 
         configurarTabla();
 
-        // VALIDACIONES EN TIEMPO REAL
+        //VALIDACIONES EN TIEMPO REAL
         modelo.addTableModelListener(e -> {
 
             int fila = e.getFirstRow();
@@ -80,7 +80,7 @@ public class FrmEditar extends javax.swing.JFrame {
 
             String texto = val.toString();
 
-            // NUMERO
+            //NUMERO
             if (col == 0) {
                 if (!texto.matches("\\d{0,8}")) {
                     JOptionPane.showMessageDialog(this, "Máximo 8 dígitos.");
@@ -88,7 +88,7 @@ public class FrmEditar extends javax.swing.JFrame {
                 }
             }
 
-            // CLIENTE
+            //CLIENTE
             if (col == 4) {
                 if (texto.length() > 50) {
                     JOptionPane.showMessageDialog(this, "Máximo 50 caracteres.");
@@ -112,7 +112,7 @@ public class FrmEditar extends javax.swing.JFrame {
         jTableDatosEditados.getTableHeader().setResizingAllowed(false);
         jTableDatosEditados.getTableHeader().setReorderingAllowed(false);
 
-        // Combo Estado
+        //Combo Estado
         JComboBox<String> comboEstado = new JComboBox<>();
 
         comboEstado.addItem("Libre");
@@ -204,7 +204,7 @@ public class FrmEditar extends javax.swing.JFrame {
                 .getColumn(3)
                 .setCellEditor(new DefaultCellEditor(comboMunicipio));
 
-        // Combo Servicio
+        //Combo Servicio
         JComboBox<String> comboServicio = new JComboBox<>();
 
         comboServicio.addItem("MyUC");
@@ -288,11 +288,11 @@ public class FrmEditar extends javax.swing.JFrame {
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGap(41, 41, 41)
+                .addGap(59, 59, 59)
                 .addComponent(jLabel1)
-                .addGap(83, 83, 83)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(59, 59, 59))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -306,6 +306,7 @@ public class FrmEditar extends javax.swing.JFrame {
         BtnGuardar.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         BtnGuardar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/IMG/Iconoguardar.png"))); // NOI18N
         BtnGuardar.setText("Guardar");
+        BtnGuardar.setToolTipText("Guardar cambios");
         BtnGuardar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 BtnGuardarActionPerformed(evt);
@@ -315,6 +316,7 @@ public class FrmEditar extends javax.swing.JFrame {
         BtnLimpiar.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         BtnLimpiar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/IMG/Iconolimpiar.png"))); // NOI18N
         BtnLimpiar.setText("Limpiar");
+        BtnLimpiar.setToolTipText("Limpiar tabla");
         BtnLimpiar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 BtnLimpiarActionPerformed(evt);
@@ -406,7 +408,7 @@ public class FrmEditar extends javax.swing.JFrame {
 
                 String numeroOriginal = numerosOriginales.get(i);
 
-                // VALIDACIONES
+                //VALIDACIONES
                 if (!numeroNuevo.matches("\\d{1,8}")) {
                     JOptionPane.showMessageDialog(this, "Número inválido fila " + (i + 1));
                     return;

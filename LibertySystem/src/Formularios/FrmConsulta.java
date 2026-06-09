@@ -6,7 +6,6 @@ package Formularios;
 
 import com.itextpdf.text.BaseColor;
 import com.itextpdf.text.Document;
-import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.Element;
 import com.itextpdf.text.Font;
 import com.itextpdf.text.PageSize;
@@ -18,13 +17,21 @@ import java.io.FileOutputStream;
 import javax.swing.JFileChooser;
 import dao.LineaDAO;
 import java.awt.Image;
+import javax.swing.AbstractAction;
+import javax.swing.ActionMap;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
+import javax.swing.InputMap;
+import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JRootPane;
+import javax.swing.KeyStroke;
+import javax.swing.SwingWorker;
 import javax.swing.table.DefaultTableModel;
-import modelo.Item;
 import utilidades.Validaciones;
+import javax.swing.Timer;
+import utilidades.BackupBD;
 
 /**
  *
@@ -50,6 +57,22 @@ public class FrmConsulta extends javax.swing.JFrame {
 
     public FrmConsulta() {
         initComponents();
+
+        this.addWindowListener(new java.awt.event.WindowAdapter() {
+            @Override
+            public void windowClosing(java.awt.event.WindowEvent e) {
+                BackupBD.generarBackup();
+            }
+        });
+
+        iniciarBackupAutomatico();
+
+        jProgressBar1.setVisible(false);
+        jProgressBar1.setString("");
+        jProgressBar1.setValue(0);
+
+        configurarAtajosTeclado();
+
         cargarTabla();
         jTableDatos.setSelectionMode(javax.swing.ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 
@@ -85,17 +108,24 @@ public class FrmConsulta extends javax.swing.JFrame {
         if (total <= 0) {
             jLabelResultadoFiltrado.setText("Sin resultados");
         } else {
-            jLabelResultadoFiltrado.setText("Resultados Filtrados/Encontrados: " + total);
+            jLabelResultadoFiltrado.setText("||  Resultados Filtrados/Encontrados: " + total);
         }
     }
 
     void cargarTotalInicial() {
 
         LineaDAO dao = new LineaDAO();
-
         int total = dao.contarLineasTotales();
-
         jLabelTotalDatos.setText("" + total);
+    }
+
+    private void iniciarBackupAutomatico() {
+
+        Timer timer = new Timer(60 * 60 * 1000, e -> {
+            BackupBD.generarBackup();
+        });
+
+        timer.start();
     }
 
     private void configurarTabla() {
@@ -123,6 +153,15 @@ public class FrmConsulta extends javax.swing.JFrame {
 
         jTableDatos.getTableHeader().setResizingAllowed(false);
         jTableDatos.getTableHeader().setReorderingAllowed(false);
+
+    }
+
+    private void actualizarProgreso(int valor, String mensaje) {
+
+        jProgressBar1.setVisible(true);
+        jProgressBar1.setValue(valor);
+        jProgressBar1.setString(mensaje);
+
     }
 
     private void validarFiltros() {
@@ -133,12 +172,10 @@ public class FrmConsulta extends javax.swing.JFrame {
 
         String cantidad = TxtCantidad.getText().trim();
 
-        boolean cantidadOk
-                = !cantidad.isEmpty()
-                && !cantidad.equals("#Cantidad Filtrado");
+        boolean cantidadOk = !cantidad.isEmpty() && !cantidad.equals("#Cantidad Filtrado");
 
         BtnFiltrar.setEnabled(
-                estadoOk|| servicioOk|| municipioOk|| cantidadOk
+                estadoOk || servicioOk || municipioOk || cantidadOk
         );
     }
 
@@ -161,6 +198,68 @@ public class FrmConsulta extends javax.swing.JFrame {
         }
 
         return v;
+    }
+
+    private void configurarAtajosTeclado() {
+
+        JRootPane root = this.getRootPane();
+
+        InputMap im = root.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
+        ActionMap am = root.getActionMap();
+
+        // AGREGAR (Ctrl + N)
+        im.put(KeyStroke.getKeyStroke("control N"), "agregar");
+        am.put("agregar", new AbstractAction() {
+            @Override
+            public void actionPerformed(java.awt.event.ActionEvent e) {
+                BtnAgregar.doClick();
+            }
+        });
+
+        // EDITAR (Ctrl + E)
+        im.put(KeyStroke.getKeyStroke("control E"), "editar");
+        am.put("editar", new AbstractAction() {
+            @Override
+            public void actionPerformed(java.awt.event.ActionEvent e) {
+                BtnEditar.doClick();
+            }
+        });
+
+        // LIMPIAR (Ctrl + L)
+        im.put(KeyStroke.getKeyStroke("control L"), "limpiar");
+        am.put("limpiar", new AbstractAction() {
+            @Override
+            public void actionPerformed(java.awt.event.ActionEvent e) {
+                BtnLimpiar.doClick();
+            }
+        });
+
+        // FILTRAR (Ctrl + F)
+        im.put(KeyStroke.getKeyStroke("control F"), "filtrar");
+        am.put("filtrar", new AbstractAction() {
+            @Override
+            public void actionPerformed(java.awt.event.ActionEvent e) {
+                BtnFiltrar.doClick();
+            }
+        });
+
+        // ELIMINAR (SUPR)
+        im.put(KeyStroke.getKeyStroke("DELETE"), "eliminar");
+        am.put("eliminar", new AbstractAction() {
+            @Override
+            public void actionPerformed(java.awt.event.ActionEvent e) {
+                BtnEliminar.doClick();
+            }
+        });
+
+        // IMPRIMIR (Ctrl + P)
+        im.put(KeyStroke.getKeyStroke("control P"), "imprimir");
+        am.put("imprimir", new AbstractAction() {
+            @Override
+            public void actionPerformed(java.awt.event.ActionEvent e) {
+                BtnImprimir.doClick();
+            }
+        });
     }
 
     private void setPlaceholder(javax.swing.JTextField txt, String placeholder) {
@@ -220,6 +319,9 @@ public class FrmConsulta extends javax.swing.JFrame {
         CmbMunicipio = new javax.swing.JComboBox<>();
         jLabelResultadoFiltrado = new javax.swing.JLabel();
         jLabelTotalDatos = new javax.swing.JLabel();
+        jProgressBar1 = new javax.swing.JProgressBar();
+        jLabel4 = new javax.swing.JLabel();
+        jLabel5 = new javax.swing.JLabel();
         jMenuBar1 = new javax.swing.JMenuBar();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -243,7 +345,7 @@ public class FrmConsulta extends javax.swing.JFrame {
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jLabel1)
-                .addGap(112, 112, 112)
+                .addGap(151, 151, 151)
                 .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 155, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(67, 67, 67))
         );
@@ -275,6 +377,7 @@ public class FrmConsulta extends javax.swing.JFrame {
         BtnLimpiar.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         BtnLimpiar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/IMG/Iconolimpiar.png"))); // NOI18N
         BtnLimpiar.setText("Limpiar");
+        BtnLimpiar.setToolTipText("Recarga de la tabla");
         BtnLimpiar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 BtnLimpiarActionPerformed(evt);
@@ -309,6 +412,7 @@ public class FrmConsulta extends javax.swing.JFrame {
         BtnEditar.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         BtnEditar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/IMG/Iconoeditar.png"))); // NOI18N
         BtnEditar.setText("Editar");
+        BtnEditar.setToolTipText("Abrir panel de edicion");
         BtnEditar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 BtnEditarActionPerformed(evt);
@@ -318,6 +422,7 @@ public class FrmConsulta extends javax.swing.JFrame {
         BtnEliminar.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         BtnEliminar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/IMG/Iconoeliminar.png"))); // NOI18N
         BtnEliminar.setText("Eliminar");
+        BtnEliminar.setToolTipText("Elimina las lineas seleccionadas");
         BtnEliminar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 BtnEliminarActionPerformed(evt);
@@ -327,6 +432,7 @@ public class FrmConsulta extends javax.swing.JFrame {
         BtnAgregar.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         BtnAgregar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/IMG/Iconoagregar.png"))); // NOI18N
         BtnAgregar.setText("Agregar");
+        BtnAgregar.setToolTipText("Abrir panel de agregado");
         BtnAgregar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 BtnAgregarActionPerformed(evt);
@@ -371,6 +477,7 @@ public class FrmConsulta extends javax.swing.JFrame {
         BtnFiltrar.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         BtnFiltrar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/IMG/Iconofiltrar.png"))); // NOI18N
         BtnFiltrar.setText("Filtrar");
+        BtnFiltrar.setToolTipText("Busqueda por filtros");
         BtnFiltrar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 BtnFiltrarActionPerformed(evt);
@@ -393,6 +500,7 @@ public class FrmConsulta extends javax.swing.JFrame {
         BtnImprimir.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         BtnImprimir.setIcon(new javax.swing.ImageIcon(getClass().getResource("/IMG/Iconoimprimir.png"))); // NOI18N
         BtnImprimir.setText("Imprimir");
+        BtnImprimir.setToolTipText("Imprimir reporte en PDF");
         BtnImprimir.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 BtnImprimirActionPerformed(evt);
@@ -424,6 +532,16 @@ public class FrmConsulta extends javax.swing.JFrame {
         jLabelTotalDatos.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jLabelTotalDatos.setText(".");
 
+        jProgressBar1.setForeground(new java.awt.Color(0, 153, 0));
+        jProgressBar1.setEnabled(false);
+        jProgressBar1.setStringPainted(true);
+
+        jLabel4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/IMG/Iconointerrogacion.png"))); // NOI18N
+        jLabel4.setToolTipText("Atajos:\n\n   Agregar (Ctrl N)\n\n   Eliminar (SUPR)\n\n   Imprimir (Ctrl P)\n\n   Filtrar (Ctrl F)\n\n   Limpiar (Ctrl L)");
+
+        jLabel5.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        jLabel5.setText("Link Manual de Usuario");
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -434,30 +552,36 @@ public class FrmConsulta extends javax.swing.JFrame {
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jPanel2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
-                        .addComponent(BtnEditar, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(BtnEditar, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(460, 460, 460)
+                        .addComponent(jLabel4)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 168, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(BtnAgregar, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(BtnAgregar, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(TxtFieldBuscador)
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addGroup(jPanel1Layout.createSequentialGroup()
                                         .addComponent(jLabel3)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(CmbMunicipio, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addComponent(CmbMunicipio, 0, 376, Short.MAX_VALUE)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(CmbEstado, javax.swing.GroupLayout.PREFERRED_SIZE, 176, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(CmbEstado, javax.swing.GroupLayout.PREFERRED_SIZE, 222, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 245, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(CmbServicio, javax.swing.GroupLayout.PREFERRED_SIZE, 176, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(jLabelTotalDatos, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(TxtCantidad, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addComponent(TxtFieldBuscador))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED))
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 245, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(jLabelResultadoFiltrado, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(0, 0, Short.MAX_VALUE)))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jLabelTotalDatos, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(833, 833, 833)))
+                                .addComponent(CmbServicio, javax.swing.GroupLayout.PREFERRED_SIZE, 221, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(TxtCantidad, javax.swing.GroupLayout.PREFERRED_SIZE, 136, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addComponent(BtnEliminar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -467,41 +591,47 @@ public class FrmConsulta extends javax.swing.JFrame {
                                 .addComponent(BtnFiltrar, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(BtnImprimir, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(jLabelResultadoFiltrado, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 270, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                            .addComponent(jProgressBar1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGap(1, 1, 1)))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(18, 18, 18)
+                .addContainerGap()
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(4, 4, 4)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(TxtFieldBuscador, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(BtnEliminar, javax.swing.GroupLayout.DEFAULT_SIZE, 39, Short.MAX_VALUE)
+                    .addComponent(BtnLimpiar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(TxtFieldBuscador))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(BtnLimpiar, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(BtnEliminar, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(BtnFiltrar, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(TxtCantidad, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(CmbServicio, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(CmbEstado, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(BtnImprimir, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(CmbMunicipio, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jLabel3)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(BtnFiltrar, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(BtnImprimir, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(TxtCantidad, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(CmbEstado, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel3)
-                    .addComponent(CmbServicio, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(CmbMunicipio, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jProgressBar1, javax.swing.GroupLayout.DEFAULT_SIZE, 21, Short.MAX_VALUE)
+                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jLabel6)
+                        .addComponent(jLabelResultadoFiltrado)
+                        .addComponent(jLabelTotalDatos)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel6)
-                    .addComponent(jLabelResultadoFiltrado)
-                    .addComponent(jLabelTotalDatos))
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 360, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 342, Short.MAX_VALUE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(BtnAgregar, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(BtnEditar, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(10, 10, 10))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(BtnEditar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(BtnAgregar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
         );
 
         setJMenuBar(jMenuBar1);
@@ -510,15 +640,11 @@ public class FrmConsulta extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(0, 0, Short.MAX_VALUE)
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
         pack();
@@ -526,170 +652,199 @@ public class FrmConsulta extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void BtnImprimirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnImprimirActionPerformed
+        SwingWorker<Void, Integer> worker = new SwingWorker<>() {
+            boolean cancelado = false;
 
-        try {
+            String ruta;
+            String tituloDinamico;
 
-            JFileChooser fileChooser = new JFileChooser();
-            fileChooser.setDialogTitle("Guardar PDF");
+            @Override
+            protected Void doInBackground() throws Exception {
 
-            int option = fileChooser.showSaveDialog(this);
+                publish(5);
 
-            if (option != JFileChooser.APPROVE_OPTION) {
-                return;
-            }
+                JFileChooser fileChooser = new JFileChooser();
+                fileChooser.setDialogTitle("Guardar PDF");
 
-            String ruta = fileChooser.getSelectedFile().getAbsolutePath();
+                int option = fileChooser.showSaveDialog(FrmConsulta.this);
 
-            String nombreArchivo = fileChooser.getSelectedFile().getName();
+                if (option != JFileChooser.APPROVE_OPTION) {
+                    cancelado = true;
+                    publish(0);
+                    return null;
+                }
 
-            if (nombreArchivo.toLowerCase().endsWith(".pdf")) {
-                nombreArchivo = nombreArchivo.substring(0, nombreArchivo.length() - 4);
-            }
+                ruta = fileChooser.getSelectedFile().getAbsolutePath();
 
-            String tituloDinamico = "LIBERTY NETWORKS - " + nombreArchivo.toUpperCase();
+                String nombreArchivo = fileChooser.getSelectedFile().getName();
 
-            if (!ruta.endsWith(".pdf")) {
-                ruta += ".pdf";
-            }
+                if (nombreArchivo.toLowerCase().endsWith(".pdf")) {
+                    nombreArchivo = nombreArchivo.substring(0, nombreArchivo.length() - 4);
+                }
 
-            // =========================
-            // DOCUMENTO
-            // =========================
-            Document documento = new Document(PageSize.A4.rotate(), 20, 20, 20, 20);
+                tituloDinamico = "LIBERTY NETWORKS - " + nombreArchivo.toUpperCase();
 
-            PdfWriter.getInstance(documento, new FileOutputStream(ruta));
+                if (!ruta.endsWith(".pdf")) {
+                    ruta += ".pdf";
+                }
 
-            documento.open();
+                publish(15);
 
-            // =========================
-            // COLORES
-            // =========================
-            BaseColor naranjaLiberty = new BaseColor(255, 153, 0);
-            BaseColor grisClaro = new BaseColor(245, 245, 245);
+                Document documento = new Document(PageSize.A4.rotate(), 20, 20, 20, 20);
+                PdfWriter.getInstance(documento, new FileOutputStream(ruta));
 
-            // =========================
-            // LOGO
-            // =========================
-            try {
-                com.itextpdf.text.Image logo
-                        = com.itextpdf.text.Image.getInstance("src/IMG/Logoliberty.png");
+                documento.open();
 
-                logo.scaleToFit(100, 100);
-                logo.setAlignment(Element.ALIGN_CENTER);
+                publish(25);
 
-                documento.add(logo);
+                //LOGO
+                try {
+                    com.itextpdf.text.Image logo
+                            = com.itextpdf.text.Image.getInstance("src/IMG/Logoliberty.png");
 
-            } catch (Exception e) {
-                System.out.println("Logo no encontrado");
-            }
+                    logo.scaleToFit(100, 100);
+                    logo.setAlignment(Element.ALIGN_CENTER);
 
-            // =========================
-            // TITULO
-            // =========================
-            Font tituloFont = new Font(Font.FontFamily.HELVETICA, 18, Font.BOLD, BaseColor.BLACK);
+                    documento.add(logo);
 
-            Paragraph titulo = new Paragraph(tituloDinamico, tituloFont);
-            titulo.setAlignment(Element.ALIGN_CENTER);
+                } catch (Exception e) {
+                    System.out.println("Logo no encontrado");
+                }
 
-            documento.add(titulo);
-            documento.add(new Paragraph(" "));
+                publish(35);
 
-            // =========================
-            // FECHA
-            // =========================
-            String fecha = new java.text.SimpleDateFormat("dd/MM/yyyy HH:mm:ss")
-                    .format(new java.util.Date());
+                //TITULO
+                Font tituloFont = new Font(Font.FontFamily.HELVETICA, 18, Font.BOLD, BaseColor.BLACK);
 
-            Paragraph fechaTexto = new Paragraph("Generado: " + fecha);
-            fechaTexto.setAlignment(Element.ALIGN_RIGHT);
+                Paragraph titulo = new Paragraph(tituloDinamico, tituloFont);
+                titulo.setAlignment(Element.ALIGN_CENTER);
 
-            documento.add(fechaTexto);
-            documento.add(new Paragraph(" "));
+                documento.add(titulo);
+                documento.add(new Paragraph(" "));
 
-            // =========================
-            // TABLA
-            // =========================
-            PdfPTable tabla = new PdfPTable(jTableDatos.getColumnCount());
-            tabla.setWidthPercentage(100);
+                publish(45);
 
-            tabla.setSplitLate(false);
-            tabla.setSplitRows(true);
+                //FECHA
+                String fecha = new java.text.SimpleDateFormat("dd/MM/yyyy HH:mm:ss")
+                        .format(new java.util.Date());
 
-            // IMPORTANTE: evitar error si se cambia columnas
-            float[] widths = new float[jTableDatos.getColumnCount()];
-            for (int i = 0; i < widths.length; i++) {
-                widths[i] = 1f;
-            }
-            tabla.setWidths(widths);
+                Paragraph fechaTexto = new Paragraph("Generado: " + fecha);
+                fechaTexto.setAlignment(Element.ALIGN_RIGHT);
 
-            Font headerFont = new Font(Font.FontFamily.HELVETICA, 10, Font.BOLD, BaseColor.WHITE);
-            Font dataFont = new Font(Font.FontFamily.HELVETICA, 9, Font.NORMAL, BaseColor.BLACK);
+                documento.add(fechaTexto);
+                documento.add(new Paragraph(" "));
 
-            // =========================
-            // ENCABEZADOS
-            // =========================
-            for (int i = 0; i < jTableDatos.getColumnCount(); i++) {
+                publish(55);
 
-                PdfPCell header = new PdfPCell(
-                        new Paragraph(jTableDatos.getColumnName(i), headerFont)
-                );
+                //TABLA
+                PdfPTable tabla = new PdfPTable(jTableDatos.getColumnCount());
+                tabla.setWidthPercentage(100);
 
-                header.setBackgroundColor(naranjaLiberty);
-                header.setHorizontalAlignment(Element.ALIGN_CENTER);
-                header.setVerticalAlignment(Element.ALIGN_MIDDLE);
-                header.setPadding(6);
+                float[] widths = new float[jTableDatos.getColumnCount()];
+                for (int i = 0; i < widths.length; i++) {
+                    widths[i] = 1f;
+                }
+                tabla.setWidths(widths);
 
-                tabla.addCell(header);
-            }
+                Font headerFont = new Font(Font.FontFamily.HELVETICA, 10, Font.BOLD, BaseColor.WHITE);
+                Font dataFont = new Font(Font.FontFamily.HELVETICA, 9, Font.NORMAL, BaseColor.BLACK);
 
-            // =========================
-            // DATOS 
-            // =========================
-            for (int fila = 0; fila < jTableDatos.getRowCount(); fila++) {
+                //ENCABEZADOS
+                for (int i = 0; i < jTableDatos.getColumnCount(); i++) {
 
-                for (int col = 0; col < jTableDatos.getColumnCount(); col++) {
+                    PdfPCell header = new PdfPCell(
+                            new Paragraph(jTableDatos.getColumnName(i), headerFont)
+                    );
 
-                    Object valor = jTableDatos.getValueAt(fila, col);
+                    header.setBackgroundColor(new BaseColor(255, 153, 0));
+                    header.setHorizontalAlignment(Element.ALIGN_CENTER);
+                    header.setPadding(6);
 
-                    String texto = limpiarPDF(valor);
+                    tabla.addCell(header);
+                }
 
-                    PdfPCell cell = new PdfPCell(new Paragraph(texto, dataFont));
+                publish(65);
 
-                    cell.setPadding(5);
-                    cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+                //DATOS
+                for (int fila = 0; fila < jTableDatos.getRowCount(); fila++) {
 
-                    if (fila % 2 == 0) {
-                        cell.setBackgroundColor(grisClaro);
+                    for (int col = 0; col < jTableDatos.getColumnCount(); col++) {
+
+                        Object valor = jTableDatos.getValueAt(fila, col);
+
+                        String texto = limpiarPDF(valor);
+
+                        PdfPCell cell = new PdfPCell(new Paragraph(texto, dataFont));
+
+                        if (fila % 2 == 0) {
+                            cell.setBackgroundColor(new BaseColor(245, 245, 245));
+                        }
+
+                        tabla.addCell(cell);
                     }
 
-                    tabla.addCell(cell);
+                    int progreso = 65 + (int) ((fila * 25.0) / jTableDatos.getRowCount());
+                    publish(progreso);
                 }
+
+                documento.add(tabla);
+
+                publish(95);
+
+                Paragraph firma = new Paragraph(
+                        "Generado automáticamente por Liberty Networks",
+                        new Font(Font.FontFamily.HELVETICA, 9, Font.ITALIC, BaseColor.GRAY)
+                );
+
+                firma.setAlignment(Element.ALIGN_CENTER);
+
+                documento.add(firma);
+
+                documento.close();
+
+                publish(100);
+
+                return null;
             }
 
-            documento.add(tabla);
+            @Override
+            protected void process(java.util.List<Integer> chunks) {
 
-            documento.add(new Paragraph(" "));
+                int valor = chunks.get(chunks.size() - 1);
 
-            Font firmaFont = new Font(Font.FontFamily.HELVETICA, 9, Font.ITALIC, BaseColor.GRAY);
+                jProgressBar1.setVisible(true);
+                jProgressBar1.setValue(valor);
+                jProgressBar1.setString("Generando PDF... " + valor + "%");
+            }
 
-            Paragraph firma = new Paragraph(
-                    "Generado automáticamente por Liberty Networks",
-                    firmaFont
-            );
+            @Override
+            protected void done() {
 
-            firma.setAlignment(Element.ALIGN_CENTER);
+                if (cancelado) {
 
-            documento.add(firma);
+                    jProgressBar1.setVisible(false);
+                    jProgressBar1.setValue(0);
+                    jProgressBar1.setString("");
 
-            documento.close();
+                    return; //NO mostrar mensaje de éxito
+                }
 
-            JOptionPane.showMessageDialog(this, "PDF generado correctamente");
+                JOptionPane.showMessageDialog(
+                        FrmConsulta.this,
+                        "PDF generado correctamente"
+                );
 
-        } catch (Exception e) {
+                new javax.swing.Timer(2000, e -> {
 
-            JOptionPane.showMessageDialog(this, "Error al generar PDF: " + e);
-        }
+                    jProgressBar1.setVisible(false);
+                    jProgressBar1.setValue(0);
+                    jProgressBar1.setString("");
 
+                }).start();
+            }
+        };
+
+        worker.execute();
     }//GEN-LAST:event_BtnImprimirActionPerformed
 
     private void CmbEstadoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CmbEstadoActionPerformed
@@ -756,9 +911,7 @@ public class FrmConsulta extends javax.swing.JFrame {
 
         configurarTabla();
 
-        // =========================
         // ACTUALIZAR LABEL
-        // =========================
         actualizarLabelResultado();
 
 
@@ -798,7 +951,7 @@ public class FrmConsulta extends javax.swing.JFrame {
         LineaDAO dao = new LineaDAO();
         boolean error = false;
 
-        // IMPORTANTE: eliminar de abajo hacia arriba para evitar problemas visuales
+        // IMPORTANTE: elimina de abajo hacia arriba para evitar problemas visuales
         for (int i = filas.length - 1; i >= 0; i--) {
 
             int fila = filas[i];
@@ -839,7 +992,7 @@ public class FrmConsulta extends javax.swing.JFrame {
         TxtCantidad.setText(" #Cantidad Filtrado");
         TxtCantidad.setForeground(java.awt.Color.GRAY);
 
-        TxtFieldBuscador.setText(" ");
+        TxtFieldBuscador.setText(" Buscar por Numero o Cliente");
         TxtFieldBuscador.setForeground(java.awt.Color.BLACK);
 
         TxtFieldBuscador.requestFocus();
@@ -992,6 +1145,7 @@ public class FrmConsulta extends javax.swing.JFrame {
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 new FrmConsulta().setVisible(true);
+
             }
         });
     }
@@ -1018,12 +1172,15 @@ public class FrmConsulta extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabelResultadoFiltrado;
     private javax.swing.JLabel jLabelTotalDatos;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
+    private javax.swing.JProgressBar jProgressBar1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTableDatos;
     // End of variables declaration//GEN-END:variables

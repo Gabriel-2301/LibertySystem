@@ -54,9 +54,7 @@ public class LineaDAO {
         return modelo;
     }
 
-    // =========================
-    // BUSCAR
-    // =========================
+    //BUSCAR
     public DefaultTableModel buscarNumeroOCliente(String texto) {
 
         String[] columnas = {
@@ -111,9 +109,7 @@ public class LineaDAO {
         return modelo;
     }
 
-    // =========================
-    // FILTRO
-    // =========================
+    //FILTRO
     public DefaultTableModel filtrarLineasFlexible(
             int estadoIndex,
             int servicioIndex,
@@ -185,9 +181,7 @@ public class LineaDAO {
         return modelo;
     }
 
-    // =========================
     // MUNICIPIOS
-    // =========================
     public void cargarMunicipios(javax.swing.JComboBox<String> combo) {
 
         try {
@@ -222,9 +216,7 @@ public class LineaDAO {
         }
     }
 
-    // =========================
     // INSERTAR (SIN CAMBIOS NECESARIOS)
-    // =========================
     public int insertarLinea(String numero,
             String estado,
             String fecha,
@@ -268,9 +260,7 @@ public class LineaDAO {
         }
     }
 
-    // =========================
     // HELPERS
-    // =========================
     public int obtenerId(Connection con, String tabla, String nombre) throws SQLException {
 
         String sql = "SELECT id FROM " + tabla + " WHERE nombre=?";
@@ -315,9 +305,7 @@ public class LineaDAO {
         throw new SQLException("Error cliente");
     }
 
-    // =========================
     // ELIMINAR
-    // =========================
     public boolean eliminarLinea(String numero) {
 
         String sql = "DELETE FROM lineas WHERE numero=?";
@@ -331,6 +319,25 @@ public class LineaDAO {
         } catch (Exception e) {
             System.out.println("Error eliminar: " + e);
             return false;
+        }
+    }
+
+    public void registrarHistorial(String numero, String estadoAnterior, String estadoNuevo) {
+
+        String sql = "INSERT INTO historial_lineas "
+                + "(numero, estado_anterior, estado_nuevo) "
+                + "VALUES (?, ?, ?)";
+
+        try (Connection con = Conexion.conectar(); PreparedStatement ps = con.prepareStatement(sql)) {
+
+            ps.setString(1, numero);
+            ps.setString(2, estadoAnterior);
+            ps.setString(3, estadoNuevo);
+
+            ps.executeUpdate();
+
+        } catch (Exception e) {
+            System.out.println("Error historial: " + e);
         }
     }
 
