@@ -10,11 +10,15 @@ import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import dao.LineaDAO;
 import conexion.Conexion;
+import java.awt.Color;
 import java.sql.*;
+import java.util.ArrayList;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.JOptionPane;
 import javax.swing.DefaultCellEditor;
+import javax.swing.JButton;
 import javax.swing.JComboBox;
+import utilidades.TemaManager;
 
 /**
  *
@@ -26,25 +30,122 @@ public class FrmEditar extends javax.swing.JFrame {
      * Creates new form FrmEditar
      *
      */
+    public void aplicarTemaOscuro() {
+        aplicarColoresPersonalizados();
+    }
+
+    ArrayList<String> estadoOriginal = new ArrayList<>();
+    ArrayList<String> municipioOriginal = new ArrayList<>();
+    ArrayList<String> clienteOriginal = new ArrayList<>();
+    ArrayList<String> servicioOriginal = new ArrayList<>();
+
     private FrmConsulta frmConsulta;
     private DefaultTableModel modelo;
     private java.util.List<String> numerosOriginales = new java.util.ArrayList<>();
 
     public FrmEditar() {
         initComponents();
+
         setTitle("Liberty Networks | Panel de Edicion");
         setResizable(false);
         setLocationRelativeTo(null);
         SetImageLabel(jLabel2, "/IMG/Logoliberty.png");
         setIconImage(new ImageIcon(getClass().getResource("/IMG/Iconoliberty.png")).getImage());
+
+        aplicarTema();
+
+    }
+
+    private void aplicarColoresPersonalizados() {
+
+        if (TemaManager.oscuro) {
+
+            BtnGuardar.setIcon(TemaManager.invertirIcono(getClass(), "/IMG/Iconoguardar.png"));
+
+            BtnLimpiar.setIcon(TemaManager.invertirIcono(getClass(), "/IMG/Iconolimpiar.png"));
+
+            LblCantidad.setIcon(TemaManager.invertirIcono(getClass(), "/IMG/Iconoeditar.png"));
+
+        } else {
+
+            BtnGuardar.setIcon(new ImageIcon(getClass().getResource("/IMG/Iconoguardar.png")));
+
+            BtnLimpiar.setIcon(new ImageIcon(getClass().getResource("/IMG/Iconolimpiar.png")));
+
+            LblCantidad.setIcon(new ImageIcon(getClass().getResource("/IMG/Iconoeditar.png")));
+        }
+        repaint();
+    }
+
+    private void aplicarTema() {
+        if (TemaManager.oscuro) {
+
+            BtnGuardar.setIcon(TemaManager.invertirIcono(getClass(), "/IMG/Iconoguardar.png"));
+
+            BtnLimpiar.setIcon(
+                    TemaManager.invertirIcono(getClass(), "/IMG/Iconolimpiar.png"));
+
+            LblCantidad.setIcon(
+                    TemaManager.invertirIcono(getClass(), "/IMG/Iconoeditar.png"));
+
+        } else {
+
+            BtnGuardar.setIcon(
+                    new ImageIcon(getClass().getResource("/IMG/Iconoguardar.png")));
+
+            BtnLimpiar.setIcon(
+                    new ImageIcon(getClass().getResource("/IMG/Iconolimpiar.png")));
+
+            LblCantidad.setIcon(
+                    new ImageIcon(getClass().getResource("/IMG/Iconoeditar.png")));
+        }
+
+        if (TemaManager.oscuro) {
+            jPanel1.setBackground(new java.awt.Color(35, 35, 35));
+            jPanel2.setBackground(new java.awt.Color(45, 45, 45));
+
+            jLabel1.setForeground(Color.WHITE);
+            LblCantidad.setForeground(Color.WHITE);
+
+            jTableDatosEditados.setBackground(new Color(45, 45, 45));
+            jTableDatosEditados.setForeground(Color.WHITE);
+            jTableDatosEditados.setGridColor(new Color(70, 70, 70));
+            jTableDatosEditados.setSelectionForeground(Color.BLACK);
+            jTableDatosEditados.getTableHeader().setBackground(new Color(60, 60, 60));
+            jTableDatosEditados.getTableHeader().setForeground(Color.WHITE);
+
+            JButton[] botones = {
+                BtnGuardar,
+                BtnLimpiar
+            };
+            for (JButton b : botones) {
+                b.setBackground(new Color(55, 55, 55));
+                b.setForeground(Color.WHITE);
+            }
+//    } else {
+//        jPanel1.setBackground(new java.awt.Color(35,35,35));
+//        jPanel2.setBackground(new java.awt.Color(45,45,45));
+//        jLabel1.setForeground(Color.WHITE);
+//        jLabel2.setForeground(Color.WHITE);
+//        jTableDatosEditados.setBackground(new Color(45,45,45));
+//        jTableDatosEditados.setForeground(Color.WHITE);
+//        jTableDatosEditados.setGridColor(new Color(70,70,70));
+//        jTableDatosEditados.setSelectionForeground(Color.BLACK);
+//        jTableDatosEditados.getTableHeader().setBackground(new Color(60,60,60));
+//        jTableDatosEditados.getTableHeader().setForeground(Color.WHITE);
+//        JButton[] botones = {
+//            BtnGuardar,
+//            BtnLimpiar
+//        };
+        }
+        repaint();
     }
 
     public void cargarDatos(FrmConsulta frmConsulta, java.util.List<Object[]> datos) {
 
         this.frmConsulta = frmConsulta;
 
-        modelo = new DefaultTableModel(
-                new Object[]{"Numero", "Estado", "Fecha", "Municipio", "Cliente", "Servicio"}, 0
+        modelo = new DefaultTableModel(new Object[]{"Numero", "Estado", "Fecha", "Municipio", "Cliente", "Servicio"}, 0
         ) {
             @Override
             public boolean isCellEditable(int row, int col) {
@@ -54,10 +155,26 @@ public class FrmEditar extends javax.swing.JFrame {
 
         jTableDatosEditados.setModel(modelo);
         numerosOriginales.clear();
+        estadoOriginal.clear();
+        municipioOriginal.clear();
+        clienteOriginal.clear();
+        servicioOriginal.clear();
+        numerosOriginales.clear();
 
         for (Object[] fila : datos) {
-            numerosOriginales.add(fila[0].toString());
-            modelo.addRow(fila);
+
+            Object[] safe = new Object[6];
+
+            for (int i = 0; i < 6; i++) {
+                safe[i] = (fila[i] == null) ? "" : fila[i];
+            }
+
+            numerosOriginales.add(safe[0].toString());
+            estadoOriginal.add(safe[1].toString());
+            municipioOriginal.add(safe[3].toString());
+            clienteOriginal.add(safe[4].toString());
+            servicioOriginal.add(safe[5].toString());
+            modelo.addRow(safe);
         }
         LblCantidad.setText("Total de Lineas Seleccionadas para Editar: " + datos.size());
 
@@ -106,15 +223,12 @@ public class FrmEditar extends javax.swing.JFrame {
         jTableDatosEditados.getColumnModel().getColumn(3).setPreferredWidth(300);
         jTableDatosEditados.getColumnModel().getColumn(4).setPreferredWidth(400);
         jTableDatosEditados.getColumnModel().getColumn(5).setPreferredWidth(140);
-
         jTableDatosEditados.setRowHeight(25);
-
         jTableDatosEditados.getTableHeader().setResizingAllowed(false);
         jTableDatosEditados.getTableHeader().setReorderingAllowed(false);
 
         //Combo Estado
         JComboBox<String> comboEstado = new JComboBox<>();
-
         comboEstado.addItem("Libre");
         comboEstado.addItem("Reservado");
         comboEstado.addItem("Cancelado");
@@ -206,9 +320,8 @@ public class FrmEditar extends javax.swing.JFrame {
 
         //Combo Servicio
         JComboBox<String> comboServicio = new JComboBox<>();
-
         comboServicio.addItem("MyUC");
-        comboServicio.addItem("Business Trunk");
+        comboServicio.addItem("Bussines Trunk");
 
         jTableDatosEditados.getColumnModel()
                 .getColumn(5)
@@ -383,47 +496,47 @@ public class FrmEditar extends javax.swing.JFrame {
             }
 
             Connection con = Conexion.conectar();
-
             LineaDAO dao = new LineaDAO();
 
-            String sql
-                    = "UPDATE lineas SET "
-                    + "numero=?,"
-                    + "estado_id=?,"
-                    + "fechas_ultimo_estado=NOW(),"
-                    + "municipio_id=?,"
-                    + "cliente_id=?,"
-                    + "servicio_id=? "
-                    + "WHERE numero=?";
+            String sql = "UPDATE lineas SET " + "numero=?," + "estado_id=?," + "fechas_ultimo_estado=NOW()," + "municipio_id=?," + "cliente_id=?," + "servicio_id=? " + "WHERE numero=?";
 
             PreparedStatement ps = con.prepareStatement(sql);
 
             for (int i = 0; i < modelo.getRowCount(); i++) {
 
                 String numeroNuevo = modelo.getValueAt(i, 0).toString().trim();
-                String estado = modelo.getValueAt(i, 1).toString().trim();
-                String municipio = modelo.getValueAt(i, 3).toString().trim();
-                String cliente = modelo.getValueAt(i, 4).toString().trim();
-                String servicio = modelo.getValueAt(i, 5).toString().trim();
+                String estadoNew = modelo.getValueAt(i, 1).toString().trim();
+                String municipioNew = modelo.getValueAt(i, 3).toString().trim();
+                String clienteNew = modelo.getValueAt(i, 4).toString().trim();
+                String servicioNew = modelo.getValueAt(i, 5).toString().trim();
 
                 String numeroOriginal = numerosOriginales.get(i);
 
-                //VALIDACIONES
-                if (!numeroNuevo.matches("\\d{1,8}")) {
-                    JOptionPane.showMessageDialog(this, "Número inválido fila " + (i + 1));
-                    return;
+                String estadoAnt = estadoOriginal.get(i);
+                String municipioAnt = municipioOriginal.get(i);
+                String clienteAnt = clienteOriginal.get(i);
+                String servicioAnt = servicioOriginal.get(i);
+
+                // VALIDACIÓN FK (EVITA ERROR)
+                int estadoId = dao.obtenerIdPublic(con, "estados", estadoNew);
+                int municipioId = dao.obtenerIdPublic(con, "municipios", municipioNew);
+                int clienteId = dao.obtenerClientePublic(con, clienteNew);
+                int servicioId = dao.obtenerIdPublic(con, "servicios", servicioNew);
+
+                if (servicioId == 0) {
+                    throw new Exception("Servicio inválido: " + servicioNew);
                 }
 
-                if (cliente.length() > 50) {
-                    JOptionPane.showMessageDialog(this, "Cliente muy largo fila " + (i + 1));
-                    return;
-                }
+                // HISTORIAL (ANTES DEL UPDATE)
+                dao.registrarHistorialCompleto(
+                        numeroNuevo,
+                        estadoAnt, estadoNew,
+                        municipioAnt, municipioNew,
+                        clienteAnt, clienteNew,
+                        servicioAnt, servicioNew
+                );
 
-                int estadoId = dao.obtenerIdPublic(con, "estados", estado);
-                int municipioId = dao.obtenerIdPublic(con, "municipios", municipio);
-                int clienteId = dao.obtenerClientePublic(con, cliente);
-                int servicioId = dao.obtenerIdPublic(con, "servicios", servicio);
-
+                // UPDATE
                 ps.setString(1, numeroNuevo);
                 ps.setInt(2, estadoId);
                 ps.setInt(3, municipioId);
@@ -435,18 +548,17 @@ public class FrmEditar extends javax.swing.JFrame {
             }
 
             ps.executeBatch();
-            ps.close();
             con.close();
 
             frmConsulta.cargarTabla();
 
             JOptionPane.showMessageDialog(this, "Actualizado correctamente");
-
             dispose();
 
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, "Error: " + e.getMessage());
         }
+
     }//GEN-LAST:event_BtnGuardarActionPerformed
 
     private void BtnLimpiarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnLimpiarActionPerformed
@@ -492,29 +604,19 @@ public class FrmEditar extends javax.swing.JFrame {
 
     private void SetImageLabel(javax.swing.JLabel labelName, String resourcePath) {
 
-        java.net.URL imageURL
-                = getClass().getResource(resourcePath);
+        java.net.URL imageURL = getClass().getResource(resourcePath);
 
         if (imageURL != null) {
 
             ImageIcon image = new ImageIcon(imageURL);
 
-            Icon icon = new ImageIcon(
-                    image.getImage().getScaledInstance(
-                            labelName.getWidth(),
-                            labelName.getHeight(),
-                            Image.SCALE_SMOOTH
-                    )
-            );
+            Icon icon = new ImageIcon(image.getImage().getScaledInstance(labelName.getWidth(), labelName.getHeight(), Image.SCALE_SMOOTH));
 
             labelName.setIcon(icon);
 
         } else {
 
-            System.out.println(
-                    "No se encontró la imagen: "
-                    + resourcePath
-            );
+            System.out.println("No se encontró la imagen: " + resourcePath);
         }
     }
 

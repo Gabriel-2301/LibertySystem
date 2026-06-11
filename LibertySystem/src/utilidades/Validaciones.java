@@ -10,24 +10,17 @@ public class Validaciones {
 
         if (txt.getText().trim().isEmpty()) {
 
-            JOptionPane.showMessageDialog(
-                    null,
-                    mensaje
-            );
+            JOptionPane.showMessageDialog(null, mensaje);
 
             txt.requestFocus();
 
             return true;
         }
-
         return false;
     }
 
     // VALIDAR SOLO NÚMEROS Y 8 DÍGITOS
-    public static void soloNumeros8Digitos(
-            JTextField txt,
-            KeyEvent evt
-    ) {
+    public static void soloNumeros8Digitos(JTextField txt, KeyEvent evt) {
 
         char c = evt.getKeyChar();
 
@@ -51,8 +44,7 @@ public class Validaciones {
     public static void soloMax50Caracteres(JTextField txt, KeyEvent evt) {
 
         // permitir control keys
-        if (evt.getKeyChar() == KeyEvent.VK_BACK_SPACE
-                || evt.getKeyChar() == KeyEvent.VK_DELETE) {
+        if (evt.getKeyChar() == KeyEvent.VK_BACK_SPACE || evt.getKeyChar() == KeyEvent.VK_DELETE) {
             return;
         }
 
@@ -62,33 +54,26 @@ public class Validaciones {
         }
     }
 
-    public static void buscadorNumeroCliente(
-            JTextField txt,
-            KeyEvent evt
-    ) {
+    public static void buscadorNumeroCliente(JTextField txt, KeyEvent evt) {
 
         // Máximo 50 caracteres
         if (txt.getText().length() >= 50) {
 
-            if (evt.getKeyChar() == KeyEvent.VK_BACK_SPACE
-                    || evt.getKeyChar() == KeyEvent.VK_DELETE) {
+            if (evt.getKeyChar() == KeyEvent.VK_BACK_SPACE || evt.getKeyChar() == KeyEvent.VK_DELETE) {
                 return;
             }
-
             evt.consume();
         }
     }
 
     public static boolean validarFechaFormato(String fecha) {
-
         // SOLO permite:
         // números, /, espacio y :
         if (!fecha.matches("\\d{2}/\\d{2}/\\d{4} \\d{2}:\\d{2}:\\d{2}")) {
             return false;
         }
 
-        java.text.SimpleDateFormat sdf
-                = new java.text.SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+        java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
 
         sdf.setLenient(false);
 
@@ -109,11 +94,7 @@ public class Validaciones {
         char c = evt.getKeyChar();
 
         // SOLO números, /, : y espacio
-        if (!Character.isDigit(c)
-                && c != '/'
-                && c != ':'
-                && c != ' ') {
-
+        if (!Character.isDigit(c) && c != '/' && c != ':' && c != ' ') {
             evt.consume();
         }
     }
@@ -122,11 +103,9 @@ public class Validaciones {
 
         try {
 
-            java.text.SimpleDateFormat formatoUsuario
-                    = new java.text.SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+            java.text.SimpleDateFormat formatoUsuario = new java.text.SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
 
-            java.text.SimpleDateFormat formatoMySQL
-                    = new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            java.text.SimpleDateFormat formatoMySQL = new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
             java.util.Date fecha = formatoUsuario.parse(fechaUsuario);
 

@@ -13,8 +13,7 @@ public class LineaDAO {
     public DefaultTableModel mostrarDatos() {
 
         String[] columnas = {
-            "Numero", "Estado", "Fecha_Ultimo_Estado",
-            "Municipio", "Cliente", "Servicio"
+            "Numero", "Estado", "Fecha_Ultimo_Estado", "Municipio", "Cliente", "Servicio"
         };
 
         DefaultTableModel modelo = new DefaultTableModel(null, columnas);
@@ -58,8 +57,7 @@ public class LineaDAO {
     public DefaultTableModel buscarNumeroOCliente(String texto) {
 
         String[] columnas = {
-            "Numero", "Estado", "Fecha_Ultimo_Estado",
-            "Municipio", "Cliente", "Servicio"
+            "Numero", "Estado", "Fecha_Ultimo_Estado", "Municipio", "Cliente", "Servicio"
         };
 
         DefaultTableModel modelo = new DefaultTableModel(null, columnas);
@@ -120,8 +118,7 @@ public class LineaDAO {
             Integer cantidad) {
 
         String[] columnas = {
-            "Numero", "Estado", "Fecha_Ultimo_Estado",
-            "Municipio", "Cliente", "Servicio"
+            "Numero", "Estado", "Fecha_Ultimo_Estado", "Municipio", "Cliente", "Servicio"
         };
 
         DefaultTableModel modelo = new DefaultTableModel(null, columnas);
@@ -231,9 +228,7 @@ public class LineaDAO {
             int clienteId = obtenerOInsertarCliente(con, cliente);
             int servicioId = obtenerId(con, "servicios", servicio);
 
-            String sql = "INSERT INTO lineas "
-                    + "(numero,  estado_id, fechas_ultimo_estado, municipio_id, cliente_id, servicio_id) "
-                    + "VALUES (?, ?, ?, ?, ?, ?)";
+            String sql = "INSERT INTO lineas " + "(numero,  estado_id, fechas_ultimo_estado, municipio_id, cliente_id, servicio_id) " + "VALUES (?, ?, ?, ?, ?, ?)";
 
             PreparedStatement ps = con.prepareStatement(sql);
 
@@ -246,7 +241,7 @@ public class LineaDAO {
 
             ps.executeUpdate();
 
-            return 1; // OK
+            return 1;
 
         } catch (java.sql.SQLIntegrityConstraintViolationException e) {
 
@@ -322,22 +317,47 @@ public class LineaDAO {
         }
     }
 
-    public void registrarHistorial(String numero, String estadoAnterior, String estadoNuevo) {
+    public void registrarHistorialCompleto(
+            String numero,
+            String estadoAnt, String estadoNew,
+            String municipioAnt, String municipioNew,
+            String clienteAnt, String clienteNew,
+            String servicioAnt, String servicioNew
+    ) {
 
-        String sql = "INSERT INTO historial_lineas "
-                + "(numero, estado_anterior, estado_nuevo) "
-                + "VALUES (?, ?, ?)";
+        String sql
+                = "INSERT INTO historial_lineas (numero, estado_anterior, estado_nuevo, "
+                + "municipio_anterior, municipio_nuevo, "
+                + "cliente_anterior, cliente_nuevo, "
+                + "servicio_anterior, servicio_nuevo) "
+                + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?) "
+                + "ON DUPLICATE KEY UPDATE "
+                + "estado_anterior=VALUES(estado_anterior), "
+                + "estado_nuevo=VALUES(estado_nuevo), "
+                + "municipio_anterior=VALUES(municipio_anterior), "
+                + "municipio_nuevo=VALUES(municipio_nuevo), "
+                + "cliente_anterior=VALUES(cliente_anterior), "
+                + "cliente_nuevo=VALUES(cliente_nuevo), "
+                + "servicio_anterior=VALUES(servicio_anterior), "
+                + "servicio_nuevo=VALUES(servicio_nuevo), "
+                + "fecha=NOW()";
 
         try (Connection con = Conexion.conectar(); PreparedStatement ps = con.prepareStatement(sql)) {
 
             ps.setString(1, numero);
-            ps.setString(2, estadoAnterior);
-            ps.setString(3, estadoNuevo);
+            ps.setString(2, estadoAnt);
+            ps.setString(3, estadoNew);
+            ps.setString(4, municipioAnt);
+            ps.setString(5, municipioNew);
+            ps.setString(6, clienteAnt);
+            ps.setString(7, clienteNew);
+            ps.setString(8, servicioAnt);
+            ps.setString(9, servicioNew);
 
             ps.executeUpdate();
 
         } catch (Exception e) {
-            System.out.println("Error historial: " + e);
+            System.out.println("Error historial upsert: " + e);
         }
     }
 

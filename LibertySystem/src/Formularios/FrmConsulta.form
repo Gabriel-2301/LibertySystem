@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 
-<Form version="1.5" maxVersion="1.9" type="org.netbeans.modules.form.forminfo.JFrameFormInfo">
+<Form version="1.8" maxVersion="1.9" type="org.netbeans.modules.form.forminfo.JFrameFormInfo">
   <NonVisualComponents>
     <Menu class="javax.swing.JMenuBar" name="jMenuBar1">
     </Menu>
@@ -54,14 +54,16 @@
               <Group type="102" alignment="1" attributes="0">
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="1" attributes="0">
+                      <Component id="jPanel2" max="32767" attributes="0"/>
                       <Component id="jScrollPane1" alignment="0" max="32767" attributes="0"/>
-                      <Component id="jPanel2" alignment="0" max="32767" attributes="0"/>
                       <Group type="102" alignment="0" attributes="0">
                           <Component id="BtnEditar" min="-2" pref="190" max="-2" attributes="0"/>
-                          <EmptySpace min="-2" pref="460" max="-2" attributes="0"/>
+                          <EmptySpace min="-2" pref="396" max="-2" attributes="0"/>
                           <Component id="jLabel4" min="-2" max="-2" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
-                          <Component id="jLabel5" min="-2" pref="168" max="-2" attributes="0"/>
+                          <Component id="LblManualdeUsuario" min="-2" max="-2" attributes="0"/>
+                          <EmptySpace max="-2" attributes="0"/>
+                          <Component id="LblVerHistorial" min="-2" max="-2" attributes="0"/>
                           <EmptySpace max="32767" attributes="0"/>
                           <Component id="BtnAgregar" min="-2" pref="190" max="-2" attributes="0"/>
                       </Group>
@@ -140,21 +142,28 @@
                   </Group>
                   <EmptySpace min="-2" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <Component id="jProgressBar1" alignment="0" pref="21" max="32767" attributes="0"/>
-                      <Group type="103" groupAlignment="3" attributes="0">
-                          <Component id="jLabel6" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="jLabelResultadoFiltrado" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="jLabelTotalDatos" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="jProgressBar1" alignment="0" max="32767" attributes="0"/>
+                      <Group type="102" attributes="0">
+                          <Group type="103" groupAlignment="3" attributes="0">
+                              <Component id="jLabel6" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="jLabelResultadoFiltrado" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="jLabelTotalDatos" alignment="3" min="-2" max="-2" attributes="0"/>
+                          </Group>
+                          <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                       </Group>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
-                  <Component id="jScrollPane1" pref="360" max="32767" attributes="0"/>
+                  <Component id="jScrollPane1" pref="346" max="32767" attributes="0"/>
                   <EmptySpace min="-2" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Component id="jLabel4" alignment="0" max="32767" attributes="0"/>
-                      <Component id="jLabel5" alignment="0" min="-2" pref="40" max="-2" attributes="0"/>
-                      <Component id="BtnEditar" max="32767" attributes="0"/>
+                      <Group type="102" alignment="0" attributes="0">
+                          <Component id="LblManualdeUsuario" min="-2" pref="40" max="-2" attributes="0"/>
+                          <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                      </Group>
                       <Component id="BtnAgregar" max="32767" attributes="0"/>
+                      <Component id="BtnEditar" alignment="0" max="32767" attributes="0"/>
+                      <Component id="LblVerHistorial" alignment="1" max="32767" attributes="0"/>
                   </Group>
                   <EmptySpace min="-2" max="-2" attributes="0"/>
               </Group>
@@ -173,9 +182,17 @@
             <DimensionLayout dim="0">
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" alignment="0" attributes="0">
-                      <EmptySpace max="32767" attributes="0"/>
-                      <Component id="jLabel1" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace min="-2" pref="151" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Group type="102" attributes="0">
+                              <EmptySpace max="32767" attributes="0"/>
+                              <Component id="jLabel1" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace min="-2" pref="160" max="-2" attributes="0"/>
+                          </Group>
+                          <Group type="102" alignment="0" attributes="0">
+                              <Component id="tglTema" min="-2" pref="51" max="-2" attributes="0"/>
+                              <EmptySpace max="32767" attributes="0"/>
+                          </Group>
+                      </Group>
                       <Component id="jLabel2" min="-2" pref="155" max="-2" attributes="0"/>
                       <EmptySpace min="-2" pref="67" max="-2" attributes="0"/>
                   </Group>
@@ -183,11 +200,12 @@
             </DimensionLayout>
             <DimensionLayout dim="1">
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Component id="jLabel2" alignment="0" pref="0" max="32767" attributes="0"/>
-                  <Group type="102" alignment="1" attributes="0">
-                      <EmptySpace pref="34" max="32767" attributes="0"/>
+                  <Component id="jLabel2" pref="0" max="32767" attributes="0"/>
+                  <Group type="102" attributes="0">
+                      <Component id="tglTema" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace min="-2" pref="14" max="-2" attributes="0"/>
                       <Component id="jLabel1" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace min="-2" pref="25" max="-2" attributes="0"/>
+                      <EmptySpace pref="38" max="32767" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -213,6 +231,20 @@
                   <Image iconType="3" name="/IMG/Logoliberty.png"/>
                 </Property>
               </Properties>
+            </Component>
+            <Component class="javax.swing.JToggleButton" name="tglTema">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="\ud83c\udf19" containsInvalidXMLChars="true"/>
+                <Property name="toolTipText" type="java.lang.String" value="Cambiar Tema"/>
+                <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
+                  <Border info="org.netbeans.modules.form.compat2.border.BevelBorderInfo">
+                    <BevelBorder/>
+                  </Border>
+                </Property>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="tglTemaActionPerformed"/>
+              </Events>
             </Component>
           </SubComponents>
         </Container>
@@ -305,6 +337,7 @@
                   </TableColumnModel>
                 </Property>
                 <Property name="rowHeight" type="int" value="25"/>
+                <Property name="showGrid" type="boolean" value="true"/>
                 <Property name="tableHeader" type="javax.swing.table.JTableHeader" editor="org.netbeans.modules.form.editors2.JTableHeaderEditor">
                   <TableHeader reorderingAllowed="false" resizingAllowed="false"/>
                 </Property>
@@ -382,7 +415,12 @@
             </Property>
             <Property name="toolTipText" type="java.lang.String" value=""/>
             <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
-              <Border info="null"/>
+              <Border info="org.netbeans.modules.form.compat2.border.LineBorderInfo">
+                <LineBorder/>
+              </Border>
+            </Property>
+            <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
+              <Color id="Hand Cursor"/>
             </Property>
           </Properties>
           <Events>
@@ -438,6 +476,14 @@
                 <StringItem index="3" value="En Servicio"/>
                 <StringItem index="4" value="Reservado"/>
               </StringArray>
+            </Property>
+            <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
+              <Border info="org.netbeans.modules.form.compat2.border.LineBorderInfo">
+                <LineBorder/>
+              </Border>
+            </Property>
+            <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
+              <Color id="Hand Cursor"/>
             </Property>
           </Properties>
           <Events>
@@ -561,6 +607,14 @@
                 <StringItem index="74" value="Yuscaran, El Paraiso"/>
               </StringArray>
             </Property>
+            <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
+              <Border info="org.netbeans.modules.form.compat2.border.LineBorderInfo">
+                <LineBorder/>
+              </Border>
+            </Property>
+            <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
+              <Color id="Hand Cursor"/>
+            </Property>
           </Properties>
           <Events>
             <EventHandler event="itemStateChanged" listener="java.awt.event.ItemListener" parameters="java.awt.event.ItemEvent" handler="CmbMunicipioItemStateChanged"/>
@@ -606,13 +660,36 @@
             <Property name="toolTipText" type="java.lang.String" value="Atajos:&#xa;&#xa;   Agregar (Ctrl N)&#xa;&#xa;   Eliminar (SUPR)&#xa;&#xa;   Imprimir (Ctrl P)&#xa;&#xa;   Filtrar (Ctrl F)&#xa;&#xa;   Limpiar (Ctrl L)"/>
           </Properties>
         </Component>
-        <Component class="javax.swing.JLabel" name="jLabel5">
+        <Component class="javax.swing.JLabel" name="LblManualdeUsuario">
           <Properties>
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
               <Font name="Segoe UI" size="14" style="1"/>
             </Property>
-            <Property name="text" type="java.lang.String" value="Link Manual de Usuario"/>
+            <Property name="text" type="java.lang.String" value="Link Manual de Usuario ||"/>
+            <Property name="toolTipText" type="java.lang.String" value="Lee el Manual de Usuario"/>
+            <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
+              <Color id="Hand Cursor"/>
+            </Property>
           </Properties>
+          <Events>
+            <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="LblManualdeUsuarioMouseClicked"/>
+          </Events>
+        </Component>
+        <Component class="javax.swing.JLabel" name="LblVerHistorial">
+          <Properties>
+            <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+              <Font name="Segoe UI" size="14" style="1"/>
+            </Property>
+            <Property name="text" type="java.lang.String" value="Ver Historial"/>
+            <Property name="toolTipText" type="java.lang.String" value="Ver Historial de Cambios en el Sistema"/>
+            <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
+              <Color id="Hand Cursor"/>
+            </Property>
+          </Properties>
+          <Events>
+            <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="LblVerHistorialMouseClicked"/>
+            <EventHandler event="keyPressed" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="LblVerHistorialKeyPressed"/>
+          </Events>
         </Component>
       </SubComponents>
     </Container>

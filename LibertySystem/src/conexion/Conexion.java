@@ -6,9 +6,7 @@ import java.sql.SQLException;
 
 public class Conexion {
 
-    private static final String URL =
-            "jdbc:mysql://localhost:3306/liberty";
-
+    private static final String URL = "jdbc:mysql://localhost:3306/liberty";
     private static final String USER = "root";
     private static final String PASSWORD = "1234";
 
@@ -20,11 +18,7 @@ public class Conexion {
 
             Class.forName("com.mysql.cj.jdbc.Driver");
 
-            con = DriverManager.getConnection(
-                    URL,
-                    USER,
-                    PASSWORD
-            );
+            con = DriverManager.getConnection(URL, USER, PASSWORD);
 
             System.out.println("Conexion exitosa");
 
@@ -41,6 +35,5 @@ public class Conexion {
     public static void main(String[] args) {
 
         conectar();
-
     }
 }

@@ -16,22 +16,29 @@ import com.itextpdf.text.pdf.PdfWriter;
 import java.io.FileOutputStream;
 import javax.swing.JFileChooser;
 import dao.LineaDAO;
+import java.awt.Color;
 import java.awt.Image;
 import javax.swing.AbstractAction;
 import javax.swing.ActionMap;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.InputMap;
+import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JRootPane;
+import javax.swing.JTextField;
 import javax.swing.KeyStroke;
+import javax.swing.SwingUtilities;
 import javax.swing.SwingWorker;
 import javax.swing.table.DefaultTableModel;
 import utilidades.Validaciones;
 import javax.swing.Timer;
+import javax.swing.UIManager;
 import utilidades.BackupBD;
+import utilidades.ConfigTema;
+import utilidades.TemaManager;
 
 /**
  *
@@ -47,17 +54,240 @@ public class FrmConsulta extends javax.swing.JFrame {
     public void cargarTabla() {
 
         LineaDAO dao = new LineaDAO();
-
         jTableDatos.setModel(dao.mostrarDatos());
-
         jTableDatos.setDefaultEditor(Object.class, null);
-
         configurarTabla();
+
+    }
+
+    public void aplicarTemaOscuro() {
+        aplicarColoresPersonalizados();
+    }
+
+    public void aplicarTemaClaro() {
+        aplicarColoresPersonalizados();
+    }
+
+    private void aplicarColoresPersonalizados() {
+
+        Color naranja = new Color(255, 153, 0);
+
+        if (TemaManager.oscuro) {
+
+            BtnEliminar.setIcon(TemaManager.invertirIcono(getClass(), "/IMG/Iconoeliminar.png"));
+
+            BtnLimpiar.setIcon(TemaManager.invertirIcono(getClass(), "/IMG/Iconolimpiar.png"));
+
+            BtnFiltrar.setIcon(TemaManager.invertirIcono(getClass(), "/IMG/Iconofiltrar.png"));
+
+            BtnImprimir.setIcon(TemaManager.invertirIcono(getClass(), "/IMG/Iconoimprimir.png"));
+
+            BtnAgregar.setIcon(TemaManager.invertirIcono(getClass(), "/IMG/Iconoagregar.png"));
+
+            BtnEditar.setIcon(TemaManager.invertirIcono(getClass(), "/IMG/Iconoeditar.png"));
+
+            jLabel4.setIcon(TemaManager.invertirIcono(getClass(), "/IMG/Iconointerrogacion.png"));
+
+            jLabel6.setIcon(TemaManager.invertirIcono(getClass(), "/IMG/Iconodatos.png"));
+
+        } else {
+
+            BtnEliminar.setIcon(new ImageIcon(getClass().getResource("/IMG/Iconoeliminar.png")));
+
+            BtnLimpiar.setIcon(new ImageIcon(getClass().getResource("/IMG/Iconolimpiar.png")));
+
+            BtnFiltrar.setIcon(new ImageIcon(getClass().getResource("/IMG/Iconofiltrar.png")));
+
+            BtnImprimir.setIcon(new ImageIcon(getClass().getResource("/IMG/Iconoimprimir.png")));
+
+            BtnAgregar.setIcon(new ImageIcon(getClass().getResource("/IMG/Iconoagregar.png")));
+
+            BtnEditar.setIcon(new ImageIcon(getClass().getResource("/IMG/Iconoeditar.png")));
+
+            jLabel4.setIcon(new ImageIcon(getClass().getResource("/IMG/Iconointerrogacion.png")));
+
+            jLabel6.setIcon(new ImageIcon(getClass().getResource("/IMG/Iconodatos.png")));
+        }
+
+        if (TemaManager.oscuro) {
+            //FONDO GENERAL
+            jPanel1.setBackground(new Color(35, 35, 35));
+            //PANEL SUPERIOR BLANCO
+
+            jPanel2.setBackground(new Color(45, 45, 45));
+            jLabel1.setForeground(Color.WHITE);
+
+            //LABELS
+            jLabel3.setForeground(Color.WHITE);
+            jLabel6.setForeground(Color.WHITE);
+            jLabelResultadoFiltrado.setForeground(Color.WHITE);
+            jLabelTotalDatos.setForeground(Color.WHITE);
+            LblManualdeUsuario.setForeground(Color.WHITE);
+            LblVerHistorial.setForeground(Color.WHITE);
+
+            //TABLA             
+            jTableDatos.setBackground(new Color(45, 45, 45));
+            jTableDatos.setForeground(Color.WHITE);
+            jTableDatos.setGridColor(new Color(70, 70, 70));
+            //jTableDatos.setSelectionBackground(naranja);
+            jTableDatos.setSelectionForeground(Color.BLACK);
+            jTableDatos.getTableHeader().setBackground(new Color(60, 60, 60));
+            jTableDatos.getTableHeader().setForeground(Color.WHITE);
+
+            //SCROLL           
+            jScrollPane1.getViewport().setBackground(new Color(45, 45, 45));
+
+            //TEXTFIELDS
+            TxtFieldBuscador.setBackground(new Color(55, 55, 55));
+            TxtFieldBuscador.setForeground(Color.WHITE);
+            TxtFieldBuscador.setCaretColor(Color.WHITE);
+            TxtCantidad.setBackground(new Color(55, 55, 55));
+            TxtCantidad.setForeground(Color.WHITE);
+            TxtCantidad.setCaretColor(Color.WHITE);
+
+            //COMBOBOX            
+            CmbEstado.setBackground(new Color(55, 55, 55));
+            CmbEstado.setForeground(Color.WHITE);
+            CmbMunicipio.setBackground(new Color(55, 55, 55));
+            CmbMunicipio.setForeground(Color.WHITE);
+            CmbServicio.setBackground(new Color(55, 55, 55));
+            CmbServicio.setForeground(Color.WHITE);
+
+            //BOTONES
+            JButton[] botones = {
+                BtnAgregar,
+                BtnEditar,
+                BtnEliminar,
+                BtnFiltrar,
+                BtnImprimir,
+                BtnLimpiar
+            };
+
+            for (JButton b : botones) {
+
+                b.setBackground(new Color(55, 55, 55));
+
+                b.setForeground(Color.WHITE);
+            }
+
+            //TOGGLE
+            tglTema.setText("☀");
+            tglTema.setBackground(new Color(245, 245, 245));
+            tglTema.setForeground(Color.GRAY);
+            tglTema.setFocusPainted(false);
+            tglTema.setBorderPainted(false);
+            tglTema.setOpaque(true);
+
+        } else {
+
+            //CLARO ORIGINAL
+            jPanel1.setBackground(naranja);
+            jPanel2.setBackground(Color.WHITE);
+            jLabel1.setForeground(Color.BLACK);
+            jLabel3.setForeground(Color.BLACK);
+            jLabel6.setForeground(Color.BLACK);
+            jLabelResultadoFiltrado.setForeground(Color.BLACK);
+            jLabelTotalDatos.setForeground(Color.BLACK);
+            LblManualdeUsuario.setForeground(Color.BLACK);
+            LblVerHistorial.setForeground(Color.BLACK);
+
+            //TABLA
+            jTableDatos.setBackground(Color.WHITE);
+            jTableDatos.setForeground(Color.BLACK);
+            jTableDatos.setGridColor(Color.LIGHT_GRAY);
+            //jTableDatos.setSelectionBackground(naranja);
+            jTableDatos.setSelectionForeground(Color.BLACK);
+            jTableDatos.getTableHeader().setBackground(Color.WHITE);
+            jTableDatos.getTableHeader().setForeground(Color.BLACK);
+            jScrollPane1.getViewport().setBackground(Color.WHITE);
+
+            //TEXTFIELDS
+            TxtFieldBuscador.setBackground(Color.WHITE);
+            TxtFieldBuscador.setForeground(Color.BLACK);
+            TxtFieldBuscador.setCaretColor(Color.BLACK);
+            TxtCantidad.setBackground(Color.WHITE);
+            TxtCantidad.setForeground(Color.BLACK);
+            TxtCantidad.setCaretColor(Color.BLACK);
+
+            //COMBOBOX
+            CmbEstado.setBackground(Color.WHITE);
+            CmbEstado.setForeground(Color.BLACK);
+            CmbMunicipio.setBackground(Color.WHITE);
+            CmbMunicipio.setForeground(Color.BLACK);
+            CmbServicio.setBackground(Color.WHITE);
+            CmbServicio.setForeground(Color.BLACK);
+
+            //BOTONES
+            JButton[] botones = {
+                BtnAgregar,
+                BtnEditar,
+                BtnEliminar,
+                BtnFiltrar,
+                BtnImprimir,
+                BtnLimpiar
+            };
+
+            for (JButton b : botones) {
+                b.setBackground(new Color(240, 240, 240));
+                b.setForeground(Color.BLACK);
+            }
+
+            tglTema.setText("🌙");
+            tglTema.setBackground(new Color(240, 240, 240));
+            tglTema.setForeground(Color.BLACK);
+            tglTema.setFocusPainted(false);
+            tglTema.setBorderPainted(true);
+            tglTema.setOpaque(true);
+        }
+        repaint();
+    }
+
+    private void actualizarColorTextFields() {
+
+        JTextField[] campos = {
+            TxtFieldBuscador,
+            TxtCantidad
+        };
+
+        for (JTextField txt : campos) {
+            String texto = txt.getText();
+            boolean esPlaceholder = texto.startsWith(" Buscar") || texto.startsWith(" #Cantidad");
+            if (!esPlaceholder) {
+
+                if (TemaManager.oscuro) {
+                    txt.setForeground(Color.WHITE);
+                    txt.setCaretColor(Color.WHITE);
+                } else {
+                    txt.setForeground(Color.BLACK);
+                    txt.setCaretColor(Color.BLACK);
+                }
+            }
+        }
     }
 
     public FrmConsulta() {
         initComponents();
 
+        SwingUtilities.invokeLater(() -> {
+
+            Icon iconoFlecha;
+
+            if (TemaManager.oscuro) {
+                iconoFlecha = TemaManager.invertirIcono(getClass(), "/IMG/Iconoflecha.png");
+            } else {
+                iconoFlecha = new ImageIcon(getClass().getResource("/IMG/Iconoflecha.png"));
+            }
+
+            CmbServicio.setUI(new ComboBoxTemaUI(iconoFlecha));
+            CmbEstado.setUI(new ComboBoxTemaUI(iconoFlecha));
+            CmbMunicipio.setUI(new ComboBoxTemaUI(iconoFlecha));
+        });
+
+        /*
+        this.setLayout(new java.awt.BorderLayout());
+        this.add(jPanel1, java.awt.BorderLayout.CENTER);
+        jPanel1.setPreferredSize(null);
+         */
         this.addWindowListener(new java.awt.event.WindowAdapter() {
             @Override
             public void windowClosing(java.awt.event.WindowEvent e) {
@@ -74,7 +304,9 @@ public class FrmConsulta extends javax.swing.JFrame {
         configurarAtajosTeclado();
 
         cargarTabla();
+
         jTableDatos.setSelectionMode(javax.swing.ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
+        jTableDatos.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_SUBSEQUENT_COLUMNS);
 
         cargarTotalInicial();
 
@@ -87,16 +319,26 @@ public class FrmConsulta extends javax.swing.JFrame {
         this.requestFocusInWindow();
 
         setResizable(false);
+        //setResizable(true);
+        //setExtendedState(javax.swing.JFrame.MAXIMIZED_BOTH);
 
         setPlaceholder(TxtFieldBuscador, " Buscar por Numero o Cliente");
         setPlaceholder(TxtCantidad, " #Cantidad Filtrado");
+
         validarFiltros();
+
         this.setLocationRelativeTo(this);
         SetImageLabel(jLabel2, "src/IMG/Logoliberty.png");
 
         setIconImage(new ImageIcon(getClass().getResource("/IMG/Iconoliberty.png")).getImage());
 
         jLabelResultadoFiltrado.setText("");
+
+        getContentPane().setLayout(new java.awt.BorderLayout());
+        getContentPane().add(jPanel1, java.awt.BorderLayout.CENTER);
+
+        aplicarColoresPersonalizados();
+        //TemaManager.aplicarTema(this);
 
     }
 
@@ -129,31 +371,22 @@ public class FrmConsulta extends javax.swing.JFrame {
     }
 
     private void configurarTabla() {
-
         //jTableDatos.setAutoResizeMode(jTableDatos.AUTO_RESIZE_OFF);
         jTableDatos.getColumnModel().getColumn(0).setPreferredWidth(130);
         jTableDatos.getColumnModel().getColumn(0).setResizable(false);
-
         jTableDatos.getColumnModel().getColumn(1).setPreferredWidth(130);
         jTableDatos.getColumnModel().getColumn(1).setResizable(false);
-
         jTableDatos.getColumnModel().getColumn(2).setPreferredWidth(180);
         jTableDatos.getColumnModel().getColumn(2).setResizable(false);
-
         jTableDatos.getColumnModel().getColumn(3).setPreferredWidth(300);
         jTableDatos.getColumnModel().getColumn(3).setResizable(false);
-
         jTableDatos.getColumnModel().getColumn(4).setPreferredWidth(400);
         jTableDatos.getColumnModel().getColumn(4).setResizable(false);
-
         jTableDatos.getColumnModel().getColumn(5).setPreferredWidth(140);
         jTableDatos.getColumnModel().getColumn(5).setResizable(false);
-
         jTableDatos.setRowHeight(25);
-
         jTableDatos.getTableHeader().setResizingAllowed(false);
         jTableDatos.getTableHeader().setReorderingAllowed(false);
-
     }
 
     private void actualizarProgreso(int valor, String mensaje) {
@@ -174,8 +407,7 @@ public class FrmConsulta extends javax.swing.JFrame {
 
         boolean cantidadOk = !cantidad.isEmpty() && !cantidad.equals("#Cantidad Filtrado");
 
-        BtnFiltrar.setEnabled(
-                estadoOk || servicioOk || municipioOk || cantidadOk
+        BtnFiltrar.setEnabled(estadoOk || servicioOk || municipioOk || cantidadOk
         );
     }
 
@@ -266,24 +498,38 @@ public class FrmConsulta extends javax.swing.JFrame {
 
         txt.setText(placeholder);
         txt.setForeground(java.awt.Color.GRAY);
-
+        if (TemaManager.oscuro) {
+            txt.setCaretColor(java.awt.Color.WHITE);
+        } else {
+            txt.setCaretColor(java.awt.Color.BLACK);
+        }
         txt.addFocusListener(new java.awt.event.FocusAdapter() {
-
             @Override
             public void focusGained(java.awt.event.FocusEvent e) {
 
                 if (txt.getText().equals(placeholder)) {
                     txt.setText("");
-                    txt.setForeground(java.awt.Color.BLACK);
+                    if (TemaManager.oscuro) {
+
+                        txt.setForeground(java.awt.Color.WHITE);
+                        txt.setCaretColor(java.awt.Color.WHITE);
+                    } else {
+                        txt.setForeground(java.awt.Color.BLACK);
+                        txt.setCaretColor(java.awt.Color.BLACK);
+                    }
                 }
             }
 
             @Override
             public void focusLost(java.awt.event.FocusEvent e) {
-
-                if (txt.getText().isEmpty()) {
+                if (txt.getText().trim().isEmpty()) {
                     txt.setText(placeholder);
                     txt.setForeground(java.awt.Color.GRAY);
+                    if (TemaManager.oscuro) {
+                        txt.setCaretColor(java.awt.Color.WHITE);
+                    } else {
+                        txt.setCaretColor(java.awt.Color.BLACK);
+                    }
                 }
             }
         });
@@ -302,6 +548,7 @@ public class FrmConsulta extends javax.swing.JFrame {
         jPanel2 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
+        tglTema = new javax.swing.JToggleButton();
         TxtFieldBuscador = new javax.swing.JTextField();
         BtnLimpiar = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
@@ -321,7 +568,8 @@ public class FrmConsulta extends javax.swing.JFrame {
         jLabelTotalDatos = new javax.swing.JLabel();
         jProgressBar1 = new javax.swing.JProgressBar();
         jLabel4 = new javax.swing.JLabel();
-        jLabel5 = new javax.swing.JLabel();
+        LblManualdeUsuario = new javax.swing.JLabel();
+        LblVerHistorial = new javax.swing.JLabel();
         jMenuBar1 = new javax.swing.JMenuBar();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -338,24 +586,39 @@ public class FrmConsulta extends javax.swing.JFrame {
         jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/IMG/Logoliberty.png"))); // NOI18N
         jLabel2.setDisabledIcon(new javax.swing.ImageIcon(getClass().getResource("/IMG/Logoliberty.png"))); // NOI18N
 
+        tglTema.setText("🌙");
+        tglTema.setToolTipText("Cambiar Tema");
+        tglTema.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        tglTema.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                tglTemaActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jLabel1)
-                .addGap(151, 151, 151)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jLabel1)
+                        .addGap(160, 160, 160))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addComponent(tglTema, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                 .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 155, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(67, 67, 67))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                .addContainerGap(34, Short.MAX_VALUE)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addComponent(tglTema)
+                .addGap(14, 14, 14)
                 .addComponent(jLabel1)
-                .addGap(25, 25, 25))
+                .addContainerGap(38, Short.MAX_VALUE))
         );
 
         TxtFieldBuscador.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
@@ -405,6 +668,7 @@ public class FrmConsulta extends javax.swing.JFrame {
             }
         });
         jTableDatos.setRowHeight(25);
+        jTableDatos.setShowGrid(true);
         jTableDatos.getTableHeader().setResizingAllowed(false);
         jTableDatos.getTableHeader().setReorderingAllowed(false);
         jScrollPane1.setViewportView(jTableDatos);
@@ -446,7 +710,8 @@ public class FrmConsulta extends javax.swing.JFrame {
         CmbServicio.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         CmbServicio.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Seleccionar Servicio", "Bussines Trunk", "MyUC" }));
         CmbServicio.setToolTipText("");
-        CmbServicio.setBorder(null);
+        CmbServicio.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        CmbServicio.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         CmbServicio.addItemListener(new java.awt.event.ItemListener() {
             public void itemStateChanged(java.awt.event.ItemEvent evt) {
                 CmbServicioItemStateChanged(evt);
@@ -486,6 +751,8 @@ public class FrmConsulta extends javax.swing.JFrame {
 
         CmbEstado.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         CmbEstado.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Seleccionar Estado", "Libre", "Cancelado", "En Servicio", "Reservado" }));
+        CmbEstado.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        CmbEstado.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         CmbEstado.addItemListener(new java.awt.event.ItemListener() {
             public void itemStateChanged(java.awt.event.ItemEvent evt) {
                 CmbEstadoItemStateChanged(evt);
@@ -514,6 +781,8 @@ public class FrmConsulta extends javax.swing.JFrame {
 
         CmbMunicipio.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         CmbMunicipio.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Seleccionar Municipio", "Alianza, Valle", "Amapala, Valle", "Azacualpa, Santa Barbara", "Campamento, Olancho", "Catacamas, Olancho", "Choloma, Cortes", "Choluteca, Choluteca", "Comayagua, Comayagua", "Copan Ruinas, Copan", "Cucuyagua, Copan", "Danli, El Paraiso", "Dulce Nombre de Culmi, Olancho", "El Negrito, Yoro", "El Paraiso, El Paraiso", "El Porvenir, Francisco Morazan", "El Progreso, Yoro", "El Triunfo, Choluteca", "Florida, Copan", "Gracias, Lempira", "Guiamaca, Francisco Morazan", "Jesus de Otoro, Intibuca", "Juticalpa, Olancho", "La Ceiba, Atlantida", "La Esperanza, Intibuca", "La Flecha, Santa Barbara", "La Labor, Ocotepeque", "La Libertad, Comayagua", "La Lima, Cortes", "La Paz, La Paz", "La Trinidad, Santa Barbara", "La Union, Copan", "Langue, Valle", "Las Vegas, Santa Barbara", "Lepaera, Lempira", "Macuelizo, Santa Barbara", "Marcala, La Paz", "Monjaras, Marcovia", "Morazan, Yoro", "Nacaome, Valle", "Nueva Arcadia, Copan", "Ocotepeque, Ocotepeque", "Olanchito, Yoro", "Omoa, Cortes", "Pespire, Choluteca", "Pimienta, Cortes", "Potrerillos, Cortes", "Puerto Cortes, Cortes", "Puerto Lempira, Gracias a Dios", "Quimistan, Santa Barbara", "Roatan, Islas de la Bahia", "Saba, Colon", "San Manuel, Cortes", "San Antonio de Oriente, Francisco Morazan", "San Juan, Intibuca", "San Juan Pueblo, Atlantida", "San Lorenzo, Valle", "San Marcos, Ocotepeque", "San Marcos de Colon, Choluteca", "San Pedro Sula, Cortes", "Santa Barbara, Santa Barbara", "Santa Cruz de Yojoa, Cortes", "Santa Rita, Copan", "Santa Rosa de Copan, Copan", "Siguatepeque, Comayagua", "Talanga, Francisco Morazan", "Taulabe, Comayagua", "Tegucigalpa, Francisco Morazan", "Tela, Atlantida", "Tocoa, Colon", "Trojes, El Paraiso", "Trujillo, Colon", "Villanueva, Cortes", "Yoro, Yoro", "Yuscaran, El Paraiso" }));
+        CmbMunicipio.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        CmbMunicipio.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         CmbMunicipio.addItemListener(new java.awt.event.ItemListener() {
             public void itemStateChanged(java.awt.event.ItemEvent evt) {
                 CmbMunicipioItemStateChanged(evt);
@@ -539,8 +808,30 @@ public class FrmConsulta extends javax.swing.JFrame {
         jLabel4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/IMG/Iconointerrogacion.png"))); // NOI18N
         jLabel4.setToolTipText("Atajos:\n\n   Agregar (Ctrl N)\n\n   Eliminar (SUPR)\n\n   Imprimir (Ctrl P)\n\n   Filtrar (Ctrl F)\n\n   Limpiar (Ctrl L)");
 
-        jLabel5.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        jLabel5.setText("Link Manual de Usuario");
+        LblManualdeUsuario.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        LblManualdeUsuario.setText("Link Manual de Usuario ||");
+        LblManualdeUsuario.setToolTipText("Lee el Manual de Usuario");
+        LblManualdeUsuario.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        LblManualdeUsuario.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                LblManualdeUsuarioMouseClicked(evt);
+            }
+        });
+
+        LblVerHistorial.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        LblVerHistorial.setText("Ver Historial");
+        LblVerHistorial.setToolTipText("Ver Historial de Cambios en el Sistema");
+        LblVerHistorial.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        LblVerHistorial.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                LblVerHistorialMouseClicked(evt);
+            }
+        });
+        LblVerHistorial.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                LblVerHistorialKeyPressed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -549,14 +840,16 @@ public class FrmConsulta extends javax.swing.JFrame {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jPanel2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
                         .addComponent(BtnEditar, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(460, 460, 460)
+                        .addGap(396, 396, 396)
                         .addComponent(jLabel4)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 168, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(LblManualdeUsuario)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(LblVerHistorial)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(BtnAgregar, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
@@ -618,19 +911,24 @@ public class FrmConsulta extends javax.swing.JFrame {
                         .addComponent(jLabel3)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jProgressBar1, javax.swing.GroupLayout.DEFAULT_SIZE, 21, Short.MAX_VALUE)
-                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(jLabel6)
-                        .addComponent(jLabelResultadoFiltrado)
-                        .addComponent(jLabelTotalDatos)))
+                    .addComponent(jProgressBar1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel6)
+                            .addComponent(jLabelResultadoFiltrado)
+                            .addComponent(jLabelTotalDatos))
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 360, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 346, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(LblManualdeUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addComponent(BtnAgregar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(BtnEditar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(BtnAgregar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(LblVerHistorial, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
 
@@ -752,14 +1050,11 @@ public class FrmConsulta extends javax.swing.JFrame {
                 //ENCABEZADOS
                 for (int i = 0; i < jTableDatos.getColumnCount(); i++) {
 
-                    PdfPCell header = new PdfPCell(
-                            new Paragraph(jTableDatos.getColumnName(i), headerFont)
-                    );
+                    PdfPCell header = new PdfPCell(new Paragraph(jTableDatos.getColumnName(i), headerFont));
 
                     header.setBackgroundColor(new BaseColor(255, 153, 0));
                     header.setHorizontalAlignment(Element.ALIGN_CENTER);
                     header.setPadding(6);
-
                     tabla.addCell(header);
                 }
 
@@ -779,7 +1074,6 @@ public class FrmConsulta extends javax.swing.JFrame {
                         if (fila % 2 == 0) {
                             cell.setBackgroundColor(new BaseColor(245, 245, 245));
                         }
-
                         tabla.addCell(cell);
                     }
 
@@ -792,9 +1086,7 @@ public class FrmConsulta extends javax.swing.JFrame {
                 publish(95);
 
                 Paragraph firma = new Paragraph(
-                        "Generado automáticamente por Liberty Networks",
-                        new Font(Font.FontFamily.HELVETICA, 9, Font.ITALIC, BaseColor.GRAY)
-                );
+                        "Generado automáticamente por Liberty Networks", new Font(Font.FontFamily.HELVETICA, 9, Font.ITALIC, BaseColor.GRAY));
 
                 firma.setAlignment(Element.ALIGN_CENTER);
 
@@ -809,9 +1101,7 @@ public class FrmConsulta extends javax.swing.JFrame {
 
             @Override
             protected void process(java.util.List<Integer> chunks) {
-
                 int valor = chunks.get(chunks.size() - 1);
-
                 jProgressBar1.setVisible(true);
                 jProgressBar1.setValue(valor);
                 jProgressBar1.setString("Generando PDF... " + valor + "%");
@@ -819,9 +1109,7 @@ public class FrmConsulta extends javax.swing.JFrame {
 
             @Override
             protected void done() {
-
                 if (cancelado) {
-
                     jProgressBar1.setVisible(false);
                     jProgressBar1.setValue(0);
                     jProgressBar1.setString("");
@@ -830,20 +1118,15 @@ public class FrmConsulta extends javax.swing.JFrame {
                 }
 
                 JOptionPane.showMessageDialog(
-                        FrmConsulta.this,
-                        "PDF generado correctamente"
-                );
+                        FrmConsulta.this, "PDF generado correctamente");
 
                 new javax.swing.Timer(2000, e -> {
-
                     jProgressBar1.setVisible(false);
                     jProgressBar1.setValue(0);
                     jProgressBar1.setString("");
-
                 }).start();
             }
         };
-
         worker.execute();
     }//GEN-LAST:event_BtnImprimirActionPerformed
 
@@ -867,24 +1150,17 @@ public class FrmConsulta extends javax.swing.JFrame {
 
         Integer cantidad = null;
 
-        boolean sinFiltros
-                = estadoIndex == 0
-                && servicioIndex == 0
-                && municipioIndex == 0
-                && cantidadTxt.isEmpty();
+        boolean sinFiltros = estadoIndex == 0 && servicioIndex == 0 && municipioIndex == 0 && cantidadTxt.isEmpty();
 
         if (sinFiltros) {
-            JOptionPane.showMessageDialog(this,
-                    "Por favor seleccione filtros");
-
+            JOptionPane.showMessageDialog(this, "Por favor seleccione filtros");
             jTableDatos.setModel(new javax.swing.table.DefaultTableModel());
             jLabelResultadoFiltrado.setText("");
             return;
         }
 
         try {
-            if (!cantidadTxt.isEmpty()
-                    && !cantidadTxt.equals("#Cantidad Filtrado")) {
+            if (!cantidadTxt.isEmpty() && !cantidadTxt.equals("#Cantidad Filtrado")) {
                 cantidad = Integer.parseInt(cantidadTxt);
                 if (cantidad <= 0) {
                     cantidad = null;
@@ -913,8 +1189,6 @@ public class FrmConsulta extends javax.swing.JFrame {
 
         // ACTUALIZAR LABEL
         actualizarLabelResultado();
-
-
     }//GEN-LAST:event_BtnFiltrarActionPerformed
 
     private void TxtCantidadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_TxtCantidadActionPerformed
@@ -937,12 +1211,7 @@ public class FrmConsulta extends javax.swing.JFrame {
             return;
         }
 
-        int confirm = javax.swing.JOptionPane.showConfirmDialog(
-                this,
-                "¿Seguro que deseas eliminar " + filas.length + " registros?",
-                "Confirmar eliminación",
-                javax.swing.JOptionPane.YES_NO_OPTION
-        );
+        int confirm = javax.swing.JOptionPane.showConfirmDialog(this, "¿Seguro que deseas eliminar " + filas.length + " registros?", "Confirmar eliminación", javax.swing.JOptionPane.YES_NO_OPTION);
 
         if (confirm != javax.swing.JOptionPane.YES_OPTION) {
             return;
@@ -994,7 +1263,6 @@ public class FrmConsulta extends javax.swing.JFrame {
 
         TxtFieldBuscador.setText(" Buscar por Numero o Cliente");
         TxtFieldBuscador.setForeground(java.awt.Color.BLACK);
-
         TxtFieldBuscador.requestFocus();
 
         // Recargar tabla completa
@@ -1015,9 +1283,7 @@ public class FrmConsulta extends javax.swing.JFrame {
 
         String texto = TxtFieldBuscador.getText().trim();
 
-        if (texto.isEmpty()
-                || texto.equals("Buscar por Numero o Cliente")
-                || texto.equals(" Buscar por Numero o Cliente")) {
+        if (texto.isEmpty() || texto.equals("Buscar por Numero o Cliente") || texto.equals(" Buscar por Numero o Cliente")) {
 
             cargarTabla();
             //actualizarLabelResultado();
@@ -1027,7 +1293,6 @@ public class FrmConsulta extends javax.swing.JFrame {
         LineaDAO dao = new LineaDAO();
 
         jTableDatos.setModel(dao.buscarNumeroOCliente(texto));
-
         jTableDatos.setDefaultEditor(Object.class, null);
 
         configurarTabla();
@@ -1047,10 +1312,7 @@ public class FrmConsulta extends javax.swing.JFrame {
 
     private void TxtCantidadKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TxtCantidadKeyTyped
 
-        Validaciones.soloNumeros8Digitos(
-                TxtCantidad,
-                evt
-        );
+        Validaciones.soloNumeros8Digitos(TxtCantidad, evt);
 
     }//GEN-LAST:event_TxtCantidadKeyTyped
 
@@ -1103,16 +1365,60 @@ public class FrmConsulta extends javax.swing.JFrame {
             for (int c = 0; c < 6; c++) {
                 fila[c] = jTableDatos.getValueAt(i, c);
             }
-
             lista.add(fila);
         }
 
         FrmEditar frm = new FrmEditar();
-        frm.cargarDatos(this, lista);   // clave
+        frm.cargarDatos(this, lista);
         frm.setVisible(true);
 
 
     }//GEN-LAST:event_BtnEditarActionPerformed
+
+    private void LblVerHistorialKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_LblVerHistorialKeyPressed
+
+
+    }//GEN-LAST:event_LblVerHistorialKeyPressed
+
+    private void LblVerHistorialMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_LblVerHistorialMouseClicked
+
+        FrmHistorial frm = new FrmHistorial();
+        frm.setVisible(true);
+
+    }//GEN-LAST:event_LblVerHistorialMouseClicked
+
+    private void LblManualdeUsuarioMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_LblManualdeUsuarioMouseClicked
+
+        try {
+            java.net.URL url = getClass().getResource("/manual/Manual de Usuario - Liberty Networks Sistema de Consulta de Lineas.pdf");
+
+            if (url != null) {
+                java.awt.Desktop.getDesktop().open(new java.io.File(url.toURI()));
+            } else {
+                JOptionPane.showMessageDialog(this, "No se encontró el PDF");
+            }
+
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Error: " + e.getMessage());
+        }
+
+    }//GEN-LAST:event_LblManualdeUsuarioMouseClicked
+
+    private void tglTemaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tglTemaActionPerformed
+
+        TemaManager.cambiarTema();
+        aplicarColoresPersonalizados();
+
+        //GUARDAR EN ARCHIVO
+        ConfigTema.guardarTema(TemaManager.oscuro);
+
+        //refrescar otros abiertos
+        for (java.awt.Window w : java.awt.Window.getWindows()) {
+            if (w instanceof javax.swing.JFrame) {
+                w.repaint();
+            }
+        }
+    }//GEN-LAST:event_tglTemaActionPerformed
 
     /**
      * @param args the command line arguments
@@ -1141,11 +1447,15 @@ public class FrmConsulta extends javax.swing.JFrame {
         }
         //</editor-fold>
 
+//        try {
+//            UIManager.setLookAndFeel(new FlatDarkLaf());
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 new FrmConsulta().setVisible(true);
-
             }
         });
     }
@@ -1167,13 +1477,14 @@ public class FrmConsulta extends javax.swing.JFrame {
     private javax.swing.JComboBox<String> CmbEstado;
     private javax.swing.JComboBox<String> CmbMunicipio;
     private javax.swing.JComboBox<String> CmbServicio;
+    private javax.swing.JLabel LblManualdeUsuario;
+    private javax.swing.JLabel LblVerHistorial;
     private javax.swing.JTextField TxtCantidad;
     private javax.swing.JTextField TxtFieldBuscador;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabelResultadoFiltrado;
     private javax.swing.JLabel jLabelTotalDatos;
@@ -1183,5 +1494,6 @@ public class FrmConsulta extends javax.swing.JFrame {
     private javax.swing.JProgressBar jProgressBar1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTableDatos;
+    private javax.swing.JToggleButton tglTema;
     // End of variables declaration//GEN-END:variables
 }
