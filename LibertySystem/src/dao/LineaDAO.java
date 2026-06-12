@@ -1,15 +1,12 @@
 package dao;
 
 import conexion.Conexion;
-import static conexion.Conexion.conectar;
 import java.sql.*;
 import javax.swing.table.DefaultTableModel;
 
 public class LineaDAO {
 
-    // =========================
     // MOSTRAR DATOS
-    // =========================
     public DefaultTableModel mostrarDatos() {
 
         String[] columnas = {
@@ -187,28 +184,26 @@ public class LineaDAO {
                 return;
             }
 
-            Connection con = Conexion.conectar();
-            if (con == null) {
-                return;
+            try (Connection con = Conexion.conectar()) {
+                if (con == null) {
+                    return;
+                }
+
+                String sql = "SELECT nombre FROM municipios ORDER BY nombre ASC";
+
+                try (Statement st = con.createStatement(); ResultSet rs = st.executeQuery(sql)) {
+
+                    combo.removeAllItems();
+                    combo.addItem("Seleccionar Municipio");
+
+                    while (rs.next()) {
+                        combo.addItem(rs.getString("nombre"));
+                    }
+
+                }
             }
 
-            String sql = "SELECT nombre FROM municipios ORDER BY nombre ASC";
-
-            Statement st = con.createStatement();
-            ResultSet rs = st.executeQuery(sql);
-
-            combo.removeAllItems();
-            combo.addItem("Seleccionar Municipio");
-
-            while (rs.next()) {
-                combo.addItem(rs.getString("nombre"));
-            }
-
-            rs.close();
-            st.close();
-            con.close();
-
-        } catch (Exception e) {
+        } catch (SQLException e) {
             System.out.println("Error municipios: " + e);
         }
     }

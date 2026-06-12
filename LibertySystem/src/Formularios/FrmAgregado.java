@@ -4,23 +4,16 @@
  */
 package Formularios;
 
-import com.formdev.flatlaf.FlatDarkLaf;
 import dao.LineaDAO;
 import java.awt.Color;
 import java.awt.Image;
-import java.awt.Toolkit;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
-import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import utilidades.Validaciones;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import javax.swing.SwingUtilities;
-import javax.swing.UIManager;
 import utilidades.TemaManager;
-import utilidades.ImagenUtils;
-import javax.swing.plaf.basic.BasicComboBoxUI;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 
@@ -641,7 +634,7 @@ public class FrmAgregado extends javax.swing.JFrame {
 
         LineaDAO dao = new LineaDAO();
 
-        String numero = TxtNumero.getText().trim();;
+        String numero = TxtNumero.getText().trim();
         String municipio = CmbMunicipio.getSelectedItem().toString();
         String cliente = TxtCliente.getText().trim();
         String estado = CmbEstado.getSelectedItem().toString();

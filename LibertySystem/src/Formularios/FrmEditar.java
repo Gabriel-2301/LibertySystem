@@ -7,7 +7,6 @@ package Formularios;
 import java.awt.Image;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
-import javax.swing.JLabel;
 import dao.LineaDAO;
 import conexion.Conexion;
 import java.awt.Color;
@@ -595,10 +594,8 @@ public class FrmEditar extends javax.swing.JFrame {
         //</editor-fold>
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new FrmEditar().setVisible(true);
-            }
+        java.awt.EventQueue.invokeLater(() -> {
+            new FrmEditar().setVisible(true);
         });
     }
 

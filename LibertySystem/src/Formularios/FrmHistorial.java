@@ -15,6 +15,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import java.sql.PreparedStatement;
+import javax.swing.ListSelectionModel;
 import utilidades.TemaManager;
 
 /**
@@ -33,6 +34,10 @@ public class FrmHistorial extends javax.swing.JFrame {
         setLocationRelativeTo(null);
         SetImageLabel(jLabel2, "/IMG/Logoliberty.png");
         setIconImage(new ImageIcon(getClass().getResource("/IMG/Iconoliberty.png")).getImage());
+
+        jTableDatosHistorial.setRowSelectionAllowed(true);
+        jTableDatosHistorial.setColumnSelectionAllowed(false);
+        jTableDatosHistorial.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 
         cargarHistorial();
 
@@ -74,7 +79,12 @@ public class FrmHistorial extends javax.swing.JFrame {
 
     private void cargarHistorial() {
 
-        DefaultTableModel modelo = new DefaultTableModel();
+        DefaultTableModel modelo = new DefaultTableModel() {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
 
         modelo.addColumn("Numero");
         modelo.addColumn("Estado Ant");
@@ -108,6 +118,7 @@ public class FrmHistorial extends javax.swing.JFrame {
             }
 
             jTableDatosHistorial.setModel(modelo);
+            configurarTabla();
             jTableDatosHistorial.setRowHeight(25);
             jTableDatosHistorial.getTableHeader().setReorderingAllowed(false);
 
@@ -118,17 +129,18 @@ public class FrmHistorial extends javax.swing.JFrame {
 
     private void configurarTabla() {
 
-        jTableDatosHistorial.getColumnModel().getColumn(0).setPreferredWidth(130);
-        jTableDatosHistorial.getColumnModel().getColumn(1).setPreferredWidth(130);
-        jTableDatosHistorial.getColumnModel().getColumn(2).setPreferredWidth(180);
-        jTableDatosHistorial.getColumnModel().getColumn(3).setPreferredWidth(300);
-        jTableDatosHistorial.getColumnModel().getColumn(4).setPreferredWidth(400);
-        jTableDatosHistorial.getColumnModel().getColumn(5).setPreferredWidth(140);
-        jTableDatosHistorial.getColumnModel().getColumn(6).setPreferredWidth(140);
-        jTableDatosHistorial.getColumnModel().getColumn(7).setPreferredWidth(140);
-        jTableDatosHistorial.getColumnModel().getColumn(8).setPreferredWidth(140);
-        jTableDatosHistorial.getColumnModel().getColumn(9).setPreferredWidth(140);
-        jTableDatosHistorial.getColumnModel().getColumn(10).setPreferredWidth(140);
+        jTableDatosHistorial.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_OFF);
+
+        jTableDatosHistorial.getColumnModel().getColumn(0).setPreferredWidth(120); // Número
+        jTableDatosHistorial.getColumnModel().getColumn(1).setPreferredWidth(120); // Estado Ant
+        jTableDatosHistorial.getColumnModel().getColumn(2).setPreferredWidth(120); // Estado Nuevo
+        jTableDatosHistorial.getColumnModel().getColumn(3).setPreferredWidth(150); // Municipio Ant
+        jTableDatosHistorial.getColumnModel().getColumn(4).setPreferredWidth(150); // Municipio Nuevo
+        jTableDatosHistorial.getColumnModel().getColumn(5).setPreferredWidth(180); // Cliente Ant
+        jTableDatosHistorial.getColumnModel().getColumn(6).setPreferredWidth(180); // Cliente Nuevo
+        jTableDatosHistorial.getColumnModel().getColumn(7).setPreferredWidth(150); // Servicio Ant
+        jTableDatosHistorial.getColumnModel().getColumn(8).setPreferredWidth(150); // Servicio Nuevo
+        jTableDatosHistorial.getColumnModel().getColumn(9).setPreferredWidth(160); // Fecha
 
         jTableDatosHistorial.setRowHeight(25);
 
@@ -172,7 +184,7 @@ public class FrmHistorial extends javax.swing.JFrame {
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addGap(194, 194, 194)
                 .addComponent(jLabel1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 266, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(122, 122, 122))
         );
@@ -185,6 +197,7 @@ public class FrmHistorial extends javax.swing.JFrame {
                 .addContainerGap(29, Short.MAX_VALUE))
         );
 
+        jTableDatosHistorial.setFont(new java.awt.Font("Segoe UI", 0, 16)); // NOI18N
         jTableDatosHistorial.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null, null, null, null, null, null, null},
@@ -196,6 +209,8 @@ public class FrmHistorial extends javax.swing.JFrame {
                 "Numero", "Estado Anterior", "Estado Nuevo", "Municipio Anterior", "Municipio Nuevo", "Cliente Anterior", "Cliente Nuevo", "Servicio Anterior", "Servicio Nuevo", "Fecha "
             }
         ));
+        jTableDatosHistorial.setCellSelectionEnabled(true);
+        jTableDatosHistorial.setRowHeight(25);
         jScrollPane1.setViewportView(jTableDatosHistorial);
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
@@ -205,8 +220,10 @@ public class FrmHistorial extends javax.swing.JFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jScrollPane1))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 1482, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
