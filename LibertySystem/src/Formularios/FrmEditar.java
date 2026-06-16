@@ -228,6 +228,7 @@ public class FrmEditar extends javax.swing.JFrame {
 
         //Combo Estado
         JComboBox<String> comboEstado = new JComboBox<>();
+        comboEstado.addItem("Sin Estado");
         comboEstado.addItem("Libre");
         comboEstado.addItem("Reservado");
         comboEstado.addItem("Cancelado");
@@ -319,12 +320,17 @@ public class FrmEditar extends javax.swing.JFrame {
 
         //Combo Servicio
         JComboBox<String> comboServicio = new JComboBox<>();
+        comboServicio.addItem("Sin Servicio");
         comboServicio.addItem("MyUC");
         comboServicio.addItem("Bussines Trunk");
 
         jTableDatosEditados.getColumnModel()
                 .getColumn(5)
                 .setCellEditor(new DefaultCellEditor(comboServicio));
+    }
+
+    private String norm(Object o) {
+        return (o == null) ? "" : o.toString().trim();
     }
 
     /**
@@ -497,67 +503,66 @@ public class FrmEditar extends javax.swing.JFrame {
             Connection con = Conexion.conectar();
             LineaDAO dao = new LineaDAO();
 
-            String sql = "UPDATE lineas SET " + "numero=?," + "estado_id=?," + "fechas_ultimo_estado=NOW()," + "municipio_id=?," + "cliente_id=?," + "servicio_id=? " + "WHERE numero=?";
+            String sql = "UPDATE lineas SET " + "numero=?, " + "estado_id=?, " + "fechas_ultimo_estado=NOW(), " + "municipio_id=?, " + "cliente_id=?, " + "servicio_id=? " + "WHERE numero=?";
 
             PreparedStatement ps = con.prepareStatement(sql);
 
             for (int i = 0; i < modelo.getRowCount(); i++) {
 
-                String numeroNuevo = modelo.getValueAt(i, 0).toString().trim();
-                String estadoNew = modelo.getValueAt(i, 1).toString().trim();
-                String municipioNew = modelo.getValueAt(i, 3).toString().trim();
-                String clienteNew = modelo.getValueAt(i, 4).toString().trim();
-                String servicioNew = modelo.getValueAt(i, 5).toString().trim();
+                // DATOS TABLA
+                String numeroNuevo = norm(modelo.getValueAt(i, 0));
+                String estadoNew = norm(modelo.getValueAt(i, 1));
+                String municipioNew = norm(modelo.getValueAt(i, 3));
+                String clienteNew = norm(modelo.getValueAt(i, 4));
+                String servicioNew = norm(modelo.getValueAt(i, 5));
 
                 String numeroOriginal = numerosOriginales.get(i);
 
-                String estadoAnt = estadoOriginal.get(i);
-                String municipioAnt = municipioOriginal.get(i);
-                String clienteAnt = clienteOriginal.get(i);
-                String servicioAnt = servicioOriginal.get(i);
+                // LIMPIEZA SEGURA
+                estadoNew = (estadoNew == null) ? "" : estadoNew.trim();
+                servicioNew = (servicioNew == null) ? "" : servicioNew.trim();
 
-                // VALIDACIÓN FK (EVITA ERROR)
+                boolean estadoVacio = estadoNew.isEmpty() || estadoNew.equalsIgnoreCase("sin estado");
+
+                boolean servicioVacio = servicioNew.isEmpty() || servicioNew.equalsIgnoreCase("sin servicio");
+
+                // IDS (CON FALLBACK)
                 int estadoId = dao.obtenerIdPublic(con, "estados", estadoNew);
+                estadoId = (estadoId > 0) ? estadoId : dao.obtenerIdPublic(con, "estados", "Sin Estado");
+
+                int servicioId = dao.obtenerIdPublic(con, "servicios", servicioNew);
+                servicioId = (servicioId > 0) ? servicioId : dao.obtenerIdPublic(con, "servicios", "Sin Servicio");
+
                 int municipioId = dao.obtenerIdPublic(con, "municipios", municipioNew);
                 int clienteId = dao.obtenerClientePublic(con, clienteNew);
-                int servicioId = dao.obtenerIdPublic(con, "servicios", servicioNew);
 
-                if (servicioId == 0) {
-                    throw new Exception("Servicio inválido: " + servicioNew);
-                }
-
-                // HISTORIAL (ANTES DEL UPDATE)
-                dao.registrarHistorialCompleto(
-                        numeroNuevo,
-                        estadoAnt, estadoNew,
-                        municipioAnt, municipioNew,
-                        clienteAnt, clienteNew,
-                        servicioAnt, servicioNew
-                );
-
-                // UPDATE
+                // PARAMETROS UPDATE
                 ps.setString(1, numeroNuevo);
+
                 ps.setInt(2, estadoId);
                 ps.setInt(3, municipioId);
                 ps.setInt(4, clienteId);
                 ps.setInt(5, servicioId);
+
                 ps.setString(6, numeroOriginal);
 
                 ps.addBatch();
             }
 
             ps.executeBatch();
+            ps.close();
             con.close();
 
             frmConsulta.cargarTabla();
 
             JOptionPane.showMessageDialog(this, "Actualizado correctamente");
+
             dispose();
 
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, "Error: " + e.getMessage());
+            e.printStackTrace();
         }
-
     }//GEN-LAST:event_BtnGuardarActionPerformed
 
     private void BtnLimpiarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnLimpiarActionPerformed

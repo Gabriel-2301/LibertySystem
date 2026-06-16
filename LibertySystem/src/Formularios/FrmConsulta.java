@@ -18,13 +18,10 @@ import java.io.FileOutputStream;
 import javax.swing.JFileChooser;
 import dao.LineaDAO;
 import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.HeadlessException;
 import java.awt.Image;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.io.IOException;
-import java.net.URISyntaxException;
 import javax.swing.AbstractAction;
 import javax.swing.ActionMap;
 import javax.swing.Icon;
@@ -32,11 +29,9 @@ import javax.swing.ImageIcon;
 import javax.swing.InputMap;
 import javax.swing.JButton;
 import javax.swing.JComponent;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JRootPane;
-import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.KeyStroke;
@@ -49,6 +44,12 @@ import javax.swing.table.TableColumnModel;
 import utilidades.BackupBD;
 import utilidades.ConfigTema;
 import utilidades.TemaManager;
+import java.awt.Desktop;
+import java.io.File;
+import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
+import javax.swing.JFrame;
 
 /**
  *
@@ -278,7 +279,7 @@ public class FrmConsulta extends javax.swing.JFrame {
     public FrmConsulta() {
         initComponents();
 
-        //setExtendedState(JFrame.MAXIMIZED_BOTH);
+        setExtendedState(JFrame.MAXIMIZED_BOTH);
         SwingUtilities.invokeLater(() -> {
 
             Icon iconoFlecha;
@@ -321,7 +322,7 @@ public class FrmConsulta extends javax.swing.JFrame {
             public void componentResized(ComponentEvent e) {
 
                 ajustarColumnasTabla();
-                SetImageLabel(jLabel2, "src/IMG/Logoliberty.png");
+                SetImageLabel(jLabel2, "/IMG/Logoliberty.png");
             }
         });
 
@@ -351,17 +352,19 @@ public class FrmConsulta extends javax.swing.JFrame {
         this.setFocusable(true);
         this.requestFocusInWindow();
 
-        setResizable(false);
-        //setResizable(true);
-        //setExtendedState(javax.swing.JFrame.MAXIMIZED_BOTH);
+        //setResizable(false);
+        setResizable(true);
+        setSize(1400, 800);
+        setMinimumSize(new java.awt.Dimension(1200, 700));
+        setExtendedState(javax.swing.JFrame.MAXIMIZED_BOTH);
 
         setPlaceholder(TxtFieldBuscador, " Buscar por Numero o Cliente");
         setPlaceholder(TxtCantidad, " #Cantidad Filtrado");
 
         validarFiltros();
 
-        setLocationRelativeTo(this);
-        SetImageLabel(jLabel2, "src/IMG/Logoliberty.png");
+        setLocationRelativeTo(null);
+        SetImageLabel(jLabel2, "/IMG/Logoliberty.png");
 
         setIconImage(new ImageIcon(getClass().getResource("/IMG/Iconoliberty.png")).getImage());
 
@@ -604,7 +607,6 @@ public class FrmConsulta extends javax.swing.JFrame {
         BtnLimpiar = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTableDatos = new javax.swing.JTable();
-        BtnEditar = new javax.swing.JButton();
         BtnEliminar = new javax.swing.JButton();
         BtnAgregar = new javax.swing.JButton();
         jLabel3 = new javax.swing.JLabel();
@@ -621,7 +623,7 @@ public class FrmConsulta extends javax.swing.JFrame {
         jLabel4 = new javax.swing.JLabel();
         LblManualdeUsuario = new javax.swing.JLabel();
         LblVerHistorial = new javax.swing.JLabel();
-        jMenuBar1 = new javax.swing.JMenuBar();
+        BtnEditar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
@@ -652,13 +654,11 @@ public class FrmConsulta extends javax.swing.JFrame {
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(tglTema, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addComponent(tglTema, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGap(81, 81, 81)))
+                        .addGap(196, 196, 196)
+                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 829, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 155, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(67, 67, 67))
         );
@@ -667,9 +667,9 @@ public class FrmConsulta extends javax.swing.JFrame {
             .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addComponent(tglTema)
-                .addGap(18, 18, 18)
+                .addGap(20, 20, 20)
                 .addComponent(jLabel1)
-                .addContainerGap(34, Short.MAX_VALUE))
+                .addContainerGap(32, Short.MAX_VALUE))
         );
 
         TxtFieldBuscador.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
@@ -701,10 +701,7 @@ public class FrmConsulta extends javax.swing.JFrame {
         jTableDatos.setFont(new java.awt.Font("Segoe UI", 0, 16)); // NOI18N
         jTableDatos.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null}
+
             },
             new String [] {
                 "Numero", "Estado", "Fecha_Ultimo_Estado", "Municipio", "Cliente", "Servicio"
@@ -723,17 +720,6 @@ public class FrmConsulta extends javax.swing.JFrame {
         jTableDatos.getTableHeader().setResizingAllowed(false);
         jTableDatos.getTableHeader().setReorderingAllowed(false);
         jScrollPane1.setViewportView(jTableDatos);
-
-        BtnEditar.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        BtnEditar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/IMG/Iconoeditar.png"))); // NOI18N
-        BtnEditar.setText("Editar");
-        BtnEditar.setToolTipText("Abrir panel de edicion");
-        BtnEditar.setPreferredSize(null);
-        BtnEditar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                BtnEditarActionPerformed(evt);
-            }
-        });
 
         BtnEliminar.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         BtnEliminar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/IMG/Iconoeliminar.png"))); // NOI18N
@@ -886,26 +872,27 @@ public class FrmConsulta extends javax.swing.JFrame {
             }
         });
 
+        BtnEditar.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        BtnEditar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/IMG/Iconoeditar.png"))); // NOI18N
+        BtnEditar.setText("Editar");
+        BtnEditar.setToolTipText("Abrir panel de edicion");
+        BtnEditar.setPreferredSize(null);
+        BtnEditar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BtnEditarActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+            .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
-                        .addComponent(BtnEditar, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(405, 405, 405)
-                        .addComponent(jLabel4)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(LblManualdeUsuario)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(LblVerHistorial)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(BtnAgregar, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane1)
+                    .addComponent(jPanel2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(TxtFieldBuscador)
                             .addGroup(jPanel1Layout.createSequentialGroup()
@@ -913,7 +900,7 @@ public class FrmConsulta extends javax.swing.JFrame {
                                     .addGroup(jPanel1Layout.createSequentialGroup()
                                         .addComponent(jLabel3)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(CmbMunicipio, 0, 395, Short.MAX_VALUE)
+                                        .addComponent(CmbMunicipio, 0, 1, Short.MAX_VALUE)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                         .addComponent(CmbEstado, javax.swing.GroupLayout.PREFERRED_SIZE, 222, javax.swing.GroupLayout.PREFERRED_SIZE))
                                     .addGroup(jPanel1Layout.createSequentialGroup()
@@ -938,7 +925,17 @@ public class FrmConsulta extends javax.swing.JFrame {
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(BtnImprimir, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addComponent(jProgressBar1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addGap(1, 1, 1)))
+                        .addGap(1, 1, 1))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(BtnEditar, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jLabel4)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(LblManualdeUsuario)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(LblVerHistorial)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(BtnAgregar, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
@@ -963,36 +960,29 @@ public class FrmConsulta extends javax.swing.JFrame {
                         .addComponent(CmbMunicipio, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(jLabel3)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jProgressBar1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel6)
-                            .addComponent(jLabelResultadoFiltrado)
-                            .addComponent(jLabelTotalDatos))
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jLabel6)
+                        .addComponent(jLabelResultadoFiltrado)
+                        .addComponent(jLabelTotalDatos))
+                    .addComponent(jProgressBar1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 346, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 653, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(BtnAgregar, javax.swing.GroupLayout.DEFAULT_SIZE, 52, Short.MAX_VALUE)
+                    .addComponent(LblVerHistorial, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(LblManualdeUsuario, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(LblVerHistorial, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(LblManualdeUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(BtnEditar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(BtnAgregar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(BtnEditar, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
-
-        setJMenuBar(jMenuBar1);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1002,6 +992,57 @@ public class FrmConsulta extends javax.swing.JFrame {
         pack();
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
+
+    private void LblVerHistorialKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_LblVerHistorialKeyPressed
+
+    }//GEN-LAST:event_LblVerHistorialKeyPressed
+
+    private void LblVerHistorialMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_LblVerHistorialMouseClicked
+
+        FrmHistorial frm = new FrmHistorial();
+        frm.setVisible(true);
+    }//GEN-LAST:event_LblVerHistorialMouseClicked
+
+    private void LblManualdeUsuarioMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_LblManualdeUsuarioMouseClicked
+
+        try {
+
+            InputStream input = getClass().getResourceAsStream(
+                    "/manual/Manual de Usuario - Liberty Networks Sistema de Consulta de Lineas.pdf");
+
+            if (input == null) {
+                JOptionPane.showMessageDialog(this,
+                        "No se encontró el manual.");
+                return;
+            }
+
+            File archivoTemporal
+                    = File.createTempFile("ManualUsuario", ".pdf");
+
+            archivoTemporal.deleteOnExit();
+
+            Files.copy(
+                    input,
+                    archivoTemporal.toPath(),
+                    StandardCopyOption.REPLACE_EXISTING);
+
+            Desktop.getDesktop().open(archivoTemporal);
+
+        } catch (Exception e) {
+
+            JOptionPane.showMessageDialog(this,
+                    "Error al abrir el manual:\n" + e.getMessage());
+        }
+    }//GEN-LAST:event_LblManualdeUsuarioMouseClicked
+
+    private void CmbMunicipioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CmbMunicipioActionPerformed
+
+        validarFiltros();
+    }//GEN-LAST:event_CmbMunicipioActionPerformed
+
+    private void CmbMunicipioItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_CmbMunicipioItemStateChanged
+
+    }//GEN-LAST:event_CmbMunicipioItemStateChanged
 
     private void BtnImprimirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnImprimirActionPerformed
         SwingWorker<Void, Integer> worker = new SwingWorker<>() {
@@ -1139,8 +1180,7 @@ public class FrmConsulta extends javax.swing.JFrame {
 
                 publish(95);
 
-                Paragraph firma = new Paragraph(
-                        "Generado automáticamente por Liberty Networks", new Font(Font.FontFamily.HELVETICA, 9, Font.ITALIC, BaseColor.GRAY));
+                Paragraph firma = new Paragraph("Generado automáticamente por Liberty Networks", new Font(Font.FontFamily.HELVETICA, 9, Font.ITALIC, BaseColor.GRAY));
 
                 firma.setAlignment(Element.ALIGN_CENTER);
 
@@ -1189,6 +1229,10 @@ public class FrmConsulta extends javax.swing.JFrame {
         validarFiltros();
 
     }//GEN-LAST:event_CmbEstadoActionPerformed
+
+    private void CmbEstadoItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_CmbEstadoItemStateChanged
+
+    }//GEN-LAST:event_CmbEstadoItemStateChanged
 
     private void BtnFiltrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnFiltrarActionPerformed
 
@@ -1243,17 +1287,38 @@ public class FrmConsulta extends javax.swing.JFrame {
 
         // ACTUALIZAR LABEL
         actualizarLabelResultado();
+
     }//GEN-LAST:event_BtnFiltrarActionPerformed
+
+    private void TxtCantidadKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TxtCantidadKeyTyped
+
+        Validaciones.soloNumeros8Digitos(TxtCantidad, evt);
+    }//GEN-LAST:event_TxtCantidadKeyTyped
+
+    private void TxtCantidadKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TxtCantidadKeyReleased
+
+        validarFiltros();
+
+    }//GEN-LAST:event_TxtCantidadKeyReleased
 
     private void TxtCantidadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_TxtCantidadActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_TxtCantidadActionPerformed
 
+    private void CmbServicioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CmbServicioActionPerformed
+
+        validarFiltros();
+
+    }//GEN-LAST:event_CmbServicioActionPerformed
+
+    private void CmbServicioItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_CmbServicioItemStateChanged
+
+    }//GEN-LAST:event_CmbServicioItemStateChanged
+
     private void BtnAgregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnAgregarActionPerformed
 
         FrmAgregado frm = new FrmAgregado(this);
         frm.setVisible(true);
-
     }//GEN-LAST:event_BtnAgregarActionPerformed
 
     private void BtnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnEliminarActionPerformed
@@ -1298,6 +1363,33 @@ public class FrmConsulta extends javax.swing.JFrame {
 
     }//GEN-LAST:event_BtnEliminarActionPerformed
 
+    private void BtnEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnEditarActionPerformed
+
+        int[] filas = jTableDatos.getSelectedRows();
+
+        if (filas.length == 0) {
+            JOptionPane.showMessageDialog(this, "Selecciona al menos una fila");
+            return;
+        }
+
+        java.util.List<Object[]> lista = new java.util.ArrayList<>();
+
+        for (int i : filas) {
+
+            Object[] fila = new Object[6];
+
+            for (int c = 0; c < 6; c++) {
+                fila[c] = jTableDatos.getValueAt(i, c);
+            }
+            lista.add(fila);
+        }
+
+        FrmEditar frm = new FrmEditar();
+        frm.cargarDatos(this, lista);
+        frm.setVisible(true);
+
+    }//GEN-LAST:event_BtnEditarActionPerformed
+
     private void BtnLimpiarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnLimpiarActionPerformed
 
         // Limpiar buscador
@@ -1329,9 +1421,13 @@ public class FrmConsulta extends javax.swing.JFrame {
 
     }//GEN-LAST:event_BtnLimpiarActionPerformed
 
-    private void TxtFieldBuscadorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_TxtFieldBuscadorActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_TxtFieldBuscadorActionPerformed
+    private void TxtFieldBuscadorKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TxtFieldBuscadorKeyTyped
+
+        // máximo 50 caracteres
+        if (TxtFieldBuscador.getText().length() >= 50) {
+            evt.consume();
+        }
+    }//GEN-LAST:event_TxtFieldBuscadorKeyTyped
 
     private void TxtFieldBuscadorKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TxtFieldBuscadorKeyReleased
 
@@ -1355,107 +1451,9 @@ public class FrmConsulta extends javax.swing.JFrame {
 
     }//GEN-LAST:event_TxtFieldBuscadorKeyReleased
 
-    private void TxtFieldBuscadorKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TxtFieldBuscadorKeyTyped
-
-        // máximo 50 caracteres
-        if (TxtFieldBuscador.getText().length() >= 50) {
-            evt.consume();
-        }
-
-    }//GEN-LAST:event_TxtFieldBuscadorKeyTyped
-
-    private void TxtCantidadKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TxtCantidadKeyTyped
-
-        Validaciones.soloNumeros8Digitos(TxtCantidad, evt);
-
-    }//GEN-LAST:event_TxtCantidadKeyTyped
-
-    private void CmbMunicipioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CmbMunicipioActionPerformed
-
-        validarFiltros();
-
-    }//GEN-LAST:event_CmbMunicipioActionPerformed
-
-    private void CmbServicioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CmbServicioActionPerformed
-
-        validarFiltros();
-
-    }//GEN-LAST:event_CmbServicioActionPerformed
-
-    private void TxtCantidadKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TxtCantidadKeyReleased
-
-        validarFiltros();
-
-    }//GEN-LAST:event_TxtCantidadKeyReleased
-
-    private void CmbMunicipioItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_CmbMunicipioItemStateChanged
-
-    }//GEN-LAST:event_CmbMunicipioItemStateChanged
-
-    private void CmbEstadoItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_CmbEstadoItemStateChanged
-
-    }//GEN-LAST:event_CmbEstadoItemStateChanged
-
-    private void CmbServicioItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_CmbServicioItemStateChanged
-
-    }//GEN-LAST:event_CmbServicioItemStateChanged
-
-    private void BtnEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnEditarActionPerformed
-
-        int[] filas = jTableDatos.getSelectedRows();
-
-        if (filas.length == 0) {
-            JOptionPane.showMessageDialog(this, "Selecciona al menos una fila");
-            return;
-        }
-
-        java.util.List<Object[]> lista = new java.util.ArrayList<>();
-
-        for (int i : filas) {
-
-            Object[] fila = new Object[6];
-
-            for (int c = 0; c < 6; c++) {
-                fila[c] = jTableDatos.getValueAt(i, c);
-            }
-            lista.add(fila);
-        }
-
-        FrmEditar frm = new FrmEditar();
-        frm.cargarDatos(this, lista);
-        frm.setVisible(true);
-
-
-    }//GEN-LAST:event_BtnEditarActionPerformed
-
-    private void LblVerHistorialKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_LblVerHistorialKeyPressed
-
-
-    }//GEN-LAST:event_LblVerHistorialKeyPressed
-
-    private void LblVerHistorialMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_LblVerHistorialMouseClicked
-
-        FrmHistorial frm = new FrmHistorial();
-        frm.setVisible(true);
-
-    }//GEN-LAST:event_LblVerHistorialMouseClicked
-
-    private void LblManualdeUsuarioMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_LblManualdeUsuarioMouseClicked
-
-        try {
-            java.net.URL url = getClass().getResource("/manual/Manual de Usuario - Liberty Networks Sistema de Consulta de Lineas.pdf");
-
-            if (url != null) {
-                java.awt.Desktop.getDesktop().open(new java.io.File(url.toURI()));
-            } else {
-                JOptionPane.showMessageDialog(this, "No se encontró el PDF");
-            }
-
-        } catch (HeadlessException | IOException | URISyntaxException e) {
-            JOptionPane.showMessageDialog(this, "Error: " + e.getMessage());
-        }
-
-    }//GEN-LAST:event_LblManualdeUsuarioMouseClicked
+    private void TxtFieldBuscadorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_TxtFieldBuscadorActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_TxtFieldBuscadorActionPerformed
 
     private void tglTemaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tglTemaActionPerformed
 
@@ -1471,6 +1469,7 @@ public class FrmConsulta extends javax.swing.JFrame {
                 w.repaint();
             }
         }
+
     }//GEN-LAST:event_tglTemaActionPerformed
 
     /**
@@ -1510,11 +1509,26 @@ public class FrmConsulta extends javax.swing.JFrame {
         });
     }
 
-    private void SetImageLabel(JLabel labelName, String root) {
-        ImageIcon image = new ImageIcon(root);
-        Icon icon = new ImageIcon(image.getImage().getScaledInstance(labelName.getWidth(), labelName.getHeight(), Image.SCALE_DEFAULT));
+    private void SetImageLabel(JLabel labelName, String path) {
+
+        java.net.URL url = getClass().getResource(path);
+
+        if (url == null) {
+            System.out.println("No se encontró: " + path);
+            return;
+        }
+
+        ImageIcon image = new ImageIcon(url);
+
+        Icon icon = new ImageIcon(
+                image.getImage().getScaledInstance(
+                        labelName.getWidth(),
+                        labelName.getHeight(),
+                        Image.SCALE_SMOOTH
+                )
+        );
+
         labelName.setIcon(icon);
-        this.repaint();
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -1538,7 +1552,6 @@ public class FrmConsulta extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabelResultadoFiltrado;
     private javax.swing.JLabel jLabelTotalDatos;
-    private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JProgressBar jProgressBar1;

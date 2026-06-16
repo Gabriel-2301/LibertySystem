@@ -15,13 +15,14 @@ public class LineaDAO {
 
         DefaultTableModel modelo = new DefaultTableModel(null, columnas);
 
-        String sql = "SELECT "
+        String sql
+                = "SELECT "
                 + "l.numero, "
-                + "e.nombre AS estado, "
+                + "COALESCE(e.nombre, 'Sin Estado') AS estado, "
                 + "l.fechas_ultimo_estado, "
-                + "m.nombre AS municipio, "
-                + "c.nombre AS cliente, "
-                + "s.nombre AS servicio "
+                + "COALESCE(m.nombre, 'SIN MUNICIPIO') AS municipio, "
+                + "COALESCE(c.nombre, 'SIN CLIENTE') AS cliente, "
+                + "COALESCE(s.nombre, 'Sin Servicio') AS servicio "
                 + "FROM lineas l "
                 + "LEFT JOIN estados e ON l.estado_id = e.id "
                 + "LEFT JOIN municipios m ON l.municipio_id = m.id "
@@ -62,18 +63,17 @@ public class LineaDAO {
         String sql
                 = "SELECT "
                 + "l.numero, "
-                + "e.nombre AS estado, "
+                + "COALESCE(e.nombre, 'Sin Estado') AS estado, "
                 + "l.fechas_ultimo_estado, "
-                + "m.nombre AS municipio, "
-                + "c.nombre AS cliente, "
-                + "s.nombre AS servicio "
+                + "COALESCE(m.nombre, 'SIN MUNICIPIO') AS municipio, "
+                + "COALESCE(c.nombre, 'SIN CLIENTE') AS cliente, "
+                + "COALESCE(s.nombre, 'Sin Servicio') AS servicio "
                 + "FROM lineas l "
-                + "LEFT JOIN estados e ON l.estado_id=e.id "
-                + "LEFT JOIN municipios m ON l.municipio_id=m.id "
-                + "LEFT JOIN clientes c ON l.cliente_id=c.id "
-                + "LEFT JOIN servicios s ON l.servicio_id=s.id "
-                + "WHERE l.numero LIKE ? "
-                + "OR LOWER(c.nombre) LIKE LOWER(?) "
+                + "LEFT JOIN estados e ON l.estado_id = e.id "
+                + "LEFT JOIN municipios m ON l.municipio_id = m.id "
+                + "LEFT JOIN clientes c ON l.cliente_id = c.id "
+                + "LEFT JOIN servicios s ON l.servicio_id = s.id "
+                + "WHERE l.numero LIKE ? OR c.nombre LIKE ? "
                 + "ORDER BY l.id ASC";
 
         try (Connection con = Conexion.conectar(); PreparedStatement ps = con.prepareStatement(sql)) {
@@ -124,34 +124,34 @@ public class LineaDAO {
 
         sql.append("SELECT ")
                 .append("l.numero, ")
-                .append("COALESCE(e.nombre, 'SIN ESTADO') AS estado, ")
+                .append("COALESCE(e.nombre, 'Sin Estado') AS estado, ")
                 .append("l.fechas_ultimo_estado, ")
                 .append("COALESCE(m.nombre, 'SIN MUNICIPIO') AS municipio, ")
                 .append("COALESCE(c.nombre, 'SIN CLIENTE') AS cliente, ")
-                .append("COALESCE(s.nombre, 'SIN SERVICIO') AS servicio ")
+                .append("COALESCE(s.nombre, 'Sin Servicio') AS servicio ")
                 .append("FROM lineas l ")
-                .append("LEFT JOIN estados e ON l.estado_id=e.id ")
-                .append("LEFT JOIN municipios m ON l.municipio_id=m.id ")
-                .append("LEFT JOIN clientes c ON l.cliente_id=c.id ")
-                .append("LEFT JOIN servicios s ON l.servicio_id=s.id ")
+                .append("LEFT JOIN estados e ON l.estado_id = e.id ")
+                .append("LEFT JOIN municipios m ON l.municipio_id = m.id ")
+                .append("LEFT JOIN clientes c ON l.cliente_id = c.id ")
+                .append("LEFT JOIN servicios s ON l.servicio_id = s.id ")
                 .append("WHERE 1=1 ");
 
-        if (estadoIndex > 0) {
-            sql.append("AND e.nombre='").append(estado).append("' ");
+        if (estadoIndex > 0 && estado != null) {
+            sql.append(" AND e.nombre = '").append(estado).append("' ");
         }
 
-        if (servicioIndex > 0) {
-            sql.append("AND s.nombre='").append(servicio).append("' ");
+        if (servicioIndex > 0 && servicio != null) {
+            sql.append(" AND s.nombre = '").append(servicio).append("' ");
         }
 
-        if (municipioIndex > 0) {
-            sql.append("AND m.nombre='").append(municipio).append("' ");
+        if (municipioIndex > 0 && municipio != null) {
+            sql.append(" AND m.nombre = '").append(municipio).append("' ");
         }
 
-        sql.append("ORDER BY l.id ASC ");
+        sql.append(" ORDER BY l.id ASC ");
 
         if (cantidad != null && cantidad > 0) {
-            sql.append("LIMIT ").append(cantidad);
+            sql.append(" LIMIT ").append(cantidad);
         }
 
         try (Connection con = Conexion.conectar(); Statement st = con.createStatement(); ResultSet rs = st.executeQuery(sql.toString())) {
@@ -253,7 +253,17 @@ public class LineaDAO {
     // HELPERS
     public int obtenerId(Connection con, String tabla, String nombre) throws SQLException {
 
-        String sql = "SELECT id FROM " + tabla + " WHERE nombre=?";
+        if (nombre == null) {
+            return 0;
+        }
+
+        nombre = nombre.trim();
+
+        if (nombre.isEmpty()) {
+            return 0;
+        }
+
+        String sql = "SELECT id FROM " + tabla + " WHERE LOWER(TRIM(nombre)) = LOWER(TRIM(?))";
 
         PreparedStatement ps = con.prepareStatement(sql);
         ps.setString(1, nombre);
@@ -261,10 +271,10 @@ public class LineaDAO {
         ResultSet rs = ps.executeQuery();
 
         if (rs.next()) {
-            return rs.getInt(1);
+            return rs.getInt("id");
         }
 
-        return -1;
+        return 0;
     }
 
     public int obtenerOInsertarCliente(Connection con, String cliente) throws SQLException {

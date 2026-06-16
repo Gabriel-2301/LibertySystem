@@ -134,10 +134,10 @@ public class FrmHistorial extends javax.swing.JFrame {
         jTableDatosHistorial.getColumnModel().getColumn(0).setPreferredWidth(120); // Número
         jTableDatosHistorial.getColumnModel().getColumn(1).setPreferredWidth(120); // Estado Ant
         jTableDatosHistorial.getColumnModel().getColumn(2).setPreferredWidth(120); // Estado Nuevo
-        jTableDatosHistorial.getColumnModel().getColumn(3).setPreferredWidth(150); // Municipio Ant
-        jTableDatosHistorial.getColumnModel().getColumn(4).setPreferredWidth(150); // Municipio Nuevo
-        jTableDatosHistorial.getColumnModel().getColumn(5).setPreferredWidth(180); // Cliente Ant
-        jTableDatosHistorial.getColumnModel().getColumn(6).setPreferredWidth(180); // Cliente Nuevo
+        jTableDatosHistorial.getColumnModel().getColumn(3).setPreferredWidth(170); // Municipio Ant
+        jTableDatosHistorial.getColumnModel().getColumn(4).setPreferredWidth(210); // Municipio Nuevo
+        jTableDatosHistorial.getColumnModel().getColumn(5).setPreferredWidth(210); // Cliente Ant
+        jTableDatosHistorial.getColumnModel().getColumn(6).setPreferredWidth(210); // Cliente Nuevo
         jTableDatosHistorial.getColumnModel().getColumn(7).setPreferredWidth(150); // Servicio Ant
         jTableDatosHistorial.getColumnModel().getColumn(8).setPreferredWidth(150); // Servicio Nuevo
         jTableDatosHistorial.getColumnModel().getColumn(9).setPreferredWidth(160); // Fecha
@@ -184,7 +184,7 @@ public class FrmHistorial extends javax.swing.JFrame {
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addGap(194, 194, 194)
                 .addComponent(jLabel1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 336, Short.MAX_VALUE)
                 .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(122, 122, 122))
         );
@@ -220,10 +220,8 @@ public class FrmHistorial extends javax.swing.JFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 1482, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jScrollPane1))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
