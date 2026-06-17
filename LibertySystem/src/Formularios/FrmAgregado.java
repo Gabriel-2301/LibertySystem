@@ -104,7 +104,7 @@ public class FrmAgregado extends javax.swing.JFrame {
             }
         });
     }
-
+    
     private void aplicarColoresPersonalizados() {
 
         if (TemaManager.oscuro) {
@@ -268,7 +268,7 @@ public class FrmAgregado extends javax.swing.JFrame {
         }
         repaint();
     }
-
+    
     public FrmAgregado(FrmConsulta frmConsulta) {
         this();
         this.frmConsulta = frmConsulta;
@@ -686,6 +686,7 @@ public class FrmAgregado extends javax.swing.JFrame {
 
             JOptionPane.showMessageDialog(this, "Error al insertar el registro", "Error", JOptionPane.ERROR_MESSAGE);
         }
+        
     }//GEN-LAST:event_BtnGuardarActionPerformed
 
     private void TxtNumeroKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TxtNumeroKeyTyped
@@ -744,6 +745,8 @@ public class FrmAgregado extends javax.swing.JFrame {
         });
     }
 
+    
+    
     private void SetImageLabel(javax.swing.JLabel labelName, String resourcePath) {
 
         java.net.URL imageURL = getClass().getResource(resourcePath);
@@ -769,6 +772,8 @@ public class FrmAgregado extends javax.swing.JFrame {
     private Icon iconInvertido(String path) {
         return TemaManager.invertirIcono(getClass(), path);
     }
+    
+    
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton BtnGuardar;

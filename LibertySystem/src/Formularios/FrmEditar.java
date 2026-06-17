@@ -314,9 +314,7 @@ public class FrmEditar extends javax.swing.JFrame {
         comboMunicipio.addItem("Yoro, Yoro");
         comboMunicipio.addItem("Yuscaran, El Paraiso");
 
-        jTableDatosEditados.getColumnModel()
-                .getColumn(3)
-                .setCellEditor(new DefaultCellEditor(comboMunicipio));
+        jTableDatosEditados.getColumnModel().getColumn(3).setCellEditor(new DefaultCellEditor(comboMunicipio));
 
         //Combo Servicio
         JComboBox<String> comboServicio = new JComboBox<>();
@@ -324,9 +322,7 @@ public class FrmEditar extends javax.swing.JFrame {
         comboServicio.addItem("MyUC");
         comboServicio.addItem("Bussines Trunk");
 
-        jTableDatosEditados.getColumnModel()
-                .getColumn(5)
-                .setCellEditor(new DefaultCellEditor(comboServicio));
+        jTableDatosEditados.getColumnModel().getColumn(5).setCellEditor(new DefaultCellEditor(comboServicio));
     }
 
     private String norm(Object o) {
@@ -503,13 +499,12 @@ public class FrmEditar extends javax.swing.JFrame {
             Connection con = Conexion.conectar();
             LineaDAO dao = new LineaDAO();
 
-            String sql = "UPDATE lineas SET " + "numero=?, " + "estado_id=?, " + "fechas_ultimo_estado=NOW(), " + "municipio_id=?, " + "cliente_id=?, " + "servicio_id=? " + "WHERE numero=?";
+            String sql = "UPDATE lineas SET " + "numero=?, estado_id=?, fechas_ultimo_estado=NOW(), " + "municipio_id=?, cliente_id=?, servicio_id=? " + "WHERE numero=?";
 
             PreparedStatement ps = con.prepareStatement(sql);
 
             for (int i = 0; i < modelo.getRowCount(); i++) {
 
-                // DATOS TABLA
                 String numeroNuevo = norm(modelo.getValueAt(i, 0));
                 String estadoNew = norm(modelo.getValueAt(i, 1));
                 String municipioNew = norm(modelo.getValueAt(i, 3));
@@ -518,38 +513,79 @@ public class FrmEditar extends javax.swing.JFrame {
 
                 String numeroOriginal = numerosOriginales.get(i);
 
-                // LIMPIEZA SEGURA
-                estadoNew = (estadoNew == null) ? "" : estadoNew.trim();
-                servicioNew = (servicioNew == null) ? "" : servicioNew.trim();
+                // ?VALORES ANTERIORES
+                String estadoAnt = estadoOriginal.get(i);
+                String municipioAnt = municipioOriginal.get(i);
+                String clienteAnt = clienteOriginal.get(i);
+                String servicioAnt = servicioOriginal.get(i);
 
-                boolean estadoVacio = estadoNew.isEmpty() || estadoNew.equalsIgnoreCase("sin estado");
-
-                boolean servicioVacio = servicioNew.isEmpty() || servicioNew.equalsIgnoreCase("sin servicio");
-
-                // IDS (CON FALLBACK)
+                // IDS
                 int estadoId = dao.obtenerIdPublic(con, "estados", estadoNew);
-                estadoId = (estadoId > 0) ? estadoId : dao.obtenerIdPublic(con, "estados", "Sin Estado");
-
-                int servicioId = dao.obtenerIdPublic(con, "servicios", servicioNew);
-                servicioId = (servicioId > 0) ? servicioId : dao.obtenerIdPublic(con, "servicios", "Sin Servicio");
+                if (estadoId == 0) {
+                    estadoId = dao.obtenerIdPublic(con, "estados", "Sin Estado");
+                }
 
                 int municipioId = dao.obtenerIdPublic(con, "municipios", municipioNew);
                 int clienteId = dao.obtenerClientePublic(con, clienteNew);
 
-                // PARAMETROS UPDATE
-                ps.setString(1, numeroNuevo);
+                int servicioId = dao.obtenerIdPublic(con, "servicios", servicioNew);
+                if (servicioId == 0) {
+                    servicioId = dao.obtenerIdPublic(con, "servicios", "Sin Servicio");
+                }
 
+                // 1.GUARDAR HISTORIAL
+                dao.registrarHistorialCompleto(
+                        numeroOriginal,
+                        estadoAnt,
+                        estadoNew,
+                        municipioAnt,
+                        municipioNew,
+                        clienteAnt,
+                        clienteNew,
+                        servicioAnt,
+                        servicioNew
+                );
+
+                // 2.UPDATE
+                ps.setString(1, numeroNuevo);
                 ps.setInt(2, estadoId);
                 ps.setInt(3, municipioId);
                 ps.setInt(4, clienteId);
                 ps.setInt(5, servicioId);
-
                 ps.setString(6, numeroOriginal);
 
                 ps.addBatch();
             }
 
             ps.executeBatch();
+            for (int i = 0; i < modelo.getRowCount(); i++) {
+
+                String numero = norm(modelo.getValueAt(i, 0));
+
+                String estadoAnt = estadoOriginal.get(i);
+                String estadoNew = norm(modelo.getValueAt(i, 1));
+
+                String municipioAnt = municipioOriginal.get(i);
+                String municipioNew = norm(modelo.getValueAt(i, 3));
+
+                String clienteAnt = clienteOriginal.get(i);
+                String clienteNew = norm(modelo.getValueAt(i, 4));
+
+                String servicioAnt = servicioOriginal.get(i);
+                String servicioNew = norm(modelo.getValueAt(i, 5));
+
+                dao.registrarHistorialCompleto(
+                        numero,
+                        estadoAnt,
+                        estadoNew,
+                        municipioAnt,
+                        municipioNew,
+                        clienteAnt,
+                        clienteNew,
+                        servicioAnt,
+                        servicioNew
+                );
+            }
             ps.close();
             con.close();
 
@@ -563,6 +599,7 @@ public class FrmEditar extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "Error: " + e.getMessage());
             e.printStackTrace();
         }
+
     }//GEN-LAST:event_BtnGuardarActionPerformed
 
     private void BtnLimpiarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnLimpiarActionPerformed

@@ -17,6 +17,7 @@ import com.itextpdf.text.pdf.PdfWriter;
 import java.io.FileOutputStream;
 import javax.swing.JFileChooser;
 import dao.LineaDAO;
+import dao.VersionDAO;
 import java.awt.Color;
 import java.awt.Image;
 import java.awt.event.ComponentAdapter;
@@ -47,8 +48,11 @@ import utilidades.TemaManager;
 import java.awt.Desktop;
 import java.io.File;
 import java.io.InputStream;
+import java.net.URI;
+import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
+import javax.swing.JComboBox;
 import javax.swing.JFrame;
 
 /**
@@ -97,9 +101,13 @@ public class FrmConsulta extends javax.swing.JFrame {
 
             BtnEditar.setIcon(TemaManager.invertirIcono(getClass(), "/IMG/Iconoeditar.png"));
 
+            BtnActualizacion.setIcon(TemaManager.invertirIcono(getClass(), "/IMG/Iconoactualizar.png"));
+
             jLabel4.setIcon(TemaManager.invertirIcono(getClass(), "/IMG/Iconointerrogacion.png"));
 
             jLabel6.setIcon(TemaManager.invertirIcono(getClass(), "/IMG/Iconodatos.png"));
+            
+            BtnOrdenar.setIcon(TemaManager.invertirIcono(getClass(), "/IMG/Iconoordenar.png"));
 
         } else {
 
@@ -115,9 +123,13 @@ public class FrmConsulta extends javax.swing.JFrame {
 
             BtnEditar.setIcon(new ImageIcon(getClass().getResource("/IMG/Iconoeditar.png")));
 
+            BtnActualizacion.setIcon(new ImageIcon(getClass().getResource("/IMG/Iconoactualizar.png")));
+
             jLabel4.setIcon(new ImageIcon(getClass().getResource("/IMG/Iconointerrogacion.png")));
 
             jLabel6.setIcon(new ImageIcon(getClass().getResource("/IMG/Iconodatos.png")));
+            
+            BtnOrdenar.setIcon(new ImageIcon(getClass().getResource("/IMG/Iconoordenar.png")));
         }
 
         if (TemaManager.oscuro) {
@@ -171,7 +183,9 @@ public class FrmConsulta extends javax.swing.JFrame {
                 BtnEliminar,
                 BtnFiltrar,
                 BtnImprimir,
-                BtnLimpiar
+                BtnLimpiar,
+                BtnActualizacion,
+                BtnOrdenar
             };
 
             for (JButton b : botones) {
@@ -183,10 +197,10 @@ public class FrmConsulta extends javax.swing.JFrame {
 
             //TOGGLE
             tglTema.setText("☀");
-            tglTema.setBackground(new Color(245, 245, 245));
-            tglTema.setForeground(Color.GRAY);
+            tglTema.setBackground(new Color(40, 40, 40));
+            tglTema.setForeground(Color.WHITE);
             tglTema.setFocusPainted(false);
-            tglTema.setBorderPainted(false);
+            tglTema.setBorderPainted(true);
             tglTema.setOpaque(true);
 
         } else {
@@ -214,19 +228,31 @@ public class FrmConsulta extends javax.swing.JFrame {
 
             //TEXTFIELDS
             TxtFieldBuscador.setBackground(Color.WHITE);
-            TxtFieldBuscador.setForeground(Color.BLACK);
-            TxtFieldBuscador.setCaretColor(Color.BLACK);
+            TxtFieldBuscador.setForeground(Color.GRAY);
+            TxtFieldBuscador.setCaretColor(Color.GRAY);
             TxtCantidad.setBackground(Color.WHITE);
-            TxtCantidad.setForeground(Color.BLACK);
-            TxtCantidad.setCaretColor(Color.BLACK);
+            TxtCantidad.setForeground(Color.GRAY);
+            TxtCantidad.setCaretColor(Color.GRAY);
 
-            //COMBOBOX
-            CmbEstado.setBackground(Color.WHITE);
+            Color grisSistema = javax.swing.UIManager.getColor("ComboBox.disabledBackground");
+            if (grisSistema == null) {
+                grisSistema = new Color(240, 240, 240); // Gris suave estándar por si falla el look & feel
+            }
+
+            CmbEstado.setBackground(grisSistema);
             CmbEstado.setForeground(Color.BLACK);
-            CmbMunicipio.setBackground(Color.WHITE);
+
+            CmbMunicipio.setBackground(grisSistema);
             CmbMunicipio.setForeground(Color.BLACK);
-            CmbServicio.setBackground(Color.WHITE);
+
+            CmbServicio.setBackground(grisSistema);
             CmbServicio.setForeground(Color.BLACK);
+
+            if (CmbEstado.getRenderer() instanceof javax.swing.JComponent) {
+                ((javax.swing.JComponent) CmbEstado.getRenderer()).setBackground(grisSistema);
+                ((javax.swing.JComponent) CmbMunicipio.getRenderer()).setBackground(grisSistema);
+                ((javax.swing.JComponent) CmbServicio.getRenderer()).setBackground(grisSistema);
+            }
 
             //BOTONES
             JButton[] botones = {
@@ -235,7 +261,9 @@ public class FrmConsulta extends javax.swing.JFrame {
                 BtnEliminar,
                 BtnFiltrar,
                 BtnImprimir,
-                BtnLimpiar
+                BtnLimpiar,
+                BtnActualizacion,
+                BtnOrdenar
             };
 
             for (JButton b : botones) {
@@ -269,8 +297,8 @@ public class FrmConsulta extends javax.swing.JFrame {
                     txt.setForeground(Color.WHITE);
                     txt.setCaretColor(Color.WHITE);
                 } else {
-                    txt.setForeground(Color.BLACK);
-                    txt.setCaretColor(Color.BLACK);
+                    txt.setForeground(Color.GRAY);
+                    txt.setCaretColor(Color.GRAY);
                 }
             }
         }
@@ -279,22 +307,14 @@ public class FrmConsulta extends javax.swing.JFrame {
     public FrmConsulta() {
         initComponents();
 
-        setExtendedState(JFrame.MAXIMIZED_BOTH);
-        SwingUtilities.invokeLater(() -> {
-
-            Icon iconoFlecha;
-
-            if (TemaManager.oscuro) {
-                iconoFlecha = TemaManager.invertirIcono(getClass(), "/IMG/Iconoflecha.png");
-            } else {
-                iconoFlecha = new ImageIcon(getClass().getResource("/IMG/Iconoflecha.png"));
+        javax.swing.SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                ajustarFlechaCombo(CmbServicio);
+                ajustarFlechaCombo(CmbEstado);
+                ajustarFlechaCombo(CmbMunicipio);
             }
-
-            CmbServicio.setUI(new ComboBoxTemaUI(iconoFlecha));
-            CmbEstado.setUI(new ComboBoxTemaUI(iconoFlecha));
-            CmbMunicipio.setUI(new ComboBoxTemaUI(iconoFlecha));
         });
-
         /*
         this.setLayout(new java.awt.BorderLayout());
         this.add(jPanel1, java.awt.BorderLayout.CENTER);
@@ -397,6 +417,39 @@ public class FrmConsulta extends javax.swing.JFrame {
         jLabelTotalDatos.setText("" + total);
     }
 
+    private void aplicarEstiloCombo(JComboBox combo) {
+
+        combo.setOpaque(true);
+        combo.setBackground(Color.WHITE);
+        combo.setForeground(Color.BLACK);
+        combo.setFocusable(false);
+    }
+
+    private void ajustarFlechaCombo(JComboBox combo) {
+
+        Icon flecha = new ImageIcon(new ImageIcon(getClass().getResource("/IMG/Iconoflecha.png")).getImage().getScaledInstance(12, 12, Image.SCALE_SMOOTH));
+
+        combo.setUI(new javax.swing.plaf.basic.BasicComboBoxUI() {
+
+            @Override
+            protected JButton createArrowButton() {
+
+                JButton btn = new JButton(flecha);
+
+                btn.setBorder(null);
+                btn.setFocusPainted(false);
+                btn.setContentAreaFilled(true);
+
+                if (TemaManager.oscuro) {
+                    btn.setBackground(Color.WHITE);
+                } else {
+                    btn.setBackground(Color.WHITE);
+                }
+                return btn;
+            }
+        });
+    }
+
     private void iniciarBackupAutomatico() {
 
         Timer timer = new Timer(60 * 60 * 1000, e -> {
@@ -484,6 +537,85 @@ public class FrmConsulta extends javax.swing.JFrame {
         }
 
         return v;
+    }
+
+    public void buscarActualizacion() {
+
+        new Thread(() -> {
+
+            try {
+
+                String versionServer = VersionDAO.obtenerVersion();
+                String url = VersionDAO.obtenerURL();
+
+                System.out.println("Version servidor: " + versionServer);
+                System.out.println("URL: " + url);
+
+                if (versionServer == null || versionServer.isEmpty()) {
+
+                    JOptionPane.showMessageDialog(null,
+                            "No se pudo obtener la versión del servidor");
+
+                    return;
+                }
+
+                if (!libertysystem.LibertySystem.VERSION_LOCAL.equals(versionServer)) {
+
+                    int opcion = JOptionPane.showConfirmDialog(
+                            null,
+                            "Hay una nueva versión: " + versionServer + "\n¿Deseas actualizar?",
+                            "Actualización disponible",
+                            JOptionPane.YES_NO_OPTION
+                    );
+
+                    if (opcion == JOptionPane.YES_OPTION) {
+
+                        JOptionPane.showMessageDialog(null,
+                                "Descargando actualización...");
+
+                        descargar(url, "update.exe");
+
+                        JOptionPane.showMessageDialog(null,
+                                "Instalando actualización...");
+
+                        ProcessBuilder pb = new ProcessBuilder("cmd", "/c", "update.exe");
+                        pb.start();
+
+                        System.exit(0);
+                    }
+
+                } else {
+
+                    JOptionPane.showMessageDialog(null,
+                            "No hay actualizaciones disponibles");
+                }
+
+            } catch (Exception e) {
+
+                e.printStackTrace();
+
+                JOptionPane.showMessageDialog(null,
+                        "Error: " + e.getMessage());
+            }
+
+        }).start();
+    }
+
+    public void descargar(String urlStr, String fileName) throws Exception {
+
+        URL url = URI.create(urlStr).toURL();
+        InputStream in = url.openStream();
+        FileOutputStream fos = new FileOutputStream(fileName);
+
+        byte[] buffer = new byte[1024];
+        int len;
+
+        while ((len = in.read(buffer)) != -1) {
+            fos.write(buffer, 0, len);
+        }
+
+        fos.close();
+        in.close();
     }
 
     private void configurarAtajosTeclado() {
@@ -603,6 +735,7 @@ public class FrmConsulta extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         tglTema = new javax.swing.JToggleButton();
+        BtnActualizacion = new javax.swing.JButton();
         TxtFieldBuscador = new javax.swing.JTextField();
         BtnLimpiar = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
@@ -624,6 +757,7 @@ public class FrmConsulta extends javax.swing.JFrame {
         LblManualdeUsuario = new javax.swing.JLabel();
         LblVerHistorial = new javax.swing.JLabel();
         BtnEditar = new javax.swing.JButton();
+        BtnOrdenar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
@@ -642,9 +776,20 @@ public class FrmConsulta extends javax.swing.JFrame {
         tglTema.setText("🌙");
         tglTema.setToolTipText("Cambiar Tema");
         tglTema.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        tglTema.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         tglTema.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 tglTemaActionPerformed(evt);
+            }
+        });
+
+        BtnActualizacion.setIcon(new javax.swing.ImageIcon(getClass().getResource("/IMG/Iconoactualizar.png"))); // NOI18N
+        BtnActualizacion.setToolTipText("Buscar Actualizacion");
+        BtnActualizacion.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        BtnActualizacion.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        BtnActualizacion.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BtnActualizacionActionPerformed(evt);
             }
         });
 
@@ -654,22 +799,26 @@ public class FrmConsulta extends javax.swing.JFrame {
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(tglTema, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(BtnActualizacion, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGap(196, 196, 196)
-                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 829, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(102, 102, 102)
+                        .addComponent(jLabel1)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 155, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(67, 67, 67))
+                .addGap(26, 26, 26)
+                .addComponent(tglTema, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addComponent(tglTema)
-                .addGap(20, 20, 20)
+                .addComponent(BtnActualizacion)
+                .addGap(22, 22, 22)
                 .addComponent(jLabel1)
-                .addContainerGap(32, Short.MAX_VALUE))
+                .addContainerGap(35, Short.MAX_VALUE))
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addComponent(tglTema)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
 
         TxtFieldBuscador.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
@@ -846,6 +995,7 @@ public class FrmConsulta extends javax.swing.JFrame {
 
         jLabel4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/IMG/Iconointerrogacion.png"))); // NOI18N
         jLabel4.setToolTipText("Atajos:\n\n   Agregar (Ctrl N)\n\n   Eliminar (SUPR)\n\n   Imprimir (Ctrl P)\n\n   Filtrar (Ctrl F)\n\n   Limpiar (Ctrl L)");
+        jLabel4.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
 
         LblManualdeUsuario.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         LblManualdeUsuario.setText("Link Manual de Usuario ||");
@@ -883,6 +1033,14 @@ public class FrmConsulta extends javax.swing.JFrame {
             }
         });
 
+        BtnOrdenar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/IMG/Iconoordenar.png"))); // NOI18N
+        BtnOrdenar.setToolTipText("Ordenar Numeros");
+        BtnOrdenar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BtnOrdenarActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -904,6 +1062,8 @@ public class FrmConsulta extends javax.swing.JFrame {
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                         .addComponent(CmbEstado, javax.swing.GroupLayout.PREFERRED_SIZE, 222, javax.swing.GroupLayout.PREFERRED_SIZE))
                                     .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addComponent(BtnOrdenar)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                         .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 245, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                         .addComponent(jLabelTotalDatos, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -964,10 +1124,11 @@ public class FrmConsulta extends javax.swing.JFrame {
                     .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(jLabel6)
                         .addComponent(jLabelResultadoFiltrado)
-                        .addComponent(jLabelTotalDatos))
+                        .addComponent(jLabelTotalDatos)
+                        .addComponent(BtnOrdenar, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
                     .addComponent(jProgressBar1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 653, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 648, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(BtnAgregar, javax.swing.GroupLayout.DEFAULT_SIZE, 52, Short.MAX_VALUE)
@@ -1319,6 +1480,7 @@ public class FrmConsulta extends javax.swing.JFrame {
 
         FrmAgregado frm = new FrmAgregado(this);
         frm.setVisible(true);
+
     }//GEN-LAST:event_BtnAgregarActionPerformed
 
     private void BtnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnEliminarActionPerformed
@@ -1427,6 +1589,7 @@ public class FrmConsulta extends javax.swing.JFrame {
         if (TxtFieldBuscador.getText().length() >= 50) {
             evt.consume();
         }
+
     }//GEN-LAST:event_TxtFieldBuscadorKeyTyped
 
     private void TxtFieldBuscadorKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TxtFieldBuscadorKeyReleased
@@ -1471,6 +1634,19 @@ public class FrmConsulta extends javax.swing.JFrame {
         }
 
     }//GEN-LAST:event_tglTemaActionPerformed
+
+    private void BtnActualizacionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnActualizacionActionPerformed
+
+        buscarActualizacion();
+
+    }//GEN-LAST:event_BtnActualizacionActionPerformed
+
+    private void BtnOrdenarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnOrdenarActionPerformed
+        
+        LineaDAO dao = new LineaDAO();
+        jTableDatos.setModel(dao.mostrarDatosOrdenadosPorNumero());
+        
+    }//GEN-LAST:event_BtnOrdenarActionPerformed
 
     /**
      * @param args the command line arguments
@@ -1532,12 +1708,14 @@ public class FrmConsulta extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton BtnActualizacion;
     private javax.swing.JButton BtnAgregar;
     private javax.swing.JButton BtnEditar;
     private javax.swing.JButton BtnEliminar;
     private javax.swing.JButton BtnFiltrar;
     private javax.swing.JButton BtnImprimir;
     private javax.swing.JButton BtnLimpiar;
+    private javax.swing.JButton BtnOrdenar;
     private javax.swing.JComboBox<String> CmbEstado;
     private javax.swing.JComboBox<String> CmbMunicipio;
     private javax.swing.JComboBox<String> CmbServicio;

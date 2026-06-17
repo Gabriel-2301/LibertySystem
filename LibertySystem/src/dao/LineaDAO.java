@@ -324,30 +324,26 @@ public class LineaDAO {
 
     public void registrarHistorialCompleto(
             String numero,
-            String estadoAnt, String estadoNew,
-            String municipioAnt, String municipioNew,
-            String clienteAnt, String clienteNew,
-            String servicioAnt, String servicioNew
+            String estadoAnt,
+            String estadoNew,
+            String municipioAnt,
+            String municipioNew,
+            String clienteAnt,
+            String clienteNew,
+            String servicioAnt,
+            String servicioNew
     ) {
 
         String sql
-                = "INSERT INTO historial_lineas (numero, estado_anterior, estado_nuevo, "
+                = "INSERT INTO historial_lineas ("
+                + "numero, estado_anterior, estado_nuevo, "
                 + "municipio_anterior, municipio_nuevo, "
                 + "cliente_anterior, cliente_nuevo, "
-                + "servicio_anterior, servicio_nuevo) "
-                + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?) "
-                + "ON DUPLICATE KEY UPDATE "
-                + "estado_anterior=VALUES(estado_anterior), "
-                + "estado_nuevo=VALUES(estado_nuevo), "
-                + "municipio_anterior=VALUES(municipio_anterior), "
-                + "municipio_nuevo=VALUES(municipio_nuevo), "
-                + "cliente_anterior=VALUES(cliente_anterior), "
-                + "cliente_nuevo=VALUES(cliente_nuevo), "
-                + "servicio_anterior=VALUES(servicio_anterior), "
-                + "servicio_nuevo=VALUES(servicio_nuevo), "
-                + "fecha=NOW()";
+                + "servicio_anterior, servicio_nuevo, fecha"
+                + ") VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, NOW())";
 
-        try (Connection con = Conexion.conectar(); PreparedStatement ps = con.prepareStatement(sql)) {
+        try (
+                Connection con = Conexion.conectar(); PreparedStatement ps = con.prepareStatement(sql)) {
 
             ps.setString(1, numero);
             ps.setString(2, estadoAnt);
@@ -362,7 +358,8 @@ public class LineaDAO {
             ps.executeUpdate();
 
         } catch (Exception e) {
-            System.out.println("Error historial upsert: " + e);
+
+            System.out.println("Error historial: " + e);
         }
     }
 
@@ -381,6 +378,50 @@ public class LineaDAO {
         }
 
         return 0;
+    }
+
+    public DefaultTableModel mostrarDatosOrdenadosPorNumero() {
+
+        String[] columnas = {
+            "Numero", "Estado", "Fecha_Ultimo_Estado", "Municipio", "Cliente", "Servicio"
+        };
+
+        DefaultTableModel modelo = new DefaultTableModel(null, columnas);
+
+        String sql
+                = "SELECT "
+                + "l.numero, "
+                + "COALESCE(e.nombre, 'Sin Estado') AS estado, "
+                + "l.fechas_ultimo_estado, "
+                + "COALESCE(m.nombre, 'SIN MUNICIPIO') AS municipio, "
+                + "COALESCE(c.nombre, 'SIN CLIENTE') AS cliente, "
+                + "COALESCE(s.nombre, 'Sin Servicio') AS servicio "
+                + "FROM lineas l "
+                + "LEFT JOIN estados e ON l.estado_id = e.id "
+                + "LEFT JOIN municipios m ON l.municipio_id = m.id "
+                + "LEFT JOIN clientes c ON l.cliente_id = c.id "
+                + "LEFT JOIN servicios s ON l.servicio_id = s.id "
+                + "ORDER BY CAST(l.numero AS UNSIGNED) ASC";
+
+        try (Connection con = Conexion.conectar(); Statement st = con.createStatement(); ResultSet rs = st.executeQuery(sql)) {
+
+            while (rs.next()) {
+
+                modelo.addRow(new Object[]{
+                    rs.getString("numero"),
+                    rs.getString("estado"),
+                    rs.getString("fechas_ultimo_estado"),
+                    rs.getString("municipio"),
+                    rs.getString("cliente"),
+                    rs.getString("servicio")
+                });
+            }
+
+        } catch (Exception e) {
+            System.out.println("Error ordenar: " + e);
+        }
+
+        return modelo;
     }
 
     public int obtenerIdPublic(Connection con, String tabla, String nombre) throws SQLException {

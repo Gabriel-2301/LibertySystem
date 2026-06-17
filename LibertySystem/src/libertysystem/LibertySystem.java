@@ -17,7 +17,11 @@ public class LibertySystem {
     /**
      * @param args the command line arguments
      */
+    
+    public static final String VERSION_LOCAL = "1.0";
+    
     public static void main(String[] args) {
+        
         TemaManager.oscuro = ConfigTema.cargarTemaOscuro();
         FrmConsulta frm = new FrmConsulta();
         frm.setVisible(true);
