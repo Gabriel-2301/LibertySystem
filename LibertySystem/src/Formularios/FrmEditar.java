@@ -499,7 +499,10 @@ public class FrmEditar extends javax.swing.JFrame {
             Connection con = Conexion.conectar();
             LineaDAO dao = new LineaDAO();
 
-            String sql = "UPDATE lineas SET " + "numero=?, estado_id=?, fechas_ultimo_estado=NOW(), " + "municipio_id=?, cliente_id=?, servicio_id=? " + "WHERE numero=?";
+            String sql = "UPDATE lineas SET "
+                    + "numero=?, estado_id=?, fechas_ultimo_estado=NOW(), "
+                    + "municipio_id=?, cliente_id=?, servicio_id=? "
+                    + "WHERE numero=?";
 
             PreparedStatement ps = con.prepareStatement(sql);
 
@@ -513,7 +516,7 @@ public class FrmEditar extends javax.swing.JFrame {
 
                 String numeroOriginal = numerosOriginales.get(i);
 
-                // ?VALORES ANTERIORES
+                // ANTERIORES
                 String estadoAnt = estadoOriginal.get(i);
                 String municipioAnt = municipioOriginal.get(i);
                 String clienteAnt = clienteOriginal.get(i);
@@ -533,7 +536,17 @@ public class FrmEditar extends javax.swing.JFrame {
                     servicioId = dao.obtenerIdPublic(con, "servicios", "Sin Servicio");
                 }
 
-                // 1.GUARDAR HISTORIAL
+                // 1. UPDATE
+                ps.setString(1, numeroNuevo);
+                ps.setInt(2, estadoId);
+                ps.setInt(3, municipioId);
+                ps.setInt(4, clienteId);
+                ps.setInt(5, servicioId);
+                ps.setString(6, numeroOriginal);
+
+                ps.addBatch();
+
+                // 2. HISTORIAL (SOLO UNA VEZ POR FILA)
                 dao.registrarHistorialCompleto(
                         numeroOriginal,
                         estadoAnt,
@@ -545,47 +558,9 @@ public class FrmEditar extends javax.swing.JFrame {
                         servicioAnt,
                         servicioNew
                 );
-
-                // 2.UPDATE
-                ps.setString(1, numeroNuevo);
-                ps.setInt(2, estadoId);
-                ps.setInt(3, municipioId);
-                ps.setInt(4, clienteId);
-                ps.setInt(5, servicioId);
-                ps.setString(6, numeroOriginal);
-
-                ps.addBatch();
             }
 
             ps.executeBatch();
-            for (int i = 0; i < modelo.getRowCount(); i++) {
-
-                String numero = norm(modelo.getValueAt(i, 0));
-
-                String estadoAnt = estadoOriginal.get(i);
-                String estadoNew = norm(modelo.getValueAt(i, 1));
-
-                String municipioAnt = municipioOriginal.get(i);
-                String municipioNew = norm(modelo.getValueAt(i, 3));
-
-                String clienteAnt = clienteOriginal.get(i);
-                String clienteNew = norm(modelo.getValueAt(i, 4));
-
-                String servicioAnt = servicioOriginal.get(i);
-                String servicioNew = norm(modelo.getValueAt(i, 5));
-
-                dao.registrarHistorialCompleto(
-                        numero,
-                        estadoAnt,
-                        estadoNew,
-                        municipioAnt,
-                        municipioNew,
-                        clienteAnt,
-                        clienteNew,
-                        servicioAnt,
-                        servicioNew
-                );
-            }
             ps.close();
             con.close();
 

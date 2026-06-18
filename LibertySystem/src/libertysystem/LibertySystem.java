@@ -1,27 +1,23 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Main.java to edit this template
- */
 package libertysystem;
 
 import Formularios.FrmConsulta;
 import utilidades.ConfigTema;
 import utilidades.TemaManager;
+import utilidades.VersionLocal;
 
-/**
- *
- * @author gabri
- */
 public class LibertySystem {
 
-    /**
-     * @param args the command line arguments
-     */
-    
-    public static final String VERSION_LOCAL = "1.0";
-    
+    public static final String VERSION_LOCAL = "1.2";
+
     public static void main(String[] args) {
-        
+
+        //SI NO EXISTE version.dat, se crea con la versión instalada
+        String localVersion = VersionLocal.obtenerVersionLocal();
+
+        if (localVersion == null || localVersion.equals("0.0")) {
+            VersionLocal.guardarVersionLocal(VERSION_LOCAL);
+        }
+
         TemaManager.oscuro = ConfigTema.cargarTemaOscuro();
         FrmConsulta frm = new FrmConsulta();
         frm.setVisible(true);

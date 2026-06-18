@@ -139,11 +139,11 @@
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                      <Component id="BtnOrdenar" alignment="1" pref="0" max="32767" attributes="0"/>
                       <Group type="103" groupAlignment="3" attributes="0">
                           <Component id="jLabel6" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="jLabelResultadoFiltrado" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="jLabelTotalDatos" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="BtnOrdenar" alignment="1" pref="0" max="32767" attributes="0"/>
                       </Group>
                       <Component id="jProgressBar1" max="32767" attributes="0"/>
                   </Group>

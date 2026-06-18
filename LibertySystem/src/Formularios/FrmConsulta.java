@@ -54,6 +54,9 @@ import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
+import java.io.*;
+import utilidades.Downloader;
+import utilidades.VersionLocal;
 
 /**
  *
@@ -106,7 +109,7 @@ public class FrmConsulta extends javax.swing.JFrame {
             jLabel4.setIcon(TemaManager.invertirIcono(getClass(), "/IMG/Iconointerrogacion.png"));
 
             jLabel6.setIcon(TemaManager.invertirIcono(getClass(), "/IMG/Iconodatos.png"));
-            
+
             BtnOrdenar.setIcon(TemaManager.invertirIcono(getClass(), "/IMG/Iconoordenar.png"));
 
         } else {
@@ -128,7 +131,7 @@ public class FrmConsulta extends javax.swing.JFrame {
             jLabel4.setIcon(new ImageIcon(getClass().getResource("/IMG/Iconointerrogacion.png")));
 
             jLabel6.setIcon(new ImageIcon(getClass().getResource("/IMG/Iconodatos.png")));
-            
+
             BtnOrdenar.setIcon(new ImageIcon(getClass().getResource("/IMG/Iconoordenar.png")));
         }
 
@@ -547,75 +550,59 @@ public class FrmConsulta extends javax.swing.JFrame {
 
                 String versionServer = VersionDAO.obtenerVersion();
                 String url = VersionDAO.obtenerURL();
-
-                System.out.println("Version servidor: " + versionServer);
-                System.out.println("URL: " + url);
+                String versionLocal = VersionLocal.obtenerVersionLocal();
 
                 if (versionServer == null || versionServer.isEmpty()) {
-
                     JOptionPane.showMessageDialog(null,
                             "No se pudo obtener la versión del servidor");
-
                     return;
                 }
 
-                if (!libertysystem.LibertySystem.VERSION_LOCAL.equals(versionServer)) {
-
-                    int opcion = JOptionPane.showConfirmDialog(
-                            null,
-                            "Hay una nueva versión: " + versionServer + "\n¿Deseas actualizar?",
-                            "Actualización disponible",
-                            JOptionPane.YES_NO_OPTION
-                    );
-
-                    if (opcion == JOptionPane.YES_OPTION) {
-
-                        JOptionPane.showMessageDialog(null,
-                                "Descargando actualización...");
-
-                        descargar(url, "update.exe");
-
-                        JOptionPane.showMessageDialog(null,
-                                "Instalando actualización...");
-
-                        ProcessBuilder pb = new ProcessBuilder("cmd", "/c", "update.exe");
-                        pb.start();
-
-                        System.exit(0);
-                    }
-
-                } else {
-
+                // SI YA ESTÁ ACTUALIZADO
+                if (versionServer.equals(versionLocal)) {
                     JOptionPane.showMessageDialog(null,
                             "No hay actualizaciones disponibles");
+                    return;
+                }
+
+                int opcion = JOptionPane.showConfirmDialog(
+                        null,
+                        "Nueva versión: " + versionServer
+                        + "\n¿Deseas actualizar?",
+                        "Actualización disponible",
+                        JOptionPane.YES_NO_OPTION
+                );
+
+                if (opcion == JOptionPane.YES_OPTION) {
+
+                    // DESCARGAR INSTALADOR
+                    String rutaInstalador = System.getProperty("user.home")
+                            + "\\Downloads\\LibertySystemSetup.exe";
+
+                    Downloader.descargar(url, rutaInstalador);
+
+                    JOptionPane.showMessageDialog(null,
+                            "Se descargó la actualización.\nSe abrirá el instalador.");
+
+                    // EJECUTAR INSTALADOR
+                    ProcessBuilder pb = new ProcessBuilder(
+                            "cmd", "/c", "start", "", rutaInstalador
+                    );
+                    pb.start();
+
+                    // IMPORTANTE: actualizar versión LOCAL ANTES DE CERRAR
+                    VersionLocal.guardarVersionLocal(versionServer);
+
+                    System.exit(0);
                 }
 
             } catch (Exception e) {
-
                 e.printStackTrace();
-
                 JOptionPane.showMessageDialog(null,
                         "Error: " + e.getMessage());
             }
 
         }).start();
-    }
-
-    public void descargar(String urlStr, String fileName) throws Exception {
-
-        URL url = URI.create(urlStr).toURL();
-        InputStream in = url.openStream();
-        FileOutputStream fos = new FileOutputStream(fileName);
-
-        byte[] buffer = new byte[1024];
-        int len;
-
-        while ((len = in.read(buffer)) != -1) {
-            fos.write(buffer, 0, len);
-        }
-
-        fos.close();
-        in.close();
     }
 
     private void configurarAtajosTeclado() {
@@ -1121,11 +1108,11 @@ public class FrmConsulta extends javax.swing.JFrame {
                         .addComponent(jLabel3)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(BtnOrdenar, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
                     .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(jLabel6)
                         .addComponent(jLabelResultadoFiltrado)
-                        .addComponent(jLabelTotalDatos)
-                        .addComponent(BtnOrdenar, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
+                        .addComponent(jLabelTotalDatos))
                     .addComponent(jProgressBar1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 648, Short.MAX_VALUE)
@@ -1642,10 +1629,10 @@ public class FrmConsulta extends javax.swing.JFrame {
     }//GEN-LAST:event_BtnActualizacionActionPerformed
 
     private void BtnOrdenarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnOrdenarActionPerformed
-        
+
         LineaDAO dao = new LineaDAO();
         jTableDatos.setModel(dao.mostrarDatosOrdenadosPorNumero());
-        
+
     }//GEN-LAST:event_BtnOrdenarActionPerformed
 
     /**
