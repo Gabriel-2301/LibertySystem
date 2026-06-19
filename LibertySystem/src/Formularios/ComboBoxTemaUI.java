@@ -2,8 +2,6 @@ package Formularios;
 
 import javax.swing.*;
 import javax.swing.plaf.basic.BasicComboBoxUI;
-import java.awt.*;
-import utilidades.TemaManager;
 
 public class ComboBoxTemaUI extends BasicComboBoxUI {
 

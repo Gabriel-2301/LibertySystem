@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
- */
 package Formularios;
 
 import dao.LineaDAO;
@@ -23,9 +19,6 @@ import javax.swing.JComboBox;
  */
 public class FrmAgregado extends javax.swing.JFrame {
 
-    /**
-     * Creates new form FrmAgregado
-     */
     public void aplicarTemaOscuro() {
         aplicarColoresPersonalizados();
     }
@@ -57,29 +50,6 @@ public class FrmAgregado extends javax.swing.JFrame {
         setLocationRelativeTo(null);
     }
 
-//        private void initPost() {
-//        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-//        sdf.setTimeZone(java.util.TimeZone.getTimeZone("America/Tegucigalpa"));
-//        TxtFecha.setText(sdf.format(new Date()));
-//
-//        iniciarRelojEnTiempoReal();
-//
-//        setTitle("Liberty Networks | Panel de Agregado");
-//        setResizable(false);
-//
-//        LineaDAO dao = new LineaDAO();
-//        dao.cargarMunicipios(CmbMunicipio);
-//
-//        setLocationRelativeTo(null);
-//    }
-    private void aplicarEstiloCombo(JComboBox combo) {
-
-        combo.setOpaque(true);
-        combo.setBackground(Color.WHITE);
-        combo.setForeground(Color.BLACK);
-        combo.setFocusable(false);
-    }
-
     private void ajustarFlechaCombo(JComboBox combo) {
 
         Icon flecha = new ImageIcon(new ImageIcon(getClass().getResource("/IMG/Iconoflecha.png")).getImage().getScaledInstance(12, 12, Image.SCALE_SMOOTH));
@@ -104,52 +74,34 @@ public class FrmAgregado extends javax.swing.JFrame {
             }
         });
     }
-    
+
     private void aplicarColoresPersonalizados() {
 
         if (TemaManager.oscuro) {
-
             BtnGuardar.setIcon(TemaManager.invertirIcono(getClass(), "/IMG/Iconoguardar.png"));
-
             BtnLimpiar.setIcon(TemaManager.invertirIcono(getClass(), "/IMG/Iconolimpiar.png"));
-
             jLabel3.setIcon(TemaManager.invertirIcono(getClass(), "/IMG/Iconocliente.png"));
-
             jLabel2.setIcon(TemaManager.invertirIcono(getClass(), "/IMG/Iconohashtag.png"));
-
             jLabel7.setIcon(TemaManager.invertirIcono(getClass(), "/IMG/Iconoestado.png"));
-
             jLabel4.setIcon(TemaManager.invertirIcono(getClass(), "/IMG/Iconofecha.png"));
-
             jLabel5.setIcon(TemaManager.invertirIcono(getClass(), "/IMG/Iconomunicipio.png"));
-
             jLabel6.setIcon(TemaManager.invertirIcono(getClass(), "/IMG/Iconoservicio.png"));
 
         } else {
 
             CmbEstado.setBackground(Color.WHITE);
             CmbEstado.setForeground(Color.BLACK);
-
             CmbMunicipio.setBackground(Color.WHITE);
             CmbMunicipio.setForeground(Color.BLACK);
-
             CmbServicio.setBackground(Color.WHITE);
             CmbServicio.setForeground(Color.BLACK);
-
             BtnGuardar.setIcon(new ImageIcon(getClass().getResource("/IMG/Iconoguardar.png")));
-
             BtnLimpiar.setIcon(new ImageIcon(getClass().getResource("/IMG/Iconolimpiar.png")));
-
             jLabel3.setIcon(TemaManager.invertirIcono(getClass(), "/IMG/Iconocliente.png"));
-
             jLabel2.setIcon(TemaManager.invertirIcono(getClass(), "/IMG/Iconohashtag.png"));
-
             jLabel7.setIcon(TemaManager.invertirIcono(getClass(), "/IMG/Iconoestado.png"));
-
             jLabel4.setIcon(TemaManager.invertirIcono(getClass(), "/IMG/Iconofecha.png"));
-
             jLabel5.setIcon(TemaManager.invertirIcono(getClass(), "/IMG/Iconomunicipio.png"));
-
             jLabel6.setIcon(TemaManager.invertirIcono(getClass(), "/IMG/Iconoservicio.png"));
         }
         repaint();
@@ -159,19 +111,12 @@ public class FrmAgregado extends javax.swing.JFrame {
         if (TemaManager.oscuro) {
 
             BtnGuardar.setIcon(TemaManager.invertirIcono(getClass(), "/IMG/Iconoguardar.png"));
-
             BtnLimpiar.setIcon(TemaManager.invertirIcono(getClass(), "/IMG/Iconolimpiar.png"));
-
             jLabel3.setIcon(TemaManager.invertirIcono(getClass(), "/IMG/Iconocliente.png"));
-
             jLabel2.setIcon(TemaManager.invertirIcono(getClass(), "/IMG/Iconohashtag.png"));
-
             jLabel7.setIcon(TemaManager.invertirIcono(getClass(), "/IMG/Iconoestado.png"));
-
             jLabel4.setIcon(TemaManager.invertirIcono(getClass(), "/IMG/Iconofecha.png"));
-
             jLabel5.setIcon(TemaManager.invertirIcono(getClass(), "/IMG/Iconomunicipio.png"));
-
             jLabel6.setIcon(TemaManager.invertirIcono(getClass(), "/IMG/Iconoservicio.png"));
 
             Color bgCombo = TemaManager.oscuro ? new Color(55, 55, 55) : Color.WHITE;
@@ -180,7 +125,6 @@ public class FrmAgregado extends javax.swing.JFrame {
             CmbServicio.setBackground(bgCombo);
             CmbEstado.setBackground(bgCombo);
             CmbMunicipio.setBackground(bgCombo);
-
             CmbServicio.setForeground(fgCombo);
             CmbEstado.setForeground(fgCombo);
             CmbMunicipio.setForeground(fgCombo);
@@ -189,7 +133,6 @@ public class FrmAgregado extends javax.swing.JFrame {
 
             BtnGuardar.setIcon(new ImageIcon(getClass().getResource("/IMG/Iconoguardar.png")));
             BtnLimpiar.setIcon(new ImageIcon(getClass().getResource("/IMG/Iconolimpiar.png")));
-
             jLabel3.setIcon(new ImageIcon(getClass().getResource("/IMG/Iconocliente.png")));
             jLabel2.setIcon(new ImageIcon(getClass().getResource("/IMG/Iconohashtag.png")));
             jLabel7.setIcon(new ImageIcon(getClass().getResource("/IMG/Iconoestado.png")));
@@ -231,44 +174,10 @@ public class FrmAgregado extends javax.swing.JFrame {
                 b.setBackground(new Color(55, 55, 55));
                 b.setForeground(Color.WHITE);
             }
-
-//    } else {
-//        jPanel1.setBackground(new java.awt.Color(35,35,35));
-//        jPanel2.setBackground(new java.awt.Color(45,45,45));
-//        jLabel1.setForeground(Color.WHITE);
-//        jLabel2.setForeground(Color.WHITE);
-//        jLabel3.setForeground(Color.WHITE);
-//        jLabel4.setForeground(Color.WHITE);
-//        jLabel5.setForeground(Color.WHITE);
-//        jLabel6.setForeground(Color.WHITE);
-//        jLabel7.setForeground(Color.WHITE);
-//        TxtCliente.setBackground(new Color(55,55,55));
-//        TxtCliente.setForeground(Color.WHITE);
-//        TxtCliente.setCaretColor(Color.WHITE);
-//        TxtNumero.setBackground(new Color(55,55,55));
-//        TxtNumero.setForeground(Color.WHITE);
-//        TxtNumero.setCaretColor(Color.WHITE);
-//        TxtFecha.setBackground(new Color(55,55,55));
-//        TxtFecha.setForeground(Color.WHITE);
-//        TxtFecha.setCaretColor(Color.WHITE);
-//        CmbEstado.setBackground(new Color(55,55,55));
-//        CmbEstado.setForeground(Color.WHITE);
-//        CmbMunicipio.setBackground(new Color(55,55,55));
-//        CmbMunicipio.setForeground(Color.WHITE);
-//        CmbServicio.setBackground(new Color(55,55,55));
-//        CmbServicio.setForeground(Color.WHITE);
-//        JButton[] botones = {
-//            BtnGuardar,
-//            BtnLimpiar
-//        };
-//        for (JButton b : botones) {
-//            b.setBackground(new Color(55,55,55));
-//            b.setForeground(Color.WHITE);
-//        }
         }
         repaint();
     }
-    
+
     public FrmAgregado(FrmConsulta frmConsulta) {
         this();
         this.frmConsulta = frmConsulta;
@@ -292,7 +201,6 @@ public class FrmAgregado extends javax.swing.JFrame {
         this.setLocationRelativeTo(null);
         SetImageLabel(jLabel9, "/IMG/Logoliberty.png");
         setIconImage(new ImageIcon(getClass().getResource("/IMG/Iconoliberty.png")).getImage());
-
     }
 
     private void iniciarRelojEnTiempoReal() {
@@ -309,13 +217,11 @@ public class FrmAgregado extends javax.swing.JFrame {
     }
 
     private void restaurarPlaceholders() {
-
         setPlaceholder(TxtNumero, " Agregar Numero de Linea");
         setPlaceholder(TxtCliente, " Agregar Nombre de Cliente");
     }
 
     private void setPlaceholder(javax.swing.JTextField txt, String placeholder) {
-
         txt.setText(placeholder);
         txt.setForeground(java.awt.Color.GRAY);
 
@@ -339,7 +245,6 @@ public class FrmAgregado extends javax.swing.JFrame {
                 }
             }
         });
-
     }
 
     /**
@@ -626,9 +531,17 @@ public class FrmAgregado extends javax.swing.JFrame {
 
     private void BtnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnGuardarActionPerformed
 
-        // VALIDAR MUNICIPIO
+        // VALIDAR MUNICIPIO, ESTADO, SERVICIO
         if (CmbMunicipio.getSelectedIndex() == 0) {
-            JOptionPane.showMessageDialog(this, "Complete los campos");
+            JOptionPane.showMessageDialog(this, "Porfavor Seleccione un Municipio");
+            return;
+        }
+        if (CmbEstado.getSelectedIndex() == 0) {
+            JOptionPane.showMessageDialog(this, "Porfavor Seleccione un Estado");
+            return;
+        }
+        if (CmbServicio.getSelectedIndex() == 0) {
+            JOptionPane.showMessageDialog(this, "Porfavor Seleccione un Servicio");
             return;
         }
 
@@ -642,12 +555,11 @@ public class FrmAgregado extends javax.swing.JFrame {
 
         // VALIDAR CAMPOS
         if (numero.isEmpty() || cliente.isEmpty()) {
-
             JOptionPane.showMessageDialog(this, "Complete todos los campos", "Advertencia", JOptionPane.WARNING_MESSAGE);
             return;
         }
 
-        // FECHA AUTOMÁTICA (IMPORTANTE)
+        // FECHA AUTOMÁTICA
         String fecha = TxtFecha.getText().trim();
 
         // INSERTAR
@@ -657,8 +569,7 @@ public class FrmAgregado extends javax.swing.JFrame {
         // RESPUESTAS
         if (resultado == 1) {
 
-            dao.registrarHistorialCompleto(numero, "NUEVO", estado, "NUEVO", municipio, "NUEVO", cliente, "NUEVO", servicio
-            );
+            dao.registrarHistorialCompleto(numero, "NUEVO", estado, "NUEVO", municipio, "NUEVO", cliente, "NUEVO", servicio);
 
             JOptionPane.showMessageDialog(this, "Registro agregado correctamente");
 
@@ -678,15 +589,13 @@ public class FrmAgregado extends javax.swing.JFrame {
             TxtNumero.requestFocus();
 
         } else if (resultado == 0) {
-
-            JOptionPane.showMessageDialog(this, "Ya existe una línea con ese número", "Duplicado", JOptionPane.WARNING_MESSAGE
-            );
+            JOptionPane.showMessageDialog(this, "Ya existe una línea con ese número", "Duplicado", JOptionPane.WARNING_MESSAGE);
 
         } else {
 
             JOptionPane.showMessageDialog(this, "Error al insertar el registro", "Error", JOptionPane.ERROR_MESSAGE);
         }
-        
+
     }//GEN-LAST:event_BtnGuardarActionPerformed
 
     private void TxtNumeroKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TxtNumeroKeyTyped
@@ -696,8 +605,6 @@ public class FrmAgregado extends javax.swing.JFrame {
     }//GEN-LAST:event_TxtNumeroKeyTyped
 
     private void TxtFechaKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TxtFechaKeyTyped
-
-        Validaciones.soloFormatoFechaHora(evt);
 
     }//GEN-LAST:event_TxtFechaKeyTyped
 
@@ -745,8 +652,6 @@ public class FrmAgregado extends javax.swing.JFrame {
         });
     }
 
-    
-    
     private void SetImageLabel(javax.swing.JLabel labelName, String resourcePath) {
 
         java.net.URL imageURL = getClass().getResource(resourcePath);
@@ -760,7 +665,6 @@ public class FrmAgregado extends javax.swing.JFrame {
             labelName.setIcon(icon);
 
         } else {
-
             System.out.println("No se encontró la imagen: " + resourcePath);
         }
     }
@@ -772,8 +676,7 @@ public class FrmAgregado extends javax.swing.JFrame {
     private Icon iconInvertido(String path) {
         return TemaManager.invertirIcono(getClass(), path);
     }
-    
-    
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton BtnGuardar;

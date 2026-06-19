@@ -9,6 +9,4 @@ public class Linea {
     private String cliente;
     private String servicio;
     private String fecha;
-
-    // getters y setters
 }

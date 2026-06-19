@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
- */
 package Formularios;
 
 import com.itextpdf.text.BaseColor;
@@ -36,7 +32,6 @@ import javax.swing.JRootPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.KeyStroke;
-import javax.swing.SwingUtilities;
 import javax.swing.SwingWorker;
 import javax.swing.table.DefaultTableModel;
 import utilidades.Validaciones;
@@ -48,13 +43,9 @@ import utilidades.TemaManager;
 import java.awt.Desktop;
 import java.io.File;
 import java.io.InputStream;
-import java.net.URI;
-import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
 import javax.swing.JComboBox;
-import javax.swing.JFrame;
-import java.io.*;
 import utilidades.Downloader;
 import utilidades.VersionLocal;
 
@@ -64,9 +55,6 @@ import utilidades.VersionLocal;
  */
 public class FrmConsulta extends javax.swing.JFrame {
 
-    /**
-     * Creates new form FrmConsulta
-     */
     private javax.swing.Timer filtroTimer;
 
     public void cargarTabla() {
@@ -93,53 +81,35 @@ public class FrmConsulta extends javax.swing.JFrame {
         if (TemaManager.oscuro) {
 
             BtnEliminar.setIcon(TemaManager.invertirIcono(getClass(), "/IMG/Iconoeliminar.png"));
-
             BtnLimpiar.setIcon(TemaManager.invertirIcono(getClass(), "/IMG/Iconolimpiar.png"));
-
             BtnFiltrar.setIcon(TemaManager.invertirIcono(getClass(), "/IMG/Iconofiltrar.png"));
-
             BtnImprimir.setIcon(TemaManager.invertirIcono(getClass(), "/IMG/Iconoimprimir.png"));
-
             BtnAgregar.setIcon(TemaManager.invertirIcono(getClass(), "/IMG/Iconoagregar.png"));
-
             BtnEditar.setIcon(TemaManager.invertirIcono(getClass(), "/IMG/Iconoeditar.png"));
-
             BtnActualizacion.setIcon(TemaManager.invertirIcono(getClass(), "/IMG/Iconoactualizar.png"));
-
             jLabel4.setIcon(TemaManager.invertirIcono(getClass(), "/IMG/Iconointerrogacion.png"));
-
             jLabel6.setIcon(TemaManager.invertirIcono(getClass(), "/IMG/Iconodatos.png"));
-
             BtnOrdenar.setIcon(TemaManager.invertirIcono(getClass(), "/IMG/Iconoordenar.png"));
 
         } else {
 
             BtnEliminar.setIcon(new ImageIcon(getClass().getResource("/IMG/Iconoeliminar.png")));
-
             BtnLimpiar.setIcon(new ImageIcon(getClass().getResource("/IMG/Iconolimpiar.png")));
-
             BtnFiltrar.setIcon(new ImageIcon(getClass().getResource("/IMG/Iconofiltrar.png")));
-
             BtnImprimir.setIcon(new ImageIcon(getClass().getResource("/IMG/Iconoimprimir.png")));
-
             BtnAgregar.setIcon(new ImageIcon(getClass().getResource("/IMG/Iconoagregar.png")));
-
             BtnEditar.setIcon(new ImageIcon(getClass().getResource("/IMG/Iconoeditar.png")));
-
             BtnActualizacion.setIcon(new ImageIcon(getClass().getResource("/IMG/Iconoactualizar.png")));
-
             jLabel4.setIcon(new ImageIcon(getClass().getResource("/IMG/Iconointerrogacion.png")));
-
             jLabel6.setIcon(new ImageIcon(getClass().getResource("/IMG/Iconodatos.png")));
-
             BtnOrdenar.setIcon(new ImageIcon(getClass().getResource("/IMG/Iconoordenar.png")));
         }
 
         if (TemaManager.oscuro) {
             //FONDO GENERAL
             jPanel1.setBackground(new Color(35, 35, 35));
-            //PANEL SUPERIOR BLANCO
 
+            //PANEL SUPERIOR BLANCO
             jPanel2.setBackground(new Color(45, 45, 45));
             jLabel1.setForeground(Color.WHITE);
 
@@ -155,7 +125,6 @@ public class FrmConsulta extends javax.swing.JFrame {
             jTableDatos.setBackground(new Color(45, 45, 45));
             jTableDatos.setForeground(Color.WHITE);
             jTableDatos.setGridColor(new Color(70, 70, 70));
-            //jTableDatos.setSelectionBackground(naranja);
             jTableDatos.setSelectionForeground(Color.BLACK);
             jTableDatos.getTableHeader().setBackground(new Color(60, 60, 60));
             jTableDatos.getTableHeader().setForeground(Color.WHITE);
@@ -192,9 +161,7 @@ public class FrmConsulta extends javax.swing.JFrame {
             };
 
             for (JButton b : botones) {
-
                 b.setBackground(new Color(55, 55, 55));
-
                 b.setForeground(Color.WHITE);
             }
 
@@ -223,7 +190,6 @@ public class FrmConsulta extends javax.swing.JFrame {
             jTableDatos.setBackground(Color.WHITE);
             jTableDatos.setForeground(Color.BLACK);
             jTableDatos.setGridColor(Color.LIGHT_GRAY);
-            //jTableDatos.setSelectionBackground(naranja);
             jTableDatos.setSelectionForeground(Color.BLACK);
             jTableDatos.getTableHeader().setBackground(Color.WHITE);
             jTableDatos.getTableHeader().setForeground(Color.BLACK);
@@ -244,10 +210,8 @@ public class FrmConsulta extends javax.swing.JFrame {
 
             CmbEstado.setBackground(grisSistema);
             CmbEstado.setForeground(Color.BLACK);
-
             CmbMunicipio.setBackground(grisSistema);
             CmbMunicipio.setForeground(Color.BLACK);
-
             CmbServicio.setBackground(grisSistema);
             CmbServicio.setForeground(Color.BLACK);
 
@@ -361,7 +325,6 @@ public class FrmConsulta extends javax.swing.JFrame {
 
         jTableDatos.setSelectionMode(javax.swing.ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
         jTableDatos.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
-        //jTableDatos.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_SUBSEQUENT_COLUMNS);
         jTableDatos.getTableHeader().setReorderingAllowed(false);
         jTableDatos.setFillsViewportHeight(true);
 
@@ -375,7 +338,6 @@ public class FrmConsulta extends javax.swing.JFrame {
         this.setFocusable(true);
         this.requestFocusInWindow();
 
-        //setResizable(false);
         setResizable(true);
         setSize(1400, 800);
         setMinimumSize(new java.awt.Dimension(1200, 700));
@@ -383,8 +345,6 @@ public class FrmConsulta extends javax.swing.JFrame {
 
         setPlaceholder(TxtFieldBuscador, " Buscar por Numero o Cliente");
         setPlaceholder(TxtCantidad, " #Cantidad Filtrado");
-
-        validarFiltros();
 
         setLocationRelativeTo(null);
         SetImageLabel(jLabel2, "/IMG/Logoliberty.png");
@@ -397,8 +357,6 @@ public class FrmConsulta extends javax.swing.JFrame {
         getContentPane().add(jPanel1, java.awt.BorderLayout.CENTER);
 
         aplicarColoresPersonalizados();
-        //TemaManager.aplicarTema(this);
-
     }
 
     void actualizarLabelResultado() {
@@ -407,7 +365,7 @@ public class FrmConsulta extends javax.swing.JFrame {
 
         // Si no hay nada o tabla vacía
         if (total <= 0) {
-            jLabelResultadoFiltrado.setText("Sin resultados");
+            jLabelResultadoFiltrado.setText("|| Sin resultados");
         } else {
             jLabelResultadoFiltrado.setText("||  Resultados Filtrados/Encontrados: " + total);
         }
@@ -481,7 +439,6 @@ public class FrmConsulta extends javax.swing.JFrame {
     }
 
     private void configurarTabla() {
-        //jTableDatos.setAutoResizeMode(jTableDatos.AUTO_RESIZE_OFF);
         jTableDatos.getColumnModel().getColumn(0).setPreferredWidth(130);
         jTableDatos.getColumnModel().getColumn(0).setResizable(false);
         jTableDatos.getColumnModel().getColumn(1).setPreferredWidth(130);
@@ -517,8 +474,7 @@ public class FrmConsulta extends javax.swing.JFrame {
 
         boolean cantidadOk = !cantidad.isEmpty() && !cantidad.equals("#Cantidad Filtrado");
 
-        BtnFiltrar.setEnabled(estadoOk || servicioOk || municipioOk || cantidadOk
-        );
+        BtnFiltrar.setEnabled(estadoOk || servicioOk || municipioOk || cantidadOk);
     }
 
     private String limpiarPDF(Object valor) {
@@ -553,40 +509,29 @@ public class FrmConsulta extends javax.swing.JFrame {
                 String versionLocal = VersionLocal.obtenerVersionLocal();
 
                 if (versionServer == null || versionServer.isEmpty()) {
-                    JOptionPane.showMessageDialog(null,
-                            "No se pudo obtener la versión del servidor");
+                    JOptionPane.showMessageDialog(null, "No se pudo obtener la versión del servidor");
                     return;
                 }
 
                 // SI YA ESTÁ ACTUALIZADO
                 if (versionServer.equals(versionLocal)) {
-                    JOptionPane.showMessageDialog(null,
-                            "No hay actualizaciones disponibles");
+                    JOptionPane.showMessageDialog(null, "No hay actualizaciones disponibles");
                     return;
                 }
 
-                int opcion = JOptionPane.showConfirmDialog(
-                        null,
-                        "Nueva versión: " + versionServer
-                        + "\n¿Deseas actualizar?",
-                        "Actualización disponible",
-                        JOptionPane.YES_NO_OPTION
-                );
+                int opcion = JOptionPane.showConfirmDialog(null, "Nueva versión: " + versionServer + "\n¿Deseas actualizar?", "Actualización disponible", JOptionPane.YES_NO_OPTION);
 
                 if (opcion == JOptionPane.YES_OPTION) {
 
                     // DESCARGAR INSTALADOR
-                    String rutaInstalador = System.getProperty("user.home")
-                            + "\\Downloads\\LibertySystemSetup.exe";
+                    String rutaInstalador = System.getProperty("user.home") + "\\Downloads\\LibertySystemSetup.exe";
 
                     Downloader.descargar(url, rutaInstalador);
 
-                    JOptionPane.showMessageDialog(null,
-                            "Se descargó la actualización.\nSe abrirá el instalador.");
+                    JOptionPane.showMessageDialog(null, "Se descargó la actualización.\nSe abrirá el instalador.");
 
                     // EJECUTAR INSTALADOR
-                    ProcessBuilder pb = new ProcessBuilder(
-                            "cmd", "/c", "start", "", rutaInstalador
+                    ProcessBuilder pb = new ProcessBuilder("cmd", "/c", "start", "", rutaInstalador
                     );
                     pb.start();
 
@@ -683,7 +628,6 @@ public class FrmConsulta extends javax.swing.JFrame {
                 if (txt.getText().equals(placeholder)) {
                     txt.setText("");
                     if (TemaManager.oscuro) {
-
                         txt.setForeground(java.awt.Color.WHITE);
                         txt.setCaretColor(java.awt.Color.WHITE);
                     } else {
@@ -1149,43 +1093,39 @@ public class FrmConsulta extends javax.swing.JFrame {
 
         FrmHistorial frm = new FrmHistorial();
         frm.setVisible(true);
+
     }//GEN-LAST:event_LblVerHistorialMouseClicked
 
     private void LblManualdeUsuarioMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_LblManualdeUsuarioMouseClicked
 
         try {
 
-            InputStream input = getClass().getResourceAsStream(
-                    "/manual/Manual de Usuario - Liberty Networks Sistema de Consulta de Lineas.pdf");
+            InputStream input = getClass().getResourceAsStream("/manual/Manual de Usuario - Liberty Networks Sistema de Consulta de Lineas.pdf");
 
             if (input == null) {
-                JOptionPane.showMessageDialog(this,
-                        "No se encontró el manual.");
+                JOptionPane.showMessageDialog(this, "No se encontró el manual.");
                 return;
             }
 
-            File archivoTemporal
-                    = File.createTempFile("ManualUsuario", ".pdf");
+            File archivoTemporal = File.createTempFile("ManualUsuario", ".pdf");
 
             archivoTemporal.deleteOnExit();
 
-            Files.copy(
-                    input,
-                    archivoTemporal.toPath(),
-                    StandardCopyOption.REPLACE_EXISTING);
+            Files.copy(input, archivoTemporal.toPath(), StandardCopyOption.REPLACE_EXISTING);
 
             Desktop.getDesktop().open(archivoTemporal);
 
         } catch (Exception e) {
 
-            JOptionPane.showMessageDialog(this,
-                    "Error al abrir el manual:\n" + e.getMessage());
+            JOptionPane.showMessageDialog(this, "Error al abrir el manual:\n" + e.getMessage());
         }
+
     }//GEN-LAST:event_LblManualdeUsuarioMouseClicked
 
     private void CmbMunicipioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CmbMunicipioActionPerformed
 
         validarFiltros();
+
     }//GEN-LAST:event_CmbMunicipioActionPerformed
 
     private void CmbMunicipioItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_CmbMunicipioItemStateChanged
@@ -1193,6 +1133,7 @@ public class FrmConsulta extends javax.swing.JFrame {
     }//GEN-LAST:event_CmbMunicipioItemStateChanged
 
     private void BtnImprimirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnImprimirActionPerformed
+
         SwingWorker<Void, Integer> worker = new SwingWorker<>() {
             boolean cancelado = false;
 
@@ -1240,8 +1181,7 @@ public class FrmConsulta extends javax.swing.JFrame {
 
                 //LOGO
                 try {
-                    com.itextpdf.text.Image logo
-                            = com.itextpdf.text.Image.getInstance("src/IMG/Logoliberty.png");
+                    com.itextpdf.text.Image logo = com.itextpdf.text.Image.getInstance("src/IMG/Logoliberty.png");
 
                     logo.scaleToFit(100, 100);
                     logo.setAlignment(Element.ALIGN_CENTER);
@@ -1266,8 +1206,7 @@ public class FrmConsulta extends javax.swing.JFrame {
                 publish(45);
 
                 //FECHA
-                String fecha = new java.text.SimpleDateFormat("dd/MM/yyyy HH:mm:ss")
-                        .format(new java.util.Date());
+                String fecha = new java.text.SimpleDateFormat("dd/MM/yyyy HH:mm:ss").format(new java.util.Date());
 
                 Paragraph fechaTexto = new Paragraph("Generado: " + fecha);
                 fechaTexto.setAlignment(Element.ALIGN_RIGHT);
@@ -1309,9 +1248,7 @@ public class FrmConsulta extends javax.swing.JFrame {
                     for (int col = 0; col < jTableDatos.getColumnCount(); col++) {
 
                         Object valor = jTableDatos.getValueAt(fila, col);
-
                         String texto = limpiarPDF(valor);
-
                         PdfPCell cell = new PdfPCell(new Paragraph(texto, dataFont));
 
                         if (fila % 2 == 0) {
@@ -1325,17 +1262,11 @@ public class FrmConsulta extends javax.swing.JFrame {
                 }
 
                 documento.add(tabla);
-
                 publish(95);
-
                 Paragraph firma = new Paragraph("Generado automáticamente por Liberty Networks", new Font(Font.FontFamily.HELVETICA, 9, Font.ITALIC, BaseColor.GRAY));
-
                 firma.setAlignment(Element.ALIGN_CENTER);
-
                 documento.add(firma);
-
                 documento.close();
-
                 publish(100);
 
                 return null;
@@ -1359,8 +1290,7 @@ public class FrmConsulta extends javax.swing.JFrame {
                     return; //NO mostrar mensaje de éxito
                 }
 
-                JOptionPane.showMessageDialog(
-                        FrmConsulta.this, "PDF generado correctamente");
+                JOptionPane.showMessageDialog(FrmConsulta.this, "PDF generado correctamente");
 
                 new javax.swing.Timer(2000, e -> {
                     jProgressBar1.setVisible(false);
@@ -1370,6 +1300,7 @@ public class FrmConsulta extends javax.swing.JFrame {
             }
         };
         worker.execute();
+
     }//GEN-LAST:event_BtnImprimirActionPerformed
 
     private void CmbEstadoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CmbEstadoActionPerformed
@@ -1441,6 +1372,7 @@ public class FrmConsulta extends javax.swing.JFrame {
     private void TxtCantidadKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TxtCantidadKeyTyped
 
         Validaciones.soloNumeros8Digitos(TxtCantidad, evt);
+
     }//GEN-LAST:event_TxtCantidadKeyTyped
 
     private void TxtCantidadKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TxtCantidadKeyReleased
@@ -1562,6 +1494,7 @@ public class FrmConsulta extends javax.swing.JFrame {
 
         // Recargar tabla completa
         cargarTabla();
+        cargarTotalInicial();
 
         // Actualizar botón filtrar
         validarFiltros();
@@ -1584,19 +1517,15 @@ public class FrmConsulta extends javax.swing.JFrame {
         String texto = TxtFieldBuscador.getText().trim();
 
         if (texto.isEmpty() || texto.equals("Buscar por Numero o Cliente") || texto.equals(" Buscar por Numero o Cliente")) {
-
             cargarTabla();
-            //actualizarLabelResultado();
+            jLabelResultadoFiltrado.setText("");
             return;
         }
 
         LineaDAO dao = new LineaDAO();
-
         jTableDatos.setModel(dao.buscarNumeroOCliente(texto));
         jTableDatos.setDefaultEditor(Object.class, null);
-
         configurarTabla();
-
         actualizarLabelResultado();
 
     }//GEN-LAST:event_TxtFieldBuscadorKeyReleased
@@ -1683,14 +1612,7 @@ public class FrmConsulta extends javax.swing.JFrame {
 
         ImageIcon image = new ImageIcon(url);
 
-        Icon icon = new ImageIcon(
-                image.getImage().getScaledInstance(
-                        labelName.getWidth(),
-                        labelName.getHeight(),
-                        Image.SCALE_SMOOTH
-                )
-        );
-
+        Icon icon = new ImageIcon(image.getImage().getScaledInstance(labelName.getWidth(), labelName.getHeight(), Image.SCALE_SMOOTH));
         labelName.setIcon(icon);
     }
 

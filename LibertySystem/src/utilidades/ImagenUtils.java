@@ -8,7 +8,6 @@ import javax.imageio.ImageIO;
 public class ImagenUtils {
 
     public static Icon invertirIcono(Class<?> clazz, String path) {
-
         try {
             java.net.URL url = clazz.getResource(path);
 
@@ -17,19 +16,21 @@ public class ImagenUtils {
                 return new ImageIcon();
             }
 
-            BufferedImage img = ImageIO.read(url);
+            BufferedImage original = ImageIO.read(url);
+            BufferedImage img = new BufferedImage(original.getWidth(), original.getHeight(), BufferedImage.TYPE_INT_ARGB);
 
-            for (int y = 0; y < img.getHeight(); y++) {
-                for (int x = 0; x < img.getWidth(); x++) {
+            img.getGraphics().drawImage(original, 0, 0, null);
+
+            int width = img.getWidth();
+            int height = img.getHeight();
+
+            for (int y = 0; y < height; y++) {
+                for (int x = 0; x < width; x++) {
 
                     int rgba = img.getRGB(x, y);
+
                     Color c = new Color(rgba, true);
-
-                    int r = 255 - c.getRed();
-                    int g = 255 - c.getGreen();
-                    int b = 255 - c.getBlue();
-
-                    Color invertida = new Color(r, g, b, c.getAlpha());
+                    Color invertida = new Color(255 - c.getRed(), 255 - c.getGreen(), 255 - c.getBlue(), c.getAlpha());
 
                     img.setRGB(x, y, invertida.getRGB());
                 }
@@ -37,7 +38,7 @@ public class ImagenUtils {
             return new ImageIcon(img);
 
         } catch (Exception e) {
-            e.printStackTrace();
+            System.err.println("Error al invertir icono: " + e.getMessage());
             return new ImageIcon();
         }
     }

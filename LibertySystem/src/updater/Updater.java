@@ -5,14 +5,9 @@ import java.io.File;
 public class Updater {
 
     public static void main(String[] args) {
-
         try {
-
-            String rutaFlag = System.getProperty("user.home")
-                    + "\\Downloads\\restart.flag";
-
+            String rutaFlag = System.getProperty("user.home")+ "\\Downloads\\restart.flag";
             File flag = new File(rutaFlag);
-
             Thread.sleep(3000);
 
             if (!flag.exists()) {
@@ -20,10 +15,7 @@ public class Updater {
             }
 
             flag.delete();
-
-            String rutaApp = System.getProperty("user.home")
-                    + "\\AppData\\Local\\LibertySystem\\LibertySystem.exe";
-
+            String rutaApp = System.getProperty("user.home")+ "\\AppData\\Local\\LibertySystem\\LibertySystem.exe";
             File exe = new File(rutaApp);
 
             if (!exe.exists()) {
@@ -33,7 +25,6 @@ public class Updater {
 
             ProcessBuilder pb = new ProcessBuilder(rutaApp);
             pb.start();
-
             System.out.println("APP REABRIDA");
 
         } catch (Exception e) {

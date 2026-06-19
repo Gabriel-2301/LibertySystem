@@ -86,7 +86,7 @@ public class LineaDAO {
             ResultSet rs = ps.executeQuery();
 
             while (rs.next()) {
-
+                
                 modelo.addRow(new Object[]{
                     rs.getString("numero"),
                     rs.getString("estado"),
@@ -100,7 +100,6 @@ public class LineaDAO {
         } catch (Exception e) {
             System.out.println("Error buscar: " + e);
         }
-
         return modelo;
     }
 
@@ -179,7 +178,6 @@ public class LineaDAO {
     public void cargarMunicipios(javax.swing.JComboBox<String> combo) {
 
         try {
-
             if (combo == null) {
                 return;
             }
@@ -199,10 +197,8 @@ public class LineaDAO {
                     while (rs.next()) {
                         combo.addItem(rs.getString("nombre"));
                     }
-
                 }
             }
-
         } catch (SQLException e) {
             System.out.println("Error municipios: " + e);
         }
@@ -342,8 +338,7 @@ public class LineaDAO {
                 + "servicio_anterior, servicio_nuevo, fecha"
                 + ") VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, NOW())";
 
-        try (
-                Connection con = Conexion.conectar(); PreparedStatement ps = con.prepareStatement(sql)) {
+        try (Connection con = Conexion.conectar(); PreparedStatement ps = con.prepareStatement(sql)) {
 
             ps.setString(1, numero);
             ps.setString(2, estadoAnt);
@@ -354,11 +349,9 @@ public class LineaDAO {
             ps.setString(7, clienteNew);
             ps.setString(8, servicioAnt);
             ps.setString(9, servicioNew);
-
             ps.executeUpdate();
 
         } catch (Exception e) {
-
             System.out.println("Error historial: " + e);
         }
     }
@@ -376,7 +369,6 @@ public class LineaDAO {
         } catch (Exception e) {
             System.out.println("Error contarLineasTotales: " + e);
         }
-
         return 0;
     }
 

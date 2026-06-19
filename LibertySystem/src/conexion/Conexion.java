@@ -15,25 +15,17 @@ public class Conexion {
         Connection con = null;
 
         try {
-
             Class.forName("com.mysql.cj.jdbc.Driver");
-
             con = DriverManager.getConnection(URL, USER, PASSWORD);
-
             System.out.println("Conexion exitosa");
-
         } catch (ClassNotFoundException | SQLException e) {
-
             System.out.println("Error conexion: " + e);
-
         }
-
         return con;
     }
 
     // MAIN PARA PROBAR
     public static void main(String[] args) {
-
         conectar();
     }
 }

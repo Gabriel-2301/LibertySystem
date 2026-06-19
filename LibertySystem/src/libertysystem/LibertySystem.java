@@ -8,7 +8,6 @@ import utilidades.VersionLocal;
 public class LibertySystem {
 
     public static final String VERSION_LOCAL = "1.2";
-
     public static void main(String[] args) {
 
         //SI NO EXISTE version.dat, se crea con la versión instalada
@@ -17,7 +16,6 @@ public class LibertySystem {
         if (localVersion == null || localVersion.equals("0.0")) {
             VersionLocal.guardarVersionLocal(VERSION_LOCAL);
         }
-
         TemaManager.oscuro = ConfigTema.cargarTemaOscuro();
         FrmConsulta frm = new FrmConsulta();
         frm.setVisible(true);

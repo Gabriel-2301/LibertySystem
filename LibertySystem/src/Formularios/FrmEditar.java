@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
- */
 package Formularios;
 
 import java.awt.Image;
@@ -25,10 +21,6 @@ import utilidades.TemaManager;
  */
 public class FrmEditar extends javax.swing.JFrame {
 
-    /**
-     * Creates new form FrmEditar
-     *
-     */
     public void aplicarTemaOscuro() {
         aplicarColoresPersonalizados();
     }
@@ -50,27 +42,19 @@ public class FrmEditar extends javax.swing.JFrame {
         setLocationRelativeTo(null);
         SetImageLabel(jLabel2, "/IMG/Logoliberty.png");
         setIconImage(new ImageIcon(getClass().getResource("/IMG/Iconoliberty.png")).getImage());
-
         aplicarTema();
-
     }
 
     private void aplicarColoresPersonalizados() {
 
         if (TemaManager.oscuro) {
-
             BtnGuardar.setIcon(TemaManager.invertirIcono(getClass(), "/IMG/Iconoguardar.png"));
-
             BtnLimpiar.setIcon(TemaManager.invertirIcono(getClass(), "/IMG/Iconolimpiar.png"));
-
             LblCantidad.setIcon(TemaManager.invertirIcono(getClass(), "/IMG/Iconoeditar.png"));
 
         } else {
-
             BtnGuardar.setIcon(new ImageIcon(getClass().getResource("/IMG/Iconoguardar.png")));
-
             BtnLimpiar.setIcon(new ImageIcon(getClass().getResource("/IMG/Iconolimpiar.png")));
-
             LblCantidad.setIcon(new ImageIcon(getClass().getResource("/IMG/Iconoeditar.png")));
         }
         repaint();
@@ -78,34 +62,21 @@ public class FrmEditar extends javax.swing.JFrame {
 
     private void aplicarTema() {
         if (TemaManager.oscuro) {
-
             BtnGuardar.setIcon(TemaManager.invertirIcono(getClass(), "/IMG/Iconoguardar.png"));
-
-            BtnLimpiar.setIcon(
-                    TemaManager.invertirIcono(getClass(), "/IMG/Iconolimpiar.png"));
-
-            LblCantidad.setIcon(
-                    TemaManager.invertirIcono(getClass(), "/IMG/Iconoeditar.png"));
+            BtnLimpiar.setIcon(TemaManager.invertirIcono(getClass(), "/IMG/Iconolimpiar.png"));
+            LblCantidad.setIcon(TemaManager.invertirIcono(getClass(), "/IMG/Iconoeditar.png"));
 
         } else {
-
-            BtnGuardar.setIcon(
-                    new ImageIcon(getClass().getResource("/IMG/Iconoguardar.png")));
-
-            BtnLimpiar.setIcon(
-                    new ImageIcon(getClass().getResource("/IMG/Iconolimpiar.png")));
-
-            LblCantidad.setIcon(
-                    new ImageIcon(getClass().getResource("/IMG/Iconoeditar.png")));
+            BtnGuardar.setIcon(new ImageIcon(getClass().getResource("/IMG/Iconoguardar.png")));
+            BtnLimpiar.setIcon(new ImageIcon(getClass().getResource("/IMG/Iconolimpiar.png")));
+            LblCantidad.setIcon(new ImageIcon(getClass().getResource("/IMG/Iconoeditar.png")));
         }
 
         if (TemaManager.oscuro) {
             jPanel1.setBackground(new java.awt.Color(35, 35, 35));
             jPanel2.setBackground(new java.awt.Color(45, 45, 45));
-
             jLabel1.setForeground(Color.WHITE);
             LblCantidad.setForeground(Color.WHITE);
-
             jTableDatosEditados.setBackground(new Color(45, 45, 45));
             jTableDatosEditados.setForeground(Color.WHITE);
             jTableDatosEditados.setGridColor(new Color(70, 70, 70));
@@ -121,21 +92,6 @@ public class FrmEditar extends javax.swing.JFrame {
                 b.setBackground(new Color(55, 55, 55));
                 b.setForeground(Color.WHITE);
             }
-//    } else {
-//        jPanel1.setBackground(new java.awt.Color(35,35,35));
-//        jPanel2.setBackground(new java.awt.Color(45,45,45));
-//        jLabel1.setForeground(Color.WHITE);
-//        jLabel2.setForeground(Color.WHITE);
-//        jTableDatosEditados.setBackground(new Color(45,45,45));
-//        jTableDatosEditados.setForeground(Color.WHITE);
-//        jTableDatosEditados.setGridColor(new Color(70,70,70));
-//        jTableDatosEditados.setSelectionForeground(Color.BLACK);
-//        jTableDatosEditados.getTableHeader().setBackground(new Color(60,60,60));
-//        jTableDatosEditados.getTableHeader().setForeground(Color.WHITE);
-//        JButton[] botones = {
-//            BtnGuardar,
-//            BtnLimpiar
-//        };
         }
         repaint();
     }
@@ -153,7 +109,6 @@ public class FrmEditar extends javax.swing.JFrame {
         };
 
         jTableDatosEditados.setModel(modelo);
-        numerosOriginales.clear();
         estadoOriginal.clear();
         municipioOriginal.clear();
         clienteOriginal.clear();
@@ -167,7 +122,6 @@ public class FrmEditar extends javax.swing.JFrame {
             for (int i = 0; i < 6; i++) {
                 safe[i] = (fila[i] == null) ? "" : fila[i];
             }
-
             numerosOriginales.add(safe[0].toString());
             estadoOriginal.add(safe[1].toString());
             municipioOriginal.add(safe[3].toString());
@@ -175,8 +129,8 @@ public class FrmEditar extends javax.swing.JFrame {
             servicioOriginal.add(safe[5].toString());
             modelo.addRow(safe);
         }
-        LblCantidad.setText("Total de Lineas Seleccionadas para Editar: " + datos.size());
 
+        LblCantidad.setText("Total de Lineas Seleccionadas para Editar: " + datos.size());
         configurarTabla();
 
         //VALIDACIONES EN TIEMPO REAL
@@ -234,9 +188,7 @@ public class FrmEditar extends javax.swing.JFrame {
         comboEstado.addItem("Cancelado");
         comboEstado.addItem("En Servicio");
 
-        jTableDatosEditados.getColumnModel()
-                .getColumn(1)
-                .setCellEditor(new DefaultCellEditor(comboEstado));
+        jTableDatosEditados.getColumnModel().getColumn(1).setCellEditor(new DefaultCellEditor(comboEstado));
 
         JComboBox<String> comboMunicipio = new JComboBox<>();
         comboMunicipio.addItem("Alianza, Valle");
@@ -499,10 +451,7 @@ public class FrmEditar extends javax.swing.JFrame {
             Connection con = Conexion.conectar();
             LineaDAO dao = new LineaDAO();
 
-            String sql = "UPDATE lineas SET "
-                    + "numero=?, estado_id=?, fechas_ultimo_estado=NOW(), "
-                    + "municipio_id=?, cliente_id=?, servicio_id=? "
-                    + "WHERE numero=?";
+            String sql = "UPDATE lineas SET " + "numero=?, estado_id=?, fechas_ultimo_estado=NOW(), " + "municipio_id=?, cliente_id=?, servicio_id=? " + "WHERE numero=?";
 
             PreparedStatement ps = con.prepareStatement(sql);
 
@@ -513,7 +462,6 @@ public class FrmEditar extends javax.swing.JFrame {
                 String municipioNew = norm(modelo.getValueAt(i, 3));
                 String clienteNew = norm(modelo.getValueAt(i, 4));
                 String servicioNew = norm(modelo.getValueAt(i, 5));
-
                 String numeroOriginal = numerosOriginales.get(i);
 
                 // ANTERIORES
@@ -543,7 +491,6 @@ public class FrmEditar extends javax.swing.JFrame {
                 ps.setInt(4, clienteId);
                 ps.setInt(5, servicioId);
                 ps.setString(6, numeroOriginal);
-
                 ps.addBatch();
 
                 // 2. HISTORIAL (SOLO UNA VEZ POR FILA)

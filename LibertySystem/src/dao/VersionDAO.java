@@ -9,8 +9,7 @@ public class VersionDAO {
 
         String version = "";
 
-        try (Connection con = Conexion.conectar(); PreparedStatement ps = con.prepareStatement(
-                "SELECT version FROM system_version WHERE id=1"); ResultSet rs = ps.executeQuery()) {
+        try (Connection con = Conexion.conectar(); PreparedStatement ps = con.prepareStatement("SELECT version FROM system_version WHERE id=1"); ResultSet rs = ps.executeQuery()) {
 
             if (rs.next()) {
                 version = rs.getString("version");
@@ -19,7 +18,6 @@ public class VersionDAO {
         } catch (Exception e) {
             System.out.println("Error version: " + e);
         }
-
         return version;
     }
 
@@ -27,8 +25,7 @@ public class VersionDAO {
 
         String url = "";
 
-        try (Connection con = Conexion.conectar(); PreparedStatement ps = con.prepareStatement(
-                "SELECT url FROM system_version WHERE id=1"); ResultSet rs = ps.executeQuery()) {
+        try (Connection con = Conexion.conectar(); PreparedStatement ps = con.prepareStatement("SELECT url FROM system_version WHERE id=1"); ResultSet rs = ps.executeQuery()) {
 
             if (rs.next()) {
                 url = rs.getString("url");
@@ -37,7 +34,6 @@ public class VersionDAO {
         } catch (Exception e) {
             System.out.println("Error url: " + e);
         }
-
         return url;
     }
 }

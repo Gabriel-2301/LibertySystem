@@ -23,7 +23,6 @@ public class VersionLocal {
             if (version == null) {
                 return "0.0";
             }
-
             return version.trim();
 
         } catch (Exception e) {

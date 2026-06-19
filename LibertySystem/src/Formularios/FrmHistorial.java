@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
- */
 package Formularios;
 
 import conexion.Conexion;
@@ -24,9 +20,6 @@ import utilidades.TemaManager;
  */
 public class FrmHistorial extends javax.swing.JFrame {
 
-    /**
-     * Creates new form FrmHistorial
-     */
     public FrmHistorial() {
         initComponents();
         setTitle("Liberty Networks | Panel de Historial");
@@ -40,18 +33,15 @@ public class FrmHistorial extends javax.swing.JFrame {
         jTableDatosHistorial.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 
         cargarHistorial();
-
         aplicarTema();
     }
 
     private void aplicarTema() {
         if (TemaManager.oscuro) {
-
             jMenu2.setForeground(Color.BLACK);
             jMenu2.setBackground(new Color(85, 85, 85));
 
         } else {
-
             jMenu2.setForeground(Color.BLACK);
             jMenu2.setBackground(Color.WHITE);
         }
@@ -63,7 +53,6 @@ public class FrmHistorial extends javax.swing.JFrame {
             jTableDatosHistorial.setBackground(new Color(45, 45, 45));
             jTableDatosHistorial.setForeground(Color.WHITE);
             jTableDatosHistorial.setGridColor(new Color(70, 70, 70));
-
             jTableDatosHistorial.setSelectionForeground(Color.BLACK);
             jTableDatosHistorial.getTableHeader().setBackground(new Color(60, 60, 60));
             jTableDatosHistorial.getTableHeader().setForeground(Color.WHITE);
@@ -73,7 +62,6 @@ public class FrmHistorial extends javax.swing.JFrame {
             jTableDatosHistorial.setBackground(java.awt.Color.WHITE);
             jTableDatosHistorial.setForeground(java.awt.Color.BLACK);
         }
-
         repaint();
     }
 
@@ -119,7 +107,6 @@ public class FrmHistorial extends javax.swing.JFrame {
 
             jTableDatosHistorial.setModel(modelo);
             configurarTabla();
-            jTableDatosHistorial.setRowHeight(25);
             jTableDatosHistorial.getTableHeader().setReorderingAllowed(false);
 
         } catch (Exception e) {
@@ -130,7 +117,6 @@ public class FrmHistorial extends javax.swing.JFrame {
     private void configurarTabla() {
 
         jTableDatosHistorial.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_OFF);
-
         jTableDatosHistorial.getColumnModel().getColumn(0).setPreferredWidth(120); // Número
         jTableDatosHistorial.getColumnModel().getColumn(1).setPreferredWidth(120); // Estado Ant
         jTableDatosHistorial.getColumnModel().getColumn(2).setPreferredWidth(120); // Estado Nuevo
@@ -141,9 +127,7 @@ public class FrmHistorial extends javax.swing.JFrame {
         jTableDatosHistorial.getColumnModel().getColumn(7).setPreferredWidth(150); // Servicio Ant
         jTableDatosHistorial.getColumnModel().getColumn(8).setPreferredWidth(150); // Servicio Nuevo
         jTableDatosHistorial.getColumnModel().getColumn(9).setPreferredWidth(160); // Fecha
-
         jTableDatosHistorial.setRowHeight(25);
-
         jTableDatosHistorial.getTableHeader().setResizingAllowed(false);
         jTableDatosHistorial.getTableHeader().setReorderingAllowed(false);
     }
@@ -270,6 +254,7 @@ public class FrmHistorial extends javax.swing.JFrame {
     }//GEN-LAST:event_jMenu2ActionPerformed
 
     private void jMenu2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jMenu2MouseClicked
+
         try {
 
             int[] filas = jTableDatosHistorial.getSelectedRows();
@@ -279,10 +264,7 @@ public class FrmHistorial extends javax.swing.JFrame {
                 return;
             }
 
-            int confirm = JOptionPane.showConfirmDialog(
-                    this, "¿Seguro que desea eliminar " + filas.length + " registro(s)?", "Confirmar eliminación",
-                    JOptionPane.YES_NO_OPTION
-            );
+            int confirm = JOptionPane.showConfirmDialog(this, "¿Seguro que desea eliminar " + filas.length + " registro(s)?", "Confirmar eliminación", JOptionPane.YES_NO_OPTION);
 
             if (confirm != JOptionPane.YES_OPTION) {
                 return;
@@ -315,6 +297,7 @@ public class FrmHistorial extends javax.swing.JFrame {
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, "Error: " + e.getMessage());
         }
+
     }//GEN-LAST:event_jMenu2MouseClicked
 
     /**
@@ -354,23 +337,19 @@ public class FrmHistorial extends javax.swing.JFrame {
 
     private void SetImageLabel(javax.swing.JLabel labelName, String resourcePath) {
 
-        java.net.URL imageURL
-                = getClass().getResource(resourcePath);
+        java.net.URL imageURL = getClass().getResource(resourcePath);
 
         if (imageURL != null) {
 
             ImageIcon image = new ImageIcon(imageURL);
 
-            Icon icon = new ImageIcon(image.getImage().getScaledInstance(labelName.getWidth(), labelName.getHeight(), Image.SCALE_SMOOTH
-            )
-            );
+            Icon icon = new ImageIcon(image.getImage().getScaledInstance(labelName.getWidth(), labelName.getHeight(), Image.SCALE_SMOOTH));
 
             labelName.setIcon(icon);
 
         } else {
 
-            System.out.println("No se encontró la imagen: " + resourcePath
-            );
+            System.out.println("No se encontró la imagen: " + resourcePath);
         }
     }
 
