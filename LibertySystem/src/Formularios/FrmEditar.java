@@ -100,7 +100,7 @@ public class FrmEditar extends javax.swing.JFrame {
 
         this.frmConsulta = frmConsulta;
 
-        modelo = new DefaultTableModel(new Object[]{"Numero", "Estado", "Fecha", "Municipio", "Cliente", "Servicio"}, 0
+        modelo = new DefaultTableModel(new Object[]{"Numero", "Estado", "Fecha (Automatica)", "Municipio", "Cliente", "Servicio"}, 0
         ) {
             @Override
             public boolean isCellEditable(int row, int col) {
@@ -369,6 +369,7 @@ public class FrmEditar extends javax.swing.JFrame {
                 .addContainerGap(31, Short.MAX_VALUE))
         );
 
+        BtnGuardar.setBackground(new java.awt.Color(255, 255, 255));
         BtnGuardar.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         BtnGuardar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/IMG/Iconoguardar.png"))); // NOI18N
         BtnGuardar.setText("Guardar");
@@ -379,6 +380,7 @@ public class FrmEditar extends javax.swing.JFrame {
             }
         });
 
+        BtnLimpiar.setBackground(new java.awt.Color(255, 255, 255));
         BtnLimpiar.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         BtnLimpiar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/IMG/Iconolimpiar.png"))); // NOI18N
         BtnLimpiar.setText("Limpiar");

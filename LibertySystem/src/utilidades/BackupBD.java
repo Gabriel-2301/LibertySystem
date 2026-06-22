@@ -13,6 +13,7 @@ public class BackupBD {
             String dbName = "liberty";
             String dbUser = "root";
             String dbPass = "1234";
+
             String rutaMySQL = "C:\\Program Files\\MySQL\\MySQL Server 8.0\\bin\\mysqldump.exe";
             String carpetaBackup = "C:\\BackupsLiberty\\";
 
@@ -21,6 +22,7 @@ public class BackupBD {
                 dir.mkdirs();
             }
 
+            // Backup único por fecha + hora (permite múltiples backups manuales)
             String fecha = new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss").format(new Date());
             String archivo = carpetaBackup + "liberty_backup_" + fecha + ".sql";
 
@@ -36,23 +38,12 @@ public class BackupBD {
 
             Process process = pb.start();
 
-            // leer error sin cargar todo en memoria
-            BufferedReader br = new BufferedReader(new InputStreamReader(process.getErrorStream()));
-            StringBuilder error = new StringBuilder();
-            String line;
-
-            while ((line = br.readLine()) != null) {
-                error.append(line).append("\n");
-            }
-
-            br.close();
-
             int exitCode = process.waitFor();
 
             if (exitCode == 0) {
                 System.out.println("Backup creado: " + archivo);
             } else {
-                System.out.println("ERROR BACKUP: " + error);
+                System.out.println("Error al crear backup");
             }
 
         } catch (Exception e) {

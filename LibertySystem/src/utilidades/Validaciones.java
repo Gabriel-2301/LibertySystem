@@ -34,10 +34,15 @@ public class Validaciones {
         }
 
         // MÁXIMO 8 DÍGITOS
-        if (txt.getText().length() >= 8) {
+        if (txt.getText().length() >= 11) {
             evt.consume();
         }
     }
+    
+    public static boolean validarNumeroLinea(String numero) {
+
+    return numero.matches("\\d{8}|\\d{11}");
+}
 
     public static void soloMax50Caracteres(JTextField txt, KeyEvent evt) {
 

@@ -23,6 +23,10 @@ public class FrmAgregado extends javax.swing.JFrame {
         aplicarColoresPersonalizados();
     }
 
+    public void aplicarTemaClaro() {
+        aplicarColoresPersonalizados();
+    }
+    
     private FrmConsulta frmConsulta;
 
     public FrmAgregado() {
@@ -166,6 +170,7 @@ public class FrmAgregado extends javax.swing.JFrame {
             CmbMunicipio.setForeground(Color.WHITE);
             CmbServicio.setBackground(new Color(55, 55, 55));
             CmbServicio.setForeground(Color.WHITE);
+            
             JButton[] botones = {
                 BtnGuardar,
                 BtnLimpiar
@@ -174,6 +179,7 @@ public class FrmAgregado extends javax.swing.JFrame {
                 b.setBackground(new Color(55, 55, 55));
                 b.setForeground(Color.WHITE);
             }
+            
         }
         repaint();
     }
@@ -329,7 +335,7 @@ public class FrmAgregado extends javax.swing.JFrame {
 
         jLabel4.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jLabel4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/IMG/Iconofecha.png"))); // NOI18N
-        jLabel4.setText("Fecha");
+        jLabel4.setText("Fecha (Automatica)");
 
         jLabel5.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jLabel5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/IMG/Iconomunicipio.png"))); // NOI18N
@@ -397,6 +403,7 @@ public class FrmAgregado extends javax.swing.JFrame {
             }
         });
 
+        BtnGuardar.setBackground(new java.awt.Color(255, 255, 255));
         BtnGuardar.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         BtnGuardar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/IMG/Iconoguardar.png"))); // NOI18N
         BtnGuardar.setText("Guardar");
@@ -407,6 +414,7 @@ public class FrmAgregado extends javax.swing.JFrame {
             }
         });
 
+        BtnLimpiar.setBackground(new java.awt.Color(255, 255, 255));
         BtnLimpiar.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         BtnLimpiar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/IMG/Iconolimpiar.png"))); // NOI18N
         BtnLimpiar.setText("Limpiar");
@@ -531,69 +539,133 @@ public class FrmAgregado extends javax.swing.JFrame {
 
     private void BtnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnGuardarActionPerformed
 
-        // VALIDAR MUNICIPIO, ESTADO, SERVICIO
-        if (CmbMunicipio.getSelectedIndex() == 0) {
-            JOptionPane.showMessageDialog(this, "Porfavor Seleccione un Municipio");
-            return;
-        }
-        if (CmbEstado.getSelectedIndex() == 0) {
-            JOptionPane.showMessageDialog(this, "Porfavor Seleccione un Estado");
-            return;
-        }
-        if (CmbServicio.getSelectedIndex() == 0) {
-            JOptionPane.showMessageDialog(this, "Porfavor Seleccione un Servicio");
-            return;
-        }
-
         LineaDAO dao = new LineaDAO();
 
         String numero = TxtNumero.getText().trim();
-        String municipio = CmbMunicipio.getSelectedItem().toString();
         String cliente = TxtCliente.getText().trim();
+        String municipio = CmbMunicipio.getSelectedItem().toString();
         String estado = CmbEstado.getSelectedItem().toString();
         String servicio = CmbServicio.getSelectedItem().toString();
 
-        // VALIDAR CAMPOS
-        if (numero.isEmpty() || cliente.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Complete todos los campos", "Advertencia", JOptionPane.WARNING_MESSAGE);
+        // Ignorar placeholders
+        if (numero.equals("Agregar Numero de Linea") || numero.equals(" Agregar Numero de Linea")) {
+            numero = "";
+        }
+
+        if (cliente.equals("Agregar Nombre de Cliente") || cliente.equals(" Agregar Nombre de Cliente")) {
+            cliente = "";
+        }
+
+        // TODOS VACÍOS
+        if (numero.isEmpty() && cliente.isEmpty() && CmbMunicipio.getSelectedIndex() == 0 && CmbEstado.getSelectedIndex() == 0 && CmbServicio.getSelectedIndex() == 0) {
+
+            JOptionPane.showMessageDialog(this, "Por favor complete todos los campos.", "Advertencia", JOptionPane.WARNING_MESSAGE);
+            TxtCliente.requestFocus();
             return;
         }
 
-        // FECHA AUTOMÁTICA
+        // NÚMERO
+        if (numero.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Por favor agregue un número de línea.", "Advertencia", JOptionPane.WARNING_MESSAGE);
+            TxtNumero.requestFocus();
+            return;
+        }
+
+        // CLIENTE
+        if (cliente.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Por favor agregue un cliente.", "Advertencia", JOptionPane.WARNING_MESSAGE);
+            TxtCliente.requestFocus();
+            return;
+        }
+
+        // MUNICIPIO
+        if (CmbMunicipio.getSelectedIndex() == 0) {
+            JOptionPane.showMessageDialog(this, "Por favor seleccione un municipio.", "Advertencia", JOptionPane.WARNING_MESSAGE);
+            CmbMunicipio.requestFocus();
+            return;
+        }
+
+        // ESTADO
+        if (CmbEstado.getSelectedIndex() == 0) {
+            JOptionPane.showMessageDialog(this, "Por favor seleccione un estado.", "Advertencia", JOptionPane.WARNING_MESSAGE);
+            CmbEstado.requestFocus();
+            return;
+        }
+
+        // SERVICIO
+        if (CmbServicio.getSelectedIndex() == 0) {
+            JOptionPane.showMessageDialog(this, "Por favor seleccione un servicio.", "Advertencia", JOptionPane.WARNING_MESSAGE);
+            CmbServicio.requestFocus();
+            return;
+        }
+
+        // VALIDAR LONGITUD DEL NÚMERO (8 u 11 dígitos)
+        if (!Validaciones.validarNumeroLinea(numero)) {
+
+            JOptionPane.showMessageDialog(this, "El número de línea debe tener 8 u 11 dígitos.", "Advertencia", JOptionPane.WARNING_MESSAGE);
+
+            TxtNumero.requestFocus();
+            return;
+        }
+
+        // FECHA
         String fecha = TxtFecha.getText().trim();
 
         // INSERTAR
-        int resultado = dao.insertarLinea(numero, estado, fecha, municipio, cliente, servicio
+        int resultado = dao.insertarLinea(
+                numero,
+                estado,
+                fecha,
+                municipio,
+                cliente,
+                servicio
         );
 
         // RESPUESTAS
         if (resultado == 1) {
 
-            dao.registrarHistorialCompleto(numero, "NUEVO", estado, "NUEVO", municipio, "NUEVO", cliente, "NUEVO", servicio);
+            dao.registrarHistorialCompleto(
+                    numero,
+                    "NUEVO",
+                    estado,
+                    "NUEVO",
+                    municipio,
+                    "NUEVO",
+                    cliente,
+                    "NUEVO",
+                    servicio
+            );
 
-            JOptionPane.showMessageDialog(this, "Registro agregado correctamente");
+            JOptionPane.showMessageDialog(this,
+                    "Registro agregado correctamente.");
 
-            //REFRESCAR TABLA
+            // ACTUALIZAR TABLA
             if (frmConsulta != null) {
                 frmConsulta.cargarTabla();
                 frmConsulta.cargarTotalInicial();
                 frmConsulta.actualizarLabelResultado();
             }
 
-            //LIMPIAR CAMPOS (OPCIONAL)
+            // LIMPIAR CAMPOS
             TxtNumero.setText("");
             TxtCliente.setText("");
             CmbMunicipio.setSelectedIndex(0);
             CmbEstado.setSelectedIndex(0);
             CmbServicio.setSelectedIndex(0);
+
+            restaurarPlaceholders();
+
             TxtNumero.requestFocus();
 
         } else if (resultado == 0) {
-            JOptionPane.showMessageDialog(this, "Ya existe una línea con ese número", "Duplicado", JOptionPane.WARNING_MESSAGE);
+
+            JOptionPane.showMessageDialog(this, "Ya existe una línea con ese número.", "Duplicado", JOptionPane.WARNING_MESSAGE);
+
+            TxtNumero.requestFocus();
 
         } else {
 
-            JOptionPane.showMessageDialog(this, "Error al insertar el registro", "Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Error al insertar el registro.", "Error", JOptionPane.ERROR_MESSAGE);
         }
 
     }//GEN-LAST:event_BtnGuardarActionPerformed

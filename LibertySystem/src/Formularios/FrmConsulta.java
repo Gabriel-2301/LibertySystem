@@ -1,5 +1,6 @@
 package Formularios;
 
+import java.awt.Toolkit;
 import com.itextpdf.text.BaseColor;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
@@ -46,6 +47,7 @@ import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
 import javax.swing.JComboBox;
+import javax.swing.SwingUtilities;
 import utilidades.Downloader;
 import utilidades.VersionLocal;
 
@@ -56,6 +58,10 @@ import utilidades.VersionLocal;
 public class FrmConsulta extends javax.swing.JFrame {
 
     private javax.swing.Timer filtroTimer;
+
+    private FrmAgregado frmAgregado;
+    private FrmEditar frmEditar;
+    private FrmHistorial frmHistorial;
 
     public void cargarTabla() {
 
@@ -90,6 +96,7 @@ public class FrmConsulta extends javax.swing.JFrame {
             jLabel4.setIcon(TemaManager.invertirIcono(getClass(), "/IMG/Iconointerrogacion.png"));
             jLabel6.setIcon(TemaManager.invertirIcono(getClass(), "/IMG/Iconodatos.png"));
             BtnOrdenar.setIcon(TemaManager.invertirIcono(getClass(), "/IMG/Iconoordenar.png"));
+            BtnBackup.setIcon(TemaManager.invertirIcono(getClass(), "/IMG/Iconobackup.png"));
 
         } else {
 
@@ -103,6 +110,7 @@ public class FrmConsulta extends javax.swing.JFrame {
             jLabel4.setIcon(new ImageIcon(getClass().getResource("/IMG/Iconointerrogacion.png")));
             jLabel6.setIcon(new ImageIcon(getClass().getResource("/IMG/Iconodatos.png")));
             BtnOrdenar.setIcon(new ImageIcon(getClass().getResource("/IMG/Iconoordenar.png")));
+            BtnBackup.setIcon(new ImageIcon(getClass().getResource("/IMG/Iconobackup.png")));
         }
 
         if (TemaManager.oscuro) {
@@ -157,7 +165,8 @@ public class FrmConsulta extends javax.swing.JFrame {
                 BtnImprimir,
                 BtnLimpiar,
                 BtnActualizacion,
-                BtnOrdenar
+                BtnOrdenar,
+                BtnBackup
             };
 
             for (JButton b : botones) {
@@ -230,7 +239,8 @@ public class FrmConsulta extends javax.swing.JFrame {
                 BtnImprimir,
                 BtnLimpiar,
                 BtnActualizacion,
-                BtnOrdenar
+                BtnOrdenar,
+                BtnBackup
             };
 
             for (JButton b : botones) {
@@ -287,13 +297,6 @@ public class FrmConsulta extends javax.swing.JFrame {
         this.add(jPanel1, java.awt.BorderLayout.CENTER);
         jPanel1.setPreferredSize(null);
          */
-        this.addWindowListener(new java.awt.event.WindowAdapter() {
-            @Override
-            public void windowClosing(java.awt.event.WindowEvent e) {
-                BackupBD.generarBackup();
-            }
-        });
-
         addComponentListener(new ComponentAdapter() {
 
             @Override
@@ -312,8 +315,6 @@ public class FrmConsulta extends javax.swing.JFrame {
                 SetImageLabel(jLabel2, "/IMG/Logoliberty.png");
             }
         });
-
-        iniciarBackupAutomatico();
 
         jProgressBar1.setVisible(false);
         jProgressBar1.setString("");
@@ -689,6 +690,7 @@ public class FrmConsulta extends javax.swing.JFrame {
         LblVerHistorial = new javax.swing.JLabel();
         BtnEditar = new javax.swing.JButton();
         BtnOrdenar = new javax.swing.JButton();
+        BtnBackup = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
@@ -734,7 +736,7 @@ public class FrmConsulta extends javax.swing.JFrame {
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGap(102, 102, 102)
                         .addComponent(jLabel1)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 137, Short.MAX_VALUE)
                 .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 155, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(26, 26, 26)
                 .addComponent(tglTema, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -972,6 +974,14 @@ public class FrmConsulta extends javax.swing.JFrame {
             }
         });
 
+        BtnBackup.setIcon(new javax.swing.ImageIcon(getClass().getResource("/IMG/Iconobackup.png"))); // NOI18N
+        BtnBackup.setToolTipText("Generar Backup");
+        BtnBackup.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BtnBackupActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -985,26 +995,26 @@ public class FrmConsulta extends javax.swing.JFrame {
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(TxtFieldBuscador)
                             .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(jPanel1Layout.createSequentialGroup()
-                                        .addComponent(jLabel3)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(CmbMunicipio, 0, 1, Short.MAX_VALUE)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(CmbEstado, javax.swing.GroupLayout.PREFERRED_SIZE, 222, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addGroup(jPanel1Layout.createSequentialGroup()
-                                        .addComponent(BtnOrdenar)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 245, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(jLabelTotalDatos, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(jLabelResultadoFiltrado, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addGap(0, 0, Short.MAX_VALUE)))
+                                .addComponent(jLabel3)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(CmbMunicipio, 0, 1, Short.MAX_VALUE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(CmbEstado, javax.swing.GroupLayout.PREFERRED_SIZE, 222, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(CmbServicio, javax.swing.GroupLayout.PREFERRED_SIZE, 221, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(TxtCantidad, javax.swing.GroupLayout.PREFERRED_SIZE, 136, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addComponent(TxtCantidad, javax.swing.GroupLayout.PREFERRED_SIZE, 136, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(BtnOrdenar)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(BtnBackup)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 245, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jLabelTotalDatos, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jLabelResultadoFiltrado, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(0, 0, Short.MAX_VALUE)))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addGroup(jPanel1Layout.createSequentialGroup()
@@ -1040,7 +1050,7 @@ public class FrmConsulta extends javax.swing.JFrame {
                     .addComponent(BtnLimpiar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(TxtFieldBuscador))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(BtnFiltrar, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(TxtCantidad, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -1054,15 +1064,16 @@ public class FrmConsulta extends javax.swing.JFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(BtnOrdenar, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
                     .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jProgressBar1, javax.swing.GroupLayout.DEFAULT_SIZE, 20, Short.MAX_VALUE)
                         .addComponent(jLabel6)
                         .addComponent(jLabelResultadoFiltrado)
                         .addComponent(jLabelTotalDatos))
-                    .addComponent(jProgressBar1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(BtnBackup, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 648, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 647, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(BtnAgregar, javax.swing.GroupLayout.DEFAULT_SIZE, 52, Short.MAX_VALUE)
+                    .addComponent(BtnAgregar, javax.swing.GroupLayout.DEFAULT_SIZE, 51, Short.MAX_VALUE)
                     .addComponent(LblVerHistorial, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(LblManualdeUsuario, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -1091,8 +1102,17 @@ public class FrmConsulta extends javax.swing.JFrame {
 
     private void LblVerHistorialMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_LblVerHistorialMouseClicked
 
-        FrmHistorial frm = new FrmHistorial();
-        frm.setVisible(true);
+        if (frmHistorial == null || !frmHistorial.isVisible()) {
+
+            frmHistorial = new FrmHistorial();
+            frmHistorial.setVisible(true);
+
+        } else {
+
+            java.awt.Toolkit.getDefaultToolkit().beep(); // sonido de advertencia
+            frmHistorial.toFront();
+            frmHistorial.requestFocus();
+        }
 
     }//GEN-LAST:event_LblVerHistorialMouseClicked
 
@@ -1397,8 +1417,14 @@ public class FrmConsulta extends javax.swing.JFrame {
 
     private void BtnAgregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnAgregarActionPerformed
 
-        FrmAgregado frm = new FrmAgregado(this);
-        frm.setVisible(true);
+        if (frmAgregado == null || !frmAgregado.isVisible()) {
+            frmAgregado = new FrmAgregado(this);
+            frmAgregado.setVisible(true);
+        } else {
+            Toolkit.getDefaultToolkit().beep();
+            frmAgregado.toFront();
+            frmAgregado.requestFocus();
+        }
 
     }//GEN-LAST:event_BtnAgregarActionPerformed
 
@@ -1456,18 +1482,22 @@ public class FrmConsulta extends javax.swing.JFrame {
         java.util.List<Object[]> lista = new java.util.ArrayList<>();
 
         for (int i : filas) {
-
             Object[] fila = new Object[6];
-
             for (int c = 0; c < 6; c++) {
                 fila[c] = jTableDatos.getValueAt(i, c);
             }
             lista.add(fila);
         }
 
-        FrmEditar frm = new FrmEditar();
-        frm.cargarDatos(this, lista);
-        frm.setVisible(true);
+        if (frmEditar == null || !frmEditar.isVisible()) {
+            frmEditar = new FrmEditar();
+            frmEditar.cargarDatos(this, lista);
+            frmEditar.setVisible(true);
+        } else {
+            Toolkit.getDefaultToolkit().beep(); // sonido de advertencia
+            frmEditar.toFront();
+            frmEditar.requestFocus();
+        }
 
     }//GEN-LAST:event_BtnEditarActionPerformed
 
@@ -1564,6 +1594,31 @@ public class FrmConsulta extends javax.swing.JFrame {
 
     }//GEN-LAST:event_BtnOrdenarActionPerformed
 
+    private void BtnBackupActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnBackupActionPerformed
+
+        int confirm = JOptionPane.showConfirmDialog(this, "¿Desea generar un backup de la base de datos?", "Confirmar Backup", JOptionPane.YES_NO_OPTION);
+
+        if (confirm != JOptionPane.YES_OPTION) {
+            return;
+        }
+
+        new Thread(() -> {
+
+            BtnBackup.setEnabled(false);
+
+            BackupBD.generarBackup();
+
+            SwingUtilities.invokeLater(() -> {
+
+                BtnBackup.setEnabled(true);
+
+                JOptionPane.showMessageDialog(this, "Backup generado correctamente", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+            });
+
+        }).start();
+
+    }//GEN-LAST:event_BtnBackupActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -1619,6 +1674,7 @@ public class FrmConsulta extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton BtnActualizacion;
     private javax.swing.JButton BtnAgregar;
+    private javax.swing.JButton BtnBackup;
     private javax.swing.JButton BtnEditar;
     private javax.swing.JButton BtnEliminar;
     private javax.swing.JButton BtnFiltrar;
