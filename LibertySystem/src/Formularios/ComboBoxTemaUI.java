@@ -13,12 +13,10 @@ public class ComboBoxTemaUI extends BasicComboBoxUI {
 
     @Override
     protected JButton createArrowButton() {
-
         JButton button = new JButton();
         button.setBorder(null);
         button.setFocusPainted(false);
         button.setIcon(icono);
-
         return button;
     }
 }

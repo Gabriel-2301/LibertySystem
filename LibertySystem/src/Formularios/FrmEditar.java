@@ -36,7 +36,6 @@ public class FrmEditar extends javax.swing.JFrame {
 
     public FrmEditar() {
         initComponents();
-
         setTitle("Liberty Networks | Panel de Edicion");
         setResizable(false);
         setLocationRelativeTo(null);
@@ -46,12 +45,10 @@ public class FrmEditar extends javax.swing.JFrame {
     }
 
     private void aplicarColoresPersonalizados() {
-
         if (TemaManager.oscuro) {
             BtnGuardar.setIcon(TemaManager.invertirIcono(getClass(), "/IMG/Iconoguardar.png"));
             BtnLimpiar.setIcon(TemaManager.invertirIcono(getClass(), "/IMG/Iconolimpiar.png"));
             LblCantidad.setIcon(TemaManager.invertirIcono(getClass(), "/IMG/Iconoeditar.png"));
-
         } else {
             BtnGuardar.setIcon(new ImageIcon(getClass().getResource("/IMG/Iconoguardar.png")));
             BtnLimpiar.setIcon(new ImageIcon(getClass().getResource("/IMG/Iconolimpiar.png")));
@@ -65,13 +62,11 @@ public class FrmEditar extends javax.swing.JFrame {
             BtnGuardar.setIcon(TemaManager.invertirIcono(getClass(), "/IMG/Iconoguardar.png"));
             BtnLimpiar.setIcon(TemaManager.invertirIcono(getClass(), "/IMG/Iconolimpiar.png"));
             LblCantidad.setIcon(TemaManager.invertirIcono(getClass(), "/IMG/Iconoeditar.png"));
-
         } else {
             BtnGuardar.setIcon(new ImageIcon(getClass().getResource("/IMG/Iconoguardar.png")));
             BtnLimpiar.setIcon(new ImageIcon(getClass().getResource("/IMG/Iconolimpiar.png")));
             LblCantidad.setIcon(new ImageIcon(getClass().getResource("/IMG/Iconoeditar.png")));
         }
-
         if (TemaManager.oscuro) {
             jPanel1.setBackground(new java.awt.Color(35, 35, 35));
             jPanel2.setBackground(new java.awt.Color(45, 45, 45));
@@ -83,7 +78,6 @@ public class FrmEditar extends javax.swing.JFrame {
             jTableDatosEditados.setSelectionForeground(Color.BLACK);
             jTableDatosEditados.getTableHeader().setBackground(new Color(60, 60, 60));
             jTableDatosEditados.getTableHeader().setForeground(Color.WHITE);
-
             JButton[] botones = {
                 BtnGuardar,
                 BtnLimpiar
@@ -97,7 +91,6 @@ public class FrmEditar extends javax.swing.JFrame {
     }
 
     public void cargarDatos(FrmConsulta frmConsulta, java.util.List<Object[]> datos) {
-
         this.frmConsulta = frmConsulta;
 
         modelo = new DefaultTableModel(new Object[]{"Numero", "Estado", "Fecha (Automatica)", "Municipio", "Cliente", "Servicio"}, 0
@@ -116,9 +109,7 @@ public class FrmEditar extends javax.swing.JFrame {
         numerosOriginales.clear();
 
         for (Object[] fila : datos) {
-
             Object[] safe = new Object[6];
-
             for (int i = 0; i < 6; i++) {
                 safe[i] = (fila[i] == null) ? "" : fila[i];
             }
@@ -129,12 +120,10 @@ public class FrmEditar extends javax.swing.JFrame {
             servicioOriginal.add(safe[5].toString());
             modelo.addRow(safe);
         }
-
         LblCantidad.setText("Total de Lineas Seleccionadas para Editar: " + datos.size());
         configurarTabla();
 
-        //VALIDACIONES EN TIEMPO REAL
-        modelo.addTableModelListener(e -> {
+        modelo.addTableModelListener(e -> { //VALIDACIONES EN TIEMPO REAL
 
             int fila = e.getFirstRow();
             int col = e.getColumn();
@@ -150,16 +139,14 @@ public class FrmEditar extends javax.swing.JFrame {
 
             String texto = val.toString();
 
-            //NUMERO
-            if (col == 0) {
+            if (col == 0) { //NUMERO
                 if (!texto.matches("\\d{0,8}")) {
                     JOptionPane.showMessageDialog(this, "Máximo 8 dígitos.");
                     modelo.setValueAt(texto.replaceAll("\\D", "").substring(0, Math.min(8, texto.replaceAll("\\D", "").length())), fila, col);
                 }
             }
 
-            //CLIENTE
-            if (col == 4) {
+            if (col == 4) { //CLIENTE
                 if (texto.length() > 50) {
                     JOptionPane.showMessageDialog(this, "Máximo 50 caracteres.");
                     modelo.setValueAt(texto.substring(0, 50), fila, col);
@@ -169,7 +156,6 @@ public class FrmEditar extends javax.swing.JFrame {
     }
 
     private void configurarTabla() {
-
         jTableDatosEditados.getColumnModel().getColumn(0).setPreferredWidth(130);
         jTableDatosEditados.getColumnModel().getColumn(1).setPreferredWidth(130);
         jTableDatosEditados.getColumnModel().getColumn(2).setPreferredWidth(180);
@@ -273,7 +259,6 @@ public class FrmEditar extends javax.swing.JFrame {
         comboServicio.addItem("Sin Servicio");
         comboServicio.addItem("MyUC");
         comboServicio.addItem("Bussines Trunk");
-
         jTableDatosEditados.getColumnModel().getColumn(5).setCellEditor(new DefaultCellEditor(comboServicio));
     }
 
@@ -457,36 +442,39 @@ public class FrmEditar extends javax.swing.JFrame {
 
             PreparedStatement ps = con.prepareStatement(sql);
 
-            for (int i = 0; i < modelo.getRowCount(); i++) {
+            boolean huboCambios = false;
 
+            java.util.Set<String> procesados = new java.util.HashSet<>(); // CONTROL ANTI-DUPLICADOS
+
+            for (int i = 0; i < modelo.getRowCount(); i++) {
+                String numeroOriginal = numerosOriginales.get(i);
                 String numeroNuevo = norm(modelo.getValueAt(i, 0));
                 String estadoNew = norm(modelo.getValueAt(i, 1));
                 String municipioNew = norm(modelo.getValueAt(i, 3));
                 String clienteNew = norm(modelo.getValueAt(i, 4));
                 String servicioNew = norm(modelo.getValueAt(i, 5));
-                String numeroOriginal = numerosOriginales.get(i);
-
-                // ANTERIORES
                 String estadoAnt = estadoOriginal.get(i);
                 String municipioAnt = municipioOriginal.get(i);
                 String clienteAnt = clienteOriginal.get(i);
                 String servicioAnt = servicioOriginal.get(i);
 
-                // IDS
+                boolean cambio = !numeroNuevo.equals(numeroOriginal) || !estadoNew.equals(estadoAnt) || !municipioNew.equals(municipioAnt) || !clienteNew.equals(clienteAnt) || !servicioNew.equals(servicioAnt);
+
+                if (!cambio) {
+                    continue;
+                }
+
+                huboCambios = true;
                 int estadoId = dao.obtenerIdPublic(con, "estados", estadoNew);
                 if (estadoId == 0) {
                     estadoId = dao.obtenerIdPublic(con, "estados", "Sin Estado");
                 }
-
                 int municipioId = dao.obtenerIdPublic(con, "municipios", municipioNew);
                 int clienteId = dao.obtenerClientePublic(con, clienteNew);
-
                 int servicioId = dao.obtenerIdPublic(con, "servicios", servicioNew);
                 if (servicioId == 0) {
                     servicioId = dao.obtenerIdPublic(con, "servicios", "Sin Servicio");
                 }
-
-                // 1. UPDATE
                 ps.setString(1, numeroNuevo);
                 ps.setInt(2, estadoId);
                 ps.setInt(3, municipioId);
@@ -495,43 +483,32 @@ public class FrmEditar extends javax.swing.JFrame {
                 ps.setString(6, numeroOriginal);
                 ps.addBatch();
 
-                // 2. HISTORIAL (SOLO UNA VEZ POR FILA)
-                dao.registrarHistorialCompleto(
-                        numeroOriginal,
-                        estadoAnt,
-                        estadoNew,
-                        municipioAnt,
-                        municipioNew,
-                        clienteAnt,
-                        clienteNew,
-                        servicioAnt,
-                        servicioNew
-                );
+                // HISTORIAL (SIEMPRE SE GUARDA)
+                dao.registrarHistorialCompleto(numeroOriginal, estadoAnt, estadoNew, municipioAnt, municipioNew, clienteAnt, clienteNew, servicioAnt, servicioNew);
+            }
+
+            if (!huboCambios) {
+                JOptionPane.showMessageDialog(this, "No se realizaron cambios.");
+                ps.close();
+                con.close();
+                return;
             }
 
             ps.executeBatch();
             ps.close();
             con.close();
-
             frmConsulta.cargarTabla();
-
             JOptionPane.showMessageDialog(this, "Actualizado correctamente");
-
             dispose();
-
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, "Error: " + e.getMessage());
             e.printStackTrace();
         }
-
     }//GEN-LAST:event_BtnGuardarActionPerformed
 
     private void BtnLimpiarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnLimpiarActionPerformed
-
         ((DefaultTableModel) jTableDatosEditados.getModel()).setRowCount(0);
-
     }//GEN-LAST:event_BtnLimpiarActionPerformed
-
     /**
      * @param args the command line arguments
      */
@@ -566,23 +543,16 @@ public class FrmEditar extends javax.swing.JFrame {
     }
 
     private void SetImageLabel(javax.swing.JLabel labelName, String resourcePath) {
-
         java.net.URL imageURL = getClass().getResource(resourcePath);
 
         if (imageURL != null) {
-
             ImageIcon image = new ImageIcon(imageURL);
-
             Icon icon = new ImageIcon(image.getImage().getScaledInstance(labelName.getWidth(), labelName.getHeight(), Image.SCALE_SMOOTH));
-
             labelName.setIcon(icon);
-
         } else {
-
             System.out.println("No se encontró la imagen: " + resourcePath);
         }
     }
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton BtnGuardar;
     private javax.swing.JButton BtnLimpiar;

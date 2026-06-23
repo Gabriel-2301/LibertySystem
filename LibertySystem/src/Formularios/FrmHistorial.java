@@ -27,11 +27,9 @@ public class FrmHistorial extends javax.swing.JFrame {
         setLocationRelativeTo(null);
         SetImageLabel(jLabel2, "/IMG/Logoliberty.png");
         setIconImage(new ImageIcon(getClass().getResource("/IMG/Iconoliberty.png")).getImage());
-
         jTableDatosHistorial.setRowSelectionAllowed(true);
         jTableDatosHistorial.setColumnSelectionAllowed(false);
         jTableDatosHistorial.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
-
         cargarHistorial();
         aplicarTema();
     }
@@ -66,7 +64,6 @@ public class FrmHistorial extends javax.swing.JFrame {
     }
 
     private void cargarHistorial() {
-
         DefaultTableModel modelo = new DefaultTableModel() {
             @Override
             public boolean isCellEditable(int row, int column) {
@@ -88,9 +85,7 @@ public class FrmHistorial extends javax.swing.JFrame {
         String sql = "SELECT * FROM historial_lineas ORDER BY id DESC";
 
         try (Connection con = Conexion.conectar(); Statement st = con.createStatement(); ResultSet rs = st.executeQuery(sql)) {
-
             while (rs.next()) {
-
                 modelo.addRow(new Object[]{
                     rs.getString("numero"),
                     rs.getString("estado_anterior"),
@@ -104,7 +99,6 @@ public class FrmHistorial extends javax.swing.JFrame {
                     rs.getString("fecha")
                 });
             }
-
             jTableDatosHistorial.setModel(modelo);
             configurarTabla();
             jTableDatosHistorial.getTableHeader().setReorderingAllowed(false);
@@ -115,7 +109,6 @@ public class FrmHistorial extends javax.swing.JFrame {
     }
 
     private void configurarTabla() {
-
         jTableDatosHistorial.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_OFF);
         jTableDatosHistorial.getColumnModel().getColumn(0).setPreferredWidth(120); // Número
         jTableDatosHistorial.getColumnModel().getColumn(1).setPreferredWidth(120); // Estado Ant
@@ -260,18 +253,15 @@ public class FrmHistorial extends javax.swing.JFrame {
     }//GEN-LAST:event_jMenu2ActionPerformed
 
     private void jMenu2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jMenu2MouseClicked
-
         try {
 
             int[] filas = jTableDatosHistorial.getSelectedRows();
-
             if (filas.length == 0) {
-                JOptionPane.showMessageDialog(this, "Seleccione al menos un registro");
+                JOptionPane.showMessageDialog(this, "Seleccione al menos un registro para eliminar");
                 return;
             }
 
             int confirm = JOptionPane.showConfirmDialog(this, "¿Seguro que desea eliminar " + filas.length + " registro(s)?", "Confirmar eliminación", JOptionPane.YES_NO_OPTION);
-
             if (confirm != JOptionPane.YES_OPTION) {
                 return;
             }
@@ -282,28 +272,19 @@ public class FrmHistorial extends javax.swing.JFrame {
             PreparedStatement ps = con.prepareStatement(sql);
 
             for (int i = 0; i < filas.length; i++) {
-
                 int fila = filas[i];
-
                 String numero = jTableDatosHistorial.getValueAt(fila, 0).toString();
-
                 System.out.println("Eliminando número: " + numero);
-
                 ps.setString(1, numero);
                 ps.addBatch();
             }
-
             ps.executeBatch();
             con.close();
-
             cargarHistorial();
-
             JOptionPane.showMessageDialog(this, "Eliminado correctamente");
-
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, "Error: " + e.getMessage());
         }
-
     }//GEN-LAST:event_jMenu2MouseClicked
 
     /**
@@ -346,19 +327,13 @@ public class FrmHistorial extends javax.swing.JFrame {
         java.net.URL imageURL = getClass().getResource(resourcePath);
 
         if (imageURL != null) {
-
             ImageIcon image = new ImageIcon(imageURL);
-
             Icon icon = new ImageIcon(image.getImage().getScaledInstance(labelName.getWidth(), labelName.getHeight(), Image.SCALE_SMOOTH));
-
             labelName.setIcon(icon);
-
         } else {
-
             System.out.println("No se encontró la imagen: " + resourcePath);
         }
     }
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;

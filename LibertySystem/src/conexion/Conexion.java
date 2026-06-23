@@ -11,21 +11,20 @@ public class Conexion {
     private static final String PASSWORD = "12345";
 
     public static Connection conectar() {
-
-        Connection con = null;
-
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
-            con = DriverManager.getConnection(URL, USER, PASSWORD);
-            System.out.println("Conexion exitosa");
+            return DriverManager.getConnection(URL, USER, PASSWORD);
         } catch (ClassNotFoundException | SQLException e) {
             System.out.println("Error conexion: " + e);
+            return null;
         }
-        return con;
     }
 
-    // MAIN PARA PROBAR
-    public static void main(String[] args) {
-        conectar();
+    public static boolean probarConexion() { //prueba de conexión
+        try (Connection con = conectar()) {
+            return con != null && !con.isClosed();
+        } catch (Exception e) {
+            return false;
+        }
     }
 }

@@ -26,49 +26,37 @@ public class FrmAgregado extends javax.swing.JFrame {
     public void aplicarTemaClaro() {
         aplicarColoresPersonalizados();
     }
-    
+
     private FrmConsulta frmConsulta;
 
     public FrmAgregado() {
         initComponents();
-
         LineaDAO dao = new LineaDAO();
         dao.cargarMunicipios(CmbMunicipio);
-
         ajustarFlechaCombo(CmbServicio);
         ajustarFlechaCombo(CmbEstado);
         ajustarFlechaCombo(CmbMunicipio);
-
         aplicarTema();
-
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         sdf.setTimeZone(java.util.TimeZone.getTimeZone("America/Tegucigalpa"));
         TxtFecha.setText(sdf.format(new Date()));
-
         iniciarRelojEnTiempoReal();
-
         TxtFecha.setEditable(false);
-
         setTitle("Liberty Networks | Panel de Agregado");
         setResizable(false);
         setLocationRelativeTo(null);
     }
 
     private void ajustarFlechaCombo(JComboBox combo) {
-
         Icon flecha = new ImageIcon(new ImageIcon(getClass().getResource("/IMG/Iconoflecha.png")).getImage().getScaledInstance(12, 12, Image.SCALE_SMOOTH));
-
         combo.setUI(new javax.swing.plaf.basic.BasicComboBoxUI() {
 
             @Override
             protected JButton createArrowButton() {
-
                 JButton btn = new JButton(flecha);
-
                 btn.setBorder(null);
                 btn.setFocusPainted(false);
                 btn.setContentAreaFilled(true);
-
                 if (TemaManager.oscuro) {
                     btn.setBackground(Color.WHITE);
                 } else {
@@ -80,7 +68,6 @@ public class FrmAgregado extends javax.swing.JFrame {
     }
 
     private void aplicarColoresPersonalizados() {
-
         if (TemaManager.oscuro) {
             BtnGuardar.setIcon(TemaManager.invertirIcono(getClass(), "/IMG/Iconoguardar.png"));
             BtnLimpiar.setIcon(TemaManager.invertirIcono(getClass(), "/IMG/Iconolimpiar.png"));
@@ -90,9 +77,7 @@ public class FrmAgregado extends javax.swing.JFrame {
             jLabel4.setIcon(TemaManager.invertirIcono(getClass(), "/IMG/Iconofecha.png"));
             jLabel5.setIcon(TemaManager.invertirIcono(getClass(), "/IMG/Iconomunicipio.png"));
             jLabel6.setIcon(TemaManager.invertirIcono(getClass(), "/IMG/Iconoservicio.png"));
-
         } else {
-
             CmbEstado.setBackground(Color.WHITE);
             CmbEstado.setForeground(Color.BLACK);
             CmbMunicipio.setBackground(Color.WHITE);
@@ -113,7 +98,6 @@ public class FrmAgregado extends javax.swing.JFrame {
 
     private void aplicarTema() {
         if (TemaManager.oscuro) {
-
             BtnGuardar.setIcon(TemaManager.invertirIcono(getClass(), "/IMG/Iconoguardar.png"));
             BtnLimpiar.setIcon(TemaManager.invertirIcono(getClass(), "/IMG/Iconolimpiar.png"));
             jLabel3.setIcon(TemaManager.invertirIcono(getClass(), "/IMG/Iconocliente.png"));
@@ -122,19 +106,15 @@ public class FrmAgregado extends javax.swing.JFrame {
             jLabel4.setIcon(TemaManager.invertirIcono(getClass(), "/IMG/Iconofecha.png"));
             jLabel5.setIcon(TemaManager.invertirIcono(getClass(), "/IMG/Iconomunicipio.png"));
             jLabel6.setIcon(TemaManager.invertirIcono(getClass(), "/IMG/Iconoservicio.png"));
-
             Color bgCombo = TemaManager.oscuro ? new Color(55, 55, 55) : Color.WHITE;
             Color fgCombo = TemaManager.oscuro ? Color.WHITE : Color.BLACK;
-
             CmbServicio.setBackground(bgCombo);
             CmbEstado.setBackground(bgCombo);
             CmbMunicipio.setBackground(bgCombo);
             CmbServicio.setForeground(fgCombo);
             CmbEstado.setForeground(fgCombo);
             CmbMunicipio.setForeground(fgCombo);
-
         } else {
-
             BtnGuardar.setIcon(new ImageIcon(getClass().getResource("/IMG/Iconoguardar.png")));
             BtnLimpiar.setIcon(new ImageIcon(getClass().getResource("/IMG/Iconolimpiar.png")));
             jLabel3.setIcon(new ImageIcon(getClass().getResource("/IMG/Iconocliente.png")));
@@ -144,7 +124,6 @@ public class FrmAgregado extends javax.swing.JFrame {
             jLabel5.setIcon(new ImageIcon(getClass().getResource("/IMG/Iconomunicipio.png")));
             jLabel6.setIcon(new ImageIcon(getClass().getResource("/IMG/Iconoservicio.png")));
         }
-
         if (TemaManager.oscuro) {
             jPanel1.setBackground(new java.awt.Color(35, 35, 35));
             jPanel2.setBackground(new java.awt.Color(45, 45, 45));
@@ -170,7 +149,6 @@ public class FrmAgregado extends javax.swing.JFrame {
             CmbMunicipio.setForeground(Color.WHITE);
             CmbServicio.setBackground(new Color(55, 55, 55));
             CmbServicio.setForeground(Color.WHITE);
-            
             JButton[] botones = {
                 BtnGuardar,
                 BtnLimpiar
@@ -179,7 +157,6 @@ public class FrmAgregado extends javax.swing.JFrame {
                 b.setBackground(new Color(55, 55, 55));
                 b.setForeground(Color.WHITE);
             }
-            
         }
         repaint();
     }
@@ -189,7 +166,6 @@ public class FrmAgregado extends javax.swing.JFrame {
         this.frmConsulta = frmConsulta;
 
         TxtFecha.addKeyListener(new java.awt.event.KeyAdapter() {
-
             @Override
             public void keyReleased(java.awt.event.KeyEvent e) {
             }
@@ -203,14 +179,12 @@ public class FrmAgregado extends javax.swing.JFrame {
 
         setPlaceholder(TxtNumero, " Agregar Numero de Linea");
         setPlaceholder(TxtCliente, " Agregar Nombre de Cliente");
-
         this.setLocationRelativeTo(null);
         SetImageLabel(jLabel9, "/IMG/Logoliberty.png");
         setIconImage(new ImageIcon(getClass().getResource("/IMG/Iconoliberty.png")).getImage());
     }
 
     private void iniciarRelojEnTiempoReal() {
-
         javax.swing.Timer timer = new javax.swing.Timer(1000, new java.awt.event.ActionListener() {
             @Override
             public void actionPerformed(java.awt.event.ActionEvent e) {
@@ -230,12 +204,9 @@ public class FrmAgregado extends javax.swing.JFrame {
     private void setPlaceholder(javax.swing.JTextField txt, String placeholder) {
         txt.setText(placeholder);
         txt.setForeground(java.awt.Color.GRAY);
-
         txt.addFocusListener(new java.awt.event.FocusAdapter() {
-
             @Override
             public void focusGained(java.awt.event.FocusEvent e) {
-
                 if (txt.getText().equals(placeholder)) {
                     txt.setText("");
                     txt.setForeground(java.awt.Color.BLACK);
@@ -244,7 +215,6 @@ public class FrmAgregado extends javax.swing.JFrame {
 
             @Override
             public void focusLost(java.awt.event.FocusEvent e) {
-
                 if (txt.getText().isEmpty()) {
                     txt.setText(placeholder);
                     txt.setForeground(java.awt.Color.GRAY);
@@ -529,151 +499,95 @@ public class FrmAgregado extends javax.swing.JFrame {
     }//GEN-LAST:event_CmbMunicipioActionPerformed
 
     private void BtnLimpiarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnLimpiarActionPerformed
-
         restaurarPlaceholders();
         CmbMunicipio.setSelectedIndex(0);
         CmbEstado.setSelectedIndex(0);
         CmbServicio.setSelectedIndex(0);
-
     }//GEN-LAST:event_BtnLimpiarActionPerformed
 
     private void BtnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnGuardarActionPerformed
-
         LineaDAO dao = new LineaDAO();
-
         String numero = TxtNumero.getText().trim();
         String cliente = TxtCliente.getText().trim();
         String municipio = CmbMunicipio.getSelectedItem().toString();
         String estado = CmbEstado.getSelectedItem().toString();
         String servicio = CmbServicio.getSelectedItem().toString();
 
-        // Ignorar placeholders
-        if (numero.equals("Agregar Numero de Linea") || numero.equals(" Agregar Numero de Linea")) {
+        if (numero.equals("Agregar Numero de Linea") || numero.equals(" Agregar Numero de Linea")) { // Ignorar placeholders
             numero = "";
         }
-
         if (cliente.equals("Agregar Nombre de Cliente") || cliente.equals(" Agregar Nombre de Cliente")) {
             cliente = "";
         }
-
-        // TODOS VACÍOS
-        if (numero.isEmpty() && cliente.isEmpty() && CmbMunicipio.getSelectedIndex() == 0 && CmbEstado.getSelectedIndex() == 0 && CmbServicio.getSelectedIndex() == 0) {
-
+        if (numero.isEmpty() && cliente.isEmpty() && CmbMunicipio.getSelectedIndex() == 0 && CmbEstado.getSelectedIndex() == 0 && CmbServicio.getSelectedIndex() == 0) { // TODOS VACÍOS
             JOptionPane.showMessageDialog(this, "Por favor complete todos los campos.", "Advertencia", JOptionPane.WARNING_MESSAGE);
             TxtCliente.requestFocus();
             return;
         }
-
-        // NÚMERO
-        if (numero.isEmpty()) {
+        if (numero.isEmpty()) { // NÚMERO
             JOptionPane.showMessageDialog(this, "Por favor agregue un número de línea.", "Advertencia", JOptionPane.WARNING_MESSAGE);
             TxtNumero.requestFocus();
             return;
         }
-
-        // CLIENTE
-        if (cliente.isEmpty()) {
+        if (cliente.isEmpty()) { // CLIENTE
             JOptionPane.showMessageDialog(this, "Por favor agregue un cliente.", "Advertencia", JOptionPane.WARNING_MESSAGE);
             TxtCliente.requestFocus();
             return;
         }
-
-        // MUNICIPIO
-        if (CmbMunicipio.getSelectedIndex() == 0) {
+        if (CmbMunicipio.getSelectedIndex() == 0) { // MUNICIPIO
             JOptionPane.showMessageDialog(this, "Por favor seleccione un municipio.", "Advertencia", JOptionPane.WARNING_MESSAGE);
             CmbMunicipio.requestFocus();
             return;
         }
-
-        // ESTADO
-        if (CmbEstado.getSelectedIndex() == 0) {
+        if (CmbEstado.getSelectedIndex() == 0) { // ESTADO
             JOptionPane.showMessageDialog(this, "Por favor seleccione un estado.", "Advertencia", JOptionPane.WARNING_MESSAGE);
             CmbEstado.requestFocus();
             return;
         }
 
-        // SERVICIO
-        if (CmbServicio.getSelectedIndex() == 0) {
+        if (CmbServicio.getSelectedIndex() == 0) { // SERVICIO
             JOptionPane.showMessageDialog(this, "Por favor seleccione un servicio.", "Advertencia", JOptionPane.WARNING_MESSAGE);
             CmbServicio.requestFocus();
             return;
         }
-
-        // VALIDAR LONGITUD DEL NÚMERO (8 u 11 dígitos)
-        if (!Validaciones.validarNumeroLinea(numero)) {
-
+        if (!Validaciones.validarNumeroLinea(numero)) {   // VALIDAR LONGITUD DEL NÚMERO (8 u 11 dígitos)
             JOptionPane.showMessageDialog(this, "El número de línea debe tener 8 u 11 dígitos.", "Advertencia", JOptionPane.WARNING_MESSAGE);
-
             TxtNumero.requestFocus();
             return;
         }
 
-        // FECHA
-        String fecha = TxtFecha.getText().trim();
+        String fecha = TxtFecha.getText().trim(); // FECHA
 
-        // INSERTAR
-        int resultado = dao.insertarLinea(
-                numero,
-                estado,
-                fecha,
-                municipio,
-                cliente,
-                servicio
-        );
+        int resultado = dao.insertarLinea(numero, estado, fecha, municipio, cliente, servicio); // INSERTAR
 
-        // RESPUESTAS
-        if (resultado == 1) {
+        if (resultado == 1) { // RESPUESTAS
 
-            dao.registrarHistorialCompleto(
-                    numero,
-                    "NUEVO",
-                    estado,
-                    "NUEVO",
-                    municipio,
-                    "NUEVO",
-                    cliente,
-                    "NUEVO",
-                    servicio
-            );
+            dao.registrarHistorialCompleto(numero, "NUEVO", estado, "NUEVO", municipio, "NUEVO", cliente, "NUEVO", servicio);
 
-            JOptionPane.showMessageDialog(this,
-                    "Registro agregado correctamente.");
-
-            // ACTUALIZAR TABLA
-            if (frmConsulta != null) {
+            JOptionPane.showMessageDialog(this, "Registro agregado correctamente.");
+            if (frmConsulta != null) {  // ACTUALIZAR TABLA
                 frmConsulta.cargarTabla();
                 frmConsulta.cargarTotalInicial();
                 frmConsulta.actualizarLabelResultado();
             }
 
-            // LIMPIAR CAMPOS
-            TxtNumero.setText("");
+            TxtNumero.setText(""); // LIMPIAR CAMPOS
             TxtCliente.setText("");
             CmbMunicipio.setSelectedIndex(0);
             CmbEstado.setSelectedIndex(0);
             CmbServicio.setSelectedIndex(0);
-
             restaurarPlaceholders();
-
             TxtNumero.requestFocus();
-
         } else if (resultado == 0) {
-
             JOptionPane.showMessageDialog(this, "Ya existe una línea con ese número.", "Duplicado", JOptionPane.WARNING_MESSAGE);
-
             TxtNumero.requestFocus();
-
         } else {
-
             JOptionPane.showMessageDialog(this, "Error al insertar el registro.", "Error", JOptionPane.ERROR_MESSAGE);
         }
-
     }//GEN-LAST:event_BtnGuardarActionPerformed
 
     private void TxtNumeroKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TxtNumeroKeyTyped
-
         Validaciones.soloNumeros8Digitos(TxtNumero, evt);
-
     }//GEN-LAST:event_TxtNumeroKeyTyped
 
     private void TxtFechaKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TxtFechaKeyTyped
@@ -683,7 +597,6 @@ public class FrmAgregado extends javax.swing.JFrame {
     private void TxtFechaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_TxtFechaActionPerformed
 
     }//GEN-LAST:event_TxtFechaActionPerformed
-
     /**
      * @param args the command line arguments
      */
@@ -725,17 +638,12 @@ public class FrmAgregado extends javax.swing.JFrame {
     }
 
     private void SetImageLabel(javax.swing.JLabel labelName, String resourcePath) {
-
         java.net.URL imageURL = getClass().getResource(resourcePath);
 
         if (imageURL != null) {
-
             ImageIcon image = new ImageIcon(imageURL);
-
             Icon icon = new ImageIcon(image.getImage().getScaledInstance(labelName.getWidth(), labelName.getHeight(), Image.SCALE_SMOOTH));
-
             labelName.setIcon(icon);
-
         } else {
             System.out.println("No se encontró la imagen: " + resourcePath);
         }

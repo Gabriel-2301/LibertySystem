@@ -150,7 +150,7 @@
                   <Component id="jScrollPane1" pref="647" max="32767" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <Component id="BtnAgregar" alignment="0" pref="51" max="32767" attributes="0"/>
+                      <Component id="BtnAgregar" alignment="0" pref="52" max="32767" attributes="0"/>
                       <Component id="LblVerHistorial" alignment="1" max="32767" attributes="0"/>
                       <Component id="LblManualdeUsuario" max="32767" attributes="0"/>
                       <Component id="jLabel4" max="32767" attributes="0"/>
@@ -648,6 +648,9 @@
         </Component>
         <Component class="javax.swing.JProgressBar" name="jProgressBar1">
           <Properties>
+            <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+              <Font name="Segoe UI" size="12" style="1"/>
+            </Property>
             <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
               <Color blue="0" green="99" red="0" type="rgb"/>
             </Property>
