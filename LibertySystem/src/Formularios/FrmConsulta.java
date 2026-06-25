@@ -533,6 +533,52 @@ public class FrmConsulta extends javax.swing.JFrame {
         });
     }
 
+    private void limpiarUI() {
+        TxtFieldBuscador.setText("");
+        CmbMunicipio.setSelectedIndex(0);
+        CmbEstado.setSelectedIndex(0);
+        CmbServicio.setSelectedIndex(0);
+        TxtCantidad.setText("");
+        TxtCantidad.setText(" #Cantidad Filtrado");
+        TxtCantidad.setForeground(java.awt.Color.GRAY);
+        TxtFieldBuscador.setText(" Buscar por Numero o Cliente");
+        TxtFieldBuscador.setForeground(java.awt.Color.BLACK);
+        jLabelResultadoFiltrado.setText("");
+    }
+
+    public void agregarFilaRapida(String numero, String estado, String fecha, String municipio, String cliente, String servicio) {
+        javax.swing.table.DefaultTableModel modelo = (javax.swing.table.DefaultTableModel) jTableDatos.getModel();
+        modelo.addRow(new Object[]{
+            numero,
+            estado,
+            fecha,
+            municipio,
+            cliente,
+            servicio
+        });
+    }
+
+    public void incrementarTotal() {
+        int actual = Integer.parseInt(jLabelTotalDatos.getText());
+        jLabelTotalDatos.setText(String.valueOf(actual + 1));
+    }
+
+    public void actualizarFila(String numeroOriginal, String numeroNuevo, String estado, String municipio, String cliente, String servicio) {
+        DefaultTableModel modelo = (DefaultTableModel) jTableDatos.getModel();
+        for (int i = 0; i < modelo.getRowCount(); i++) {
+            if (modelo.getValueAt(i, 0).toString().equals(numeroOriginal)) {
+                modelo.setValueAt(numeroNuevo, i, 0);
+                modelo.setValueAt(estado, i, 1);
+                modelo.setValueAt(municipio, i, 3);
+                modelo.setValueAt(cliente, i, 4);
+                modelo.setValueAt(servicio, i, 5);
+                break;
+            }
+        }
+    }
+
+    private Timer timer;
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -1277,31 +1323,34 @@ public class FrmConsulta extends javax.swing.JFrame {
         }
 
         int confirm = javax.swing.JOptionPane.showConfirmDialog(this, "¿Seguro que deseas eliminar " + filas.length + " registros?", "Confirmar eliminación", javax.swing.JOptionPane.YES_NO_OPTION);
+
         if (confirm != javax.swing.JOptionPane.YES_OPTION) {
             return;
         }
 
+        java.util.List<String> numeros = new java.util.ArrayList<>(); // EXTRAER NUMEROS UNA SOLA VEZ
+
+        for (int fila : filas) {
+            numeros.add(jTableDatos.getValueAt(fila, 0).toString());
+        }
+
         LineaDAO dao = new LineaDAO();
-        boolean error = false;
 
-        for (int i = filas.length - 1; i >= 0; i--) { // IMPORTANTE: elimina de abajo hacia arriba para evitar problemas visuales
+        boolean ok = dao.eliminarLineasMasivo(numeros);
 
-            int fila = filas[i];
-            String numero = jTableDatos.getValueAt(fila, 0).toString();
-            boolean ok = dao.eliminarLinea(numero);
+        if (ok) {
 
-            if (!ok) {
-                error = true;
+            DefaultTableModel modelo = (DefaultTableModel) jTableDatos.getModel();
+
+            for (int i = filas.length - 1; i >= 0; i--) {
+                modelo.removeRow(filas[i]);
             }
-        }
-
-        if (!error) {
-            javax.swing.JOptionPane.showMessageDialog(this, "Eliminados correctamente");
+            cargarTotalInicial();
+            actualizarLabelResultado();
+            JOptionPane.showMessageDialog(this, "Eliminados correctamente");
         } else {
-            javax.swing.JOptionPane.showMessageDialog(this, "Algunos registros no se pudieron eliminar");
+            JOptionPane.showMessageDialog(this, "Error al eliminar algunos registros");
         }
-
-        cargarTabla();
     }//GEN-LAST:event_BtnEliminarActionPerformed
 
     private void BtnEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnEditarActionPerformed
@@ -1334,20 +1383,15 @@ public class FrmConsulta extends javax.swing.JFrame {
     }//GEN-LAST:event_BtnEditarActionPerformed
 
     private void BtnLimpiarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnLimpiarActionPerformed
-        TxtFieldBuscador.setText("");
-        CmbMunicipio.setSelectedIndex(0);
-        CmbEstado.setSelectedIndex(0);
-        CmbServicio.setSelectedIndex(0);
-        TxtCantidad.setText("");
-        TxtCantidad.setText(" #Cantidad Filtrado");
-        TxtCantidad.setForeground(java.awt.Color.GRAY);
-        TxtFieldBuscador.setText(" Buscar por Numero o Cliente");
-        TxtFieldBuscador.setForeground(java.awt.Color.BLACK);
+        limpiarUI();
+
         TxtFieldBuscador.requestFocus();
-        cargarTabla();
-        cargarTotalInicial();
-        validarFiltros();
-        jLabelResultadoFiltrado.setText("");
+
+        new Thread(() -> {
+            cargarTabla();
+            cargarTotalInicial();
+            validarFiltros();
+        }).start();
     }//GEN-LAST:event_BtnLimpiarActionPerformed
 
     private void TxtFieldBuscadorKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TxtFieldBuscadorKeyTyped
@@ -1357,19 +1401,24 @@ public class FrmConsulta extends javax.swing.JFrame {
     }//GEN-LAST:event_TxtFieldBuscadorKeyTyped
 
     private void TxtFieldBuscadorKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TxtFieldBuscadorKeyReleased
-        String texto = TxtFieldBuscador.getText().trim();
-
-        if (texto.isEmpty() || texto.equals("Buscar por Numero o Cliente") || texto.equals(" Buscar por Numero o Cliente")) {
-            cargarTabla();
-            jLabelResultadoFiltrado.setText("");
-            return;
+        if (timer != null) {
+            timer.stop();
         }
-
-        LineaDAO dao = new LineaDAO();
-        jTableDatos.setModel(dao.buscarNumeroOCliente(texto));
-        jTableDatos.setDefaultEditor(Object.class, null);
-        configurarTabla();
-        actualizarLabelResultado();
+        timer = new Timer(300, e -> {
+            String texto = TxtFieldBuscador.getText().trim();
+            if (texto.trim().length() < 3) {
+                return;
+            }
+            if (texto.isEmpty() || texto.equals("Buscar por Numero o Cliente") || texto.equals(" Buscar por Numero o Cliente")) {
+                cargarTabla();
+                return;
+            }
+            LineaDAO dao = new LineaDAO();
+            jTableDatos.setModel(dao.buscarNumeroOCliente(texto));
+            configurarTabla();
+        });
+        timer.setRepeats(false);
+        timer.start();
     }//GEN-LAST:event_TxtFieldBuscadorKeyReleased
 
     private void TxtFieldBuscadorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_TxtFieldBuscadorActionPerformed

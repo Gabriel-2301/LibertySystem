@@ -557,18 +557,18 @@ public class FrmAgregado extends javax.swing.JFrame {
         }
 
         String fecha = TxtFecha.getText().trim(); // FECHA
-
         int resultado = dao.insertarLinea(numero, estado, fecha, municipio, cliente, servicio); // INSERTAR
 
         if (resultado == 1) { // RESPUESTAS
-
             dao.registrarHistorialCompleto(numero, "NUEVO", estado, "NUEVO", municipio, "NUEVO", cliente, "NUEVO", servicio);
-
             JOptionPane.showMessageDialog(this, "Registro agregado correctamente.");
             if (frmConsulta != null) {  // ACTUALIZAR TABLA
-                frmConsulta.cargarTabla();
-                frmConsulta.cargarTotalInicial();
-                frmConsulta.actualizarLabelResultado();
+                if (frmConsulta != null) {
+
+                    frmConsulta.agregarFilaRapida(numero, estado, fecha, municipio, cliente, servicio);
+                    frmConsulta.incrementarTotal();
+                    frmConsulta.actualizarLabelResultado(); // si es solo label, no BD
+                }
             }
 
             TxtNumero.setText(""); // LIMPIAR CAMPOS
@@ -578,6 +578,7 @@ public class FrmAgregado extends javax.swing.JFrame {
             CmbServicio.setSelectedIndex(0);
             restaurarPlaceholders();
             TxtNumero.requestFocus();
+
         } else if (resultado == 0) {
             JOptionPane.showMessageDialog(this, "Ya existe una línea con ese número.", "Duplicado", JOptionPane.WARNING_MESSAGE);
             TxtNumero.requestFocus();

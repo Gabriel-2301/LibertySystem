@@ -2,18 +2,19 @@ package dao;
 
 import conexion.Conexion;
 import java.sql.*;
+import java.util.List;
 import javax.swing.table.DefaultTableModel;
 
 public class LineaDAO {
 
-    public DefaultTableModel mostrarDatos() { // MOSTRAR DATOS
+    private String ultimoTexto = "";
+    private DefaultTableModel cacheModelo = null;
 
+    public DefaultTableModel mostrarDatos() { // MOSTRAR DATOS
         String[] columnas = {
             "Numero", "Estado", "Fecha_Ultimo_Estado", "Municipio", "Cliente", "Servicio"
         };
-
         DefaultTableModel modelo = new DefaultTableModel(null, columnas);
-
         String sql
                 = "SELECT "
                 + "l.numero, "
@@ -28,9 +29,7 @@ public class LineaDAO {
                 + "LEFT JOIN clientes c ON l.cliente_id = c.id "
                 + "LEFT JOIN servicios s ON l.servicio_id = s.id "
                 + "ORDER BY l.id ASC";
-
         try (Connection con = Conexion.conectar(); Statement st = con.createStatement(); ResultSet rs = st.executeQuery(sql)) {
-
             while (rs.next()) {
                 modelo.addRow(new Object[]{
                     rs.getString("numero"),
@@ -41,42 +40,40 @@ public class LineaDAO {
                     rs.getString("servicio")
                 });
             }
-
         } catch (Exception e) {
             System.out.println("Error mostrarDatos: " + e);
         }
         return modelo;
     }
 
-    public DefaultTableModel buscarNumeroOCliente(String texto) {  //BUSCAR
-
+    public DefaultTableModel buscarNumeroOCliente(String texto) {
+        if (texto != null && texto.equals(ultimoTexto) && cacheModelo != null) {
+            return cacheModelo;
+        }
         String[] columnas = {
-            "Numero", "Estado", "Fecha_Ultimo_Estado", "Municipio", "Cliente", "Servicio"
+            "Numero", "Estado", "Fecha_Ultimo_Estado",
+            "Municipio", "Cliente", "Servicio"
         };
-
         DefaultTableModel modelo = new DefaultTableModel(null, columnas);
-
         String sql
-                = "SELECT "
-                + "l.numero, "
-                + "COALESCE(e.nombre, 'Sin Estado') AS estado, "
+                = "SELECT l.numero, "
+                + "COALESCE(e.nombre,'Sin Estado') AS estado, "
                 + "l.fechas_ultimo_estado, "
-                + "COALESCE(m.nombre, 'SIN MUNICIPIO') AS municipio, "
-                + "COALESCE(c.nombre, 'SIN CLIENTE') AS cliente, "
-                + "COALESCE(s.nombre, 'Sin Servicio') AS servicio "
+                + "COALESCE(m.nombre,'SIN MUNICIPIO') AS municipio, "
+                + "COALESCE(c.nombre,'SIN CLIENTE') AS cliente, "
+                + "COALESCE(s.nombre,'Sin Servicio') AS servicio "
                 + "FROM lineas l "
                 + "LEFT JOIN estados e ON l.estado_id = e.id "
                 + "LEFT JOIN municipios m ON l.municipio_id = m.id "
                 + "LEFT JOIN clientes c ON l.cliente_id = c.id "
                 + "LEFT JOIN servicios s ON l.servicio_id = s.id "
-                + "WHERE l.numero LIKE ? OR c.nombre LIKE ? "
+                + "WHERE l.numero LIKE ? "
+                + "OR c.nombre LIKE ? "
                 + "ORDER BY l.id ASC";
-
         try (Connection con = Conexion.conectar(); PreparedStatement ps = con.prepareStatement(sql)) {
-
-            String filtro = "%" + texto.trim() + "%";
-            ps.setString(1, filtro);
-            ps.setString(2, filtro);
+            String filtro = texto + "%";
+            ps.setString(1, texto + "%");
+            ps.setString(2, texto + "%");
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
                 modelo.addRow(new Object[]{
@@ -88,29 +85,20 @@ public class LineaDAO {
                     rs.getString("servicio")
                 });
             }
-
         } catch (Exception e) {
             System.out.println("Error buscar: " + e);
         }
+        ultimoTexto = texto;
+        cacheModelo = modelo;
         return modelo;
     }
 
-    public DefaultTableModel filtrarLineasFlexible( //FILTRO
-            int estadoIndex,
-            int servicioIndex,
-            int municipioIndex,
-            String estado,
-            String servicio,
-            String municipio,
-            Integer cantidad) {
-
+    public DefaultTableModel filtrarLineasFlexible(int estadoIndex, int servicioIndex, int municipioIndex, String estado, String servicio, String municipio, Integer cantidad) { //FILTRO
         String[] columnas = {
             "Numero", "Estado", "Fecha_Ultimo_Estado", "Municipio", "Cliente", "Servicio"
         };
-
         DefaultTableModel modelo = new DefaultTableModel(null, columnas);
         StringBuilder sql = new StringBuilder();
-
         sql.append("SELECT ")
                 .append("l.numero, ")
                 .append("COALESCE(e.nombre, 'Sin Estado') AS estado, ")
@@ -124,7 +112,6 @@ public class LineaDAO {
                 .append("LEFT JOIN clientes c ON l.cliente_id = c.id ")
                 .append("LEFT JOIN servicios s ON l.servicio_id = s.id ")
                 .append("WHERE 1=1 ");
-
         if (estadoIndex > 0 && estado != null) {
             sql.append(" AND e.nombre = '").append(estado).append("' ");
         }
@@ -165,7 +152,6 @@ public class LineaDAO {
                 if (con == null) {
                     return;
                 }
-
                 String sql = "SELECT nombre FROM municipios ORDER BY nombre ASC";
                 try (Statement st = con.createStatement(); ResultSet rs = st.executeQuery(sql)) {
                     combo.removeAllItems();
@@ -180,13 +166,7 @@ public class LineaDAO {
         }
     }
 
-    public int insertarLinea(String numero, // INSERTAR (SIN CAMBIOS NECESARIOS)
-            String estado,
-            String fecha,
-            String municipio,
-            String cliente,
-            String servicio) {
-
+    public int insertarLinea(String numero, String estado, String fecha, String municipio, String cliente, String servicio) { // INSERTAR (SIN CAMBIOS NECESARIOS)
         try (Connection con = Conexion.conectar()) {
             int estadoId = obtenerId(con, "estados", estado);
             int municipioId = obtenerId(con, "municipios", municipio);
@@ -219,12 +199,10 @@ public class LineaDAO {
         if (nombre.isEmpty()) {
             return 0;
         }
-
         String sql = "SELECT id FROM " + tabla + " WHERE LOWER(TRIM(nombre)) = LOWER(TRIM(?))";
         PreparedStatement ps = con.prepareStatement(sql);
         ps.setString(1, nombre);
         ResultSet rs = ps.executeQuery();
-
         if (rs.next()) {
             return rs.getInt("id");
         }
@@ -236,17 +214,14 @@ public class LineaDAO {
         PreparedStatement ps = con.prepareStatement(sql);
         ps.setString(1, cliente);
         ResultSet rs = ps.executeQuery();
-
         if (rs.next()) {
             return rs.getInt(1);
         }
-
         String insert = "INSERT INTO clientes(nombre) VALUES(?)";
         PreparedStatement ps2 = con.prepareStatement(insert, Statement.RETURN_GENERATED_KEYS);
         ps2.setString(1, cliente);
         ps2.executeUpdate();
         ResultSet gen = ps2.getGeneratedKeys();
-
         if (gen.next()) {
             return gen.getInt(1);
         }
@@ -265,25 +240,8 @@ public class LineaDAO {
         }
     }
 
-    public void registrarHistorialCompleto(
-            String numero,
-            String estadoAnt,
-            String estadoNew,
-            String municipioAnt,
-            String municipioNew,
-            String clienteAnt,
-            String clienteNew,
-            String servicioAnt,
-            String servicioNew
-    ) {
-        String sql
-                = "UPDATE historial_lineas SET "
-                + "estado_anterior=?, estado_nuevo=?, "
-                + "municipio_anterior=?, municipio_nuevo=?, "
-                + "cliente_anterior=?, cliente_nuevo=?, "
-                + "servicio_anterior=?, servicio_nuevo=?, fecha=NOW() "
-                + "WHERE numero=?";
-
+    public void registrarHistorialCompleto(String numero, String estadoAnt, String estadoNew, String municipioAnt, String municipioNew, String clienteAnt, String clienteNew, String servicioAnt, String servicioNew) {
+        String sql = "UPDATE historial_lineas SET " + "estado_anterior=?, estado_nuevo=?, " + "municipio_anterior=?, municipio_nuevo=?, " + "cliente_anterior=?, cliente_nuevo=?, " + "servicio_anterior=?, servicio_nuevo=?, fecha=NOW() " + "WHERE numero=?";
         try (Connection con = Conexion.conectar(); PreparedStatement ps = con.prepareStatement(sql)) {
             ps.setString(1, estadoAnt);
             ps.setString(2, estadoNew);
@@ -295,15 +253,8 @@ public class LineaDAO {
             ps.setString(8, servicioNew);
             ps.setString(9, numero);
             int rows = ps.executeUpdate();
-
             if (rows == 0) { // si no existe aún, lo creamos
-                String insert
-                        = "INSERT INTO historial_lineas ("
-                        + "numero, estado_anterior, estado_nuevo, "
-                        + "municipio_anterior, municipio_nuevo, "
-                        + "cliente_anterior, cliente_nuevo, "
-                        + "servicio_anterior, servicio_nuevo, fecha"
-                        + ") VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, NOW())";
+                String insert = "INSERT INTO historial_lineas (" + "numero, estado_anterior, estado_nuevo, " + "municipio_anterior, municipio_nuevo, " + "cliente_anterior, cliente_nuevo, " + "servicio_anterior, servicio_nuevo, fecha" + ") VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, NOW())";
                 try (PreparedStatement ps2 = con.prepareStatement(insert)) {
                     ps2.setString(1, numero);
                     ps2.setString(2, estadoAnt);
@@ -324,7 +275,6 @@ public class LineaDAO {
 
     public int contarLineasTotales() {
         String sql = "SELECT COUNT(*) FROM lineas";
-
         try (Connection con = Conexion.conectar(); Statement st = con.createStatement(); ResultSet rs = st.executeQuery(sql)) {
             if (rs.next()) {
                 return rs.getInt(1);
@@ -370,6 +320,30 @@ public class LineaDAO {
             System.out.println("Error ordenar: " + e);
         }
         return modelo;
+    }
+
+    public boolean eliminarLineasMasivo(List<String> numeros) {
+        if (numeros == null || numeros.isEmpty()) {
+            return false;
+        }
+        StringBuilder sql = new StringBuilder("DELETE FROM lineas WHERE numero IN (");
+        for (int i = 0; i < numeros.size(); i++) {
+            sql.append("?");
+            if (i < numeros.size() - 1) {
+                sql.append(",");
+            }
+        }
+        sql.append(")");
+        try (Connection con = Conexion.conectar(); PreparedStatement ps = con.prepareStatement(sql.toString())) {
+            for (int i = 0; i < numeros.size(); i++) {
+                ps.setString(i + 1, numeros.get(i));
+            }
+            ps.executeUpdate();
+            return true;
+        } catch (Exception e) {
+            System.out.println("Error eliminar masivo: " + e);
+            return false;
+        }
     }
 
     public int obtenerIdPublic(Connection con, String tabla, String nombre) throws SQLException {

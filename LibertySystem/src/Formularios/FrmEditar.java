@@ -47,12 +47,14 @@ public class FrmEditar extends javax.swing.JFrame {
     private void aplicarColoresPersonalizados() {
         if (TemaManager.oscuro) {
             BtnGuardar.setIcon(TemaManager.invertirIcono(getClass(), "/IMG/Iconoguardar.png"));
-            BtnLimpiar.setIcon(TemaManager.invertirIcono(getClass(), "/IMG/Iconolimpiar.png"));
+            BtnAplicarMasivo.setIcon(TemaManager.invertirIcono(getClass(), "/IMG/Iconoeditar.png"));
             LblCantidad.setIcon(TemaManager.invertirIcono(getClass(), "/IMG/Iconoeditar.png"));
+            BtnLimpiar.setIcon(TemaManager.invertirIcono(getClass(), "/IMG/Iconolimpiar.png"));
         } else {
             BtnGuardar.setIcon(new ImageIcon(getClass().getResource("/IMG/Iconoguardar.png")));
-            BtnLimpiar.setIcon(new ImageIcon(getClass().getResource("/IMG/Iconolimpiar.png")));
+            BtnAplicarMasivo.setIcon(new ImageIcon(getClass().getResource("/IMG/Iconoeditar.png")));
             LblCantidad.setIcon(new ImageIcon(getClass().getResource("/IMG/Iconoeditar.png")));
+            BtnLimpiar.setIcon(new ImageIcon(getClass().getResource("/IMG/Iconolimpiar.png")));
         }
         repaint();
     }
@@ -60,12 +62,14 @@ public class FrmEditar extends javax.swing.JFrame {
     private void aplicarTema() {
         if (TemaManager.oscuro) {
             BtnGuardar.setIcon(TemaManager.invertirIcono(getClass(), "/IMG/Iconoguardar.png"));
-            BtnLimpiar.setIcon(TemaManager.invertirIcono(getClass(), "/IMG/Iconolimpiar.png"));
+            BtnAplicarMasivo.setIcon(TemaManager.invertirIcono(getClass(), "/IMG/Iconoeditar.png"));
             LblCantidad.setIcon(TemaManager.invertirIcono(getClass(), "/IMG/Iconoeditar.png"));
+            BtnLimpiar.setIcon(TemaManager.invertirIcono(getClass(), "/IMG/Iconolimpiar.png"));
         } else {
             BtnGuardar.setIcon(new ImageIcon(getClass().getResource("/IMG/Iconoguardar.png")));
-            BtnLimpiar.setIcon(new ImageIcon(getClass().getResource("/IMG/Iconolimpiar.png")));
+            BtnAplicarMasivo.setIcon(new ImageIcon(getClass().getResource("/IMG/Iconoeditar.png")));
             LblCantidad.setIcon(new ImageIcon(getClass().getResource("/IMG/Iconoeditar.png")));
+            BtnLimpiar.setIcon(new ImageIcon(getClass().getResource("/IMG/Iconolimpiar.png")));
         }
         if (TemaManager.oscuro) {
             jPanel1.setBackground(new java.awt.Color(35, 35, 35));
@@ -80,6 +84,7 @@ public class FrmEditar extends javax.swing.JFrame {
             jTableDatosEditados.getTableHeader().setForeground(Color.WHITE);
             JButton[] botones = {
                 BtnGuardar,
+                BtnAplicarMasivo,
                 BtnLimpiar
             };
             for (JButton b : botones) {
@@ -282,8 +287,9 @@ public class FrmEditar extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         BtnGuardar = new javax.swing.JButton();
-        BtnLimpiar = new javax.swing.JButton();
+        BtnAplicarMasivo = new javax.swing.JButton();
         LblCantidad = new javax.swing.JLabel();
+        BtnLimpiar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -341,7 +347,7 @@ public class FrmEditar extends javax.swing.JFrame {
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addGap(59, 59, 59)
                 .addComponent(jLabel1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 76, Short.MAX_VALUE)
                 .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(59, 59, 59))
         );
@@ -365,6 +371,21 @@ public class FrmEditar extends javax.swing.JFrame {
             }
         });
 
+        BtnAplicarMasivo.setBackground(new java.awt.Color(255, 255, 255));
+        BtnAplicarMasivo.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        BtnAplicarMasivo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/IMG/Iconoeditar.png"))); // NOI18N
+        BtnAplicarMasivo.setText("Edicion de Autorelleno");
+        BtnAplicarMasivo.setToolTipText("Autorellenar lo editado (Seleccionando todas las filas desde columna \"Numero\").");
+        BtnAplicarMasivo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BtnAplicarMasivoActionPerformed(evt);
+            }
+        });
+
+        LblCantidad.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        LblCantidad.setIcon(new javax.swing.ImageIcon(getClass().getResource("/IMG/Iconoeditar.png"))); // NOI18N
+        LblCantidad.setText("Seleccionados: 0");
+
         BtnLimpiar.setBackground(new java.awt.Color(255, 255, 255));
         BtnLimpiar.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         BtnLimpiar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/IMG/Iconolimpiar.png"))); // NOI18N
@@ -376,10 +397,6 @@ public class FrmEditar extends javax.swing.JFrame {
             }
         });
 
-        LblCantidad.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        LblCantidad.setIcon(new javax.swing.ImageIcon(getClass().getResource("/IMG/Iconoeditar.png"))); // NOI18N
-        LblCantidad.setText("Seleccionados: 0");
-
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -390,13 +407,19 @@ public class FrmEditar extends javax.swing.JFrame {
                     .addComponent(jScrollPane1)
                     .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(BtnGuardar, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 892, Short.MAX_VALUE)
-                        .addComponent(BtnLimpiar, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(LblCantidad, javax.swing.GroupLayout.PREFERRED_SIZE, 370, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(LblCantidad, javax.swing.GroupLayout.PREFERRED_SIZE, 370, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(BtnGuardar, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(331, 331, 331)
+                                .addComponent(BtnAplicarMasivo)))
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
+            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                    .addContainerGap(1003, Short.MAX_VALUE)
+                    .addComponent(BtnLimpiar, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGap(16, 16, 16)))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -405,13 +428,18 @@ public class FrmEditar extends javax.swing.JFrame {
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(LblCantidad)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 14, Short.MAX_VALUE)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 326, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(BtnLimpiar, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(BtnAplicarMasivo, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(BtnGuardar, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(8, 8, 8))
+            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                    .addContainerGap(505, Short.MAX_VALUE)
+                    .addComponent(BtnLimpiar, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addContainerGap()))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -437,6 +465,10 @@ public class FrmEditar extends javax.swing.JFrame {
 
             Connection con = Conexion.conectar();
             LineaDAO dao = new LineaDAO();
+            java.util.Map<String, Integer> cacheEstados = new java.util.HashMap<>();
+            java.util.Map<String, Integer> cacheMunicipios = new java.util.HashMap<>();
+            java.util.Map<String, Integer> cacheClientes = new java.util.HashMap<>();
+            java.util.Map<String, Integer> cacheServicios = new java.util.HashMap<>();
 
             String sql = "UPDATE lineas SET " + "numero=?, estado_id=?, fechas_ultimo_estado=NOW(), " + "municipio_id=?, cliente_id=?, servicio_id=? " + "WHERE numero=?";
 
@@ -458,6 +490,15 @@ public class FrmEditar extends javax.swing.JFrame {
                 String clienteAnt = clienteOriginal.get(i);
                 String servicioAnt = servicioOriginal.get(i);
 
+                frmConsulta.actualizarFila(
+                        numeroOriginal,
+                        numeroNuevo,
+                        estadoNew,
+                        municipioNew,
+                        clienteNew,
+                        servicioNew
+                );
+
                 boolean cambio = !numeroNuevo.equals(numeroOriginal) || !estadoNew.equals(estadoAnt) || !municipioNew.equals(municipioAnt) || !clienteNew.equals(clienteAnt) || !servicioNew.equals(servicioAnt);
 
                 if (!cambio) {
@@ -465,15 +506,42 @@ public class FrmEditar extends javax.swing.JFrame {
                 }
 
                 huboCambios = true;
-                int estadoId = dao.obtenerIdPublic(con, "estados", estadoNew);
-                if (estadoId == 0) {
-                    estadoId = dao.obtenerIdPublic(con, "estados", "Sin Estado");
+                Integer estadoId = cacheEstados.get(estadoNew);
+
+                if (estadoId == null) {
+                    estadoId = dao.obtenerIdPublic(con, "estados", estadoNew);
+
+                    if (estadoId == 0) {
+                        estadoId = dao.obtenerIdPublic(con, "estados", "Sin Estado");
+                    }
+
+                    cacheEstados.put(estadoNew, estadoId);
                 }
-                int municipioId = dao.obtenerIdPublic(con, "municipios", municipioNew);
-                int clienteId = dao.obtenerClientePublic(con, clienteNew);
-                int servicioId = dao.obtenerIdPublic(con, "servicios", servicioNew);
-                if (servicioId == 0) {
-                    servicioId = dao.obtenerIdPublic(con, "servicios", "Sin Servicio");
+
+                Integer municipioId = cacheMunicipios.get(municipioNew);
+
+                if (municipioId == null) {
+                    municipioId = dao.obtenerIdPublic(con, "municipios", municipioNew);
+                    cacheMunicipios.put(municipioNew, municipioId);
+                }
+
+                Integer clienteId = cacheClientes.get(clienteNew);
+
+                if (clienteId == null) {
+                    clienteId = dao.obtenerClientePublic(con, clienteNew);
+                    cacheClientes.put(clienteNew, clienteId);
+                }
+
+                Integer servicioId = cacheServicios.get(servicioNew);
+
+                if (servicioId == null) {
+                    servicioId = dao.obtenerIdPublic(con, "servicios", servicioNew);
+
+                    if (servicioId == 0) {
+                        servicioId = dao.obtenerIdPublic(con, "servicios", "Sin Servicio");
+                    }
+
+                    cacheServicios.put(servicioNew, servicioId);
                 }
                 ps.setString(1, numeroNuevo);
                 ps.setInt(2, estadoId);
@@ -493,18 +561,54 @@ public class FrmEditar extends javax.swing.JFrame {
                 con.close();
                 return;
             }
-
+            con.setAutoCommit(false);
             ps.executeBatch();
+            con.commit();
             ps.close();
             con.close();
-            frmConsulta.cargarTabla();
-            JOptionPane.showMessageDialog(this, "Actualizado correctamente");
-            dispose();
+            new Thread(() -> {
+                
+
+                javax.swing.SwingUtilities.invokeLater(() -> {
+                    JOptionPane.showMessageDialog(this, "Actualizado correctamente");
+                    dispose();
+                });
+            }).start();
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, "Error: " + e.getMessage());
             e.printStackTrace();
         }
     }//GEN-LAST:event_BtnGuardarActionPerformed
+
+    private void BtnAplicarMasivoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnAplicarMasivoActionPerformed
+        int[] filas = jTableDatosEditados.getSelectedRows();
+
+        if (filas.length < 2) {
+            JOptionPane.showMessageDialog(this, "Debes seleccionar al menos 2 filas (1 origen + destino).");
+            return;
+        }
+
+        //  ORIGEN = primera fila seleccionada
+        int filaOrigen = filas[0];
+
+        Object estado = modelo.getValueAt(filaOrigen, 1);
+        Object municipio = modelo.getValueAt(filaOrigen, 3);
+        Object cliente = modelo.getValueAt(filaOrigen, 4);
+        Object servicio = modelo.getValueAt(filaOrigen, 5);
+
+        // aplicar a las demás filas
+        for (int i = 1; i < filas.length; i++) {
+
+            int f = filas[i];
+
+            modelo.setValueAt(estado, f, 1);
+            modelo.setValueAt(municipio, f, 3);
+            modelo.setValueAt(cliente, f, 4);
+            modelo.setValueAt(servicio, f, 5);
+        }
+
+        JOptionPane.showMessageDialog(this, "Cambios aplicados a " + (filas.length - 1) + " registros.");
+    }//GEN-LAST:event_BtnAplicarMasivoActionPerformed
 
     private void BtnLimpiarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnLimpiarActionPerformed
         ((DefaultTableModel) jTableDatosEditados.getModel()).setRowCount(0);
@@ -554,6 +658,7 @@ public class FrmEditar extends javax.swing.JFrame {
         }
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton BtnAplicarMasivo;
     private javax.swing.JButton BtnGuardar;
     private javax.swing.JButton BtnLimpiar;
     private javax.swing.JLabel LblCantidad;
