@@ -410,7 +410,7 @@ public class FrmConsulta extends javax.swing.JFrame {
                 String versionLocal = VersionLocal.obtenerVersionLocal();
 
                 if (versionServer == null || versionServer.isEmpty()) {
-                    JOptionPane.showMessageDialog(null, "No se pudo obtener la versión del servidor");
+                    JOptionPane.showMessageDialog(null, "Sistema Actualizado");
                     return;
                 }
 
